@@ -1,0 +1,103 @@
+<?xml version="1.0"?>
+<sdf version="1.10">
+  <world name="deltaseek_construction">
+    <physics name="default_physics" type="ignored">
+      <max_step_size>0.002</max_step_size>
+      <real_time_factor>1.0</real_time_factor>
+    </physics>
+
+    <plugin filename="gz-sim-physics-system" name="gz::sim::systems::Physics"/>
+    <plugin filename="gz-sim-user-commands-system" name="gz::sim::systems::UserCommands"/>
+    <plugin filename="gz-sim-scene-broadcaster-system" name="gz::sim::systems::SceneBroadcaster"/>
+    <plugin filename="gz-sim-sensors-system" name="gz::sim::systems::Sensors">
+      <render_engine>ogre2</render_engine>
+    </plugin>
+
+    <gravity>0 0 -9.81</gravity>
+    <atmosphere type="adiabatic"/>
+    <scene>
+      <ambient>0.45 0.45 0.45 1</ambient>
+      <background>0.72 0.80 0.90 1</background>
+      <shadows>true</shadows>
+    </scene>
+
+    <light type="directional" name="sun">
+      <cast_shadows>true</cast_shadows>
+      <pose>0 0 10 0 0 0</pose>
+      <diffuse>0.9 0.9 0.9 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <direction>-0.4 0.2 -0.9</direction>
+    </light>
+
+    <model name="floor">
+      <static>true</static>
+      <link name="link">
+        <collision name="collision">
+          <geometry><box><size>20 14 0.20</size></box></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><box><size>20 14 0.20</size></box></geometry>
+          <material><ambient>0.52 0.52 0.50 1</ambient><diffuse>0.58 0.58 0.55 1</diffuse></material>
+        </visual>
+      </link>
+      <pose>0 0 -0.10 0 0 0</pose>
+    </model>
+
+    <!-- A partial shell gives the robot indoor/outdoor construction geometry. -->
+    <model name="north_wall">
+      <static>true</static><pose>0 6.5 1.5 0 0 0</pose>
+      <link name="link"><collision name="collision"><geometry><box><size>20 0.20 3</size></box></geometry></collision>
+      <visual name="visual"><geometry><box><size>20 0.20 3</size></box></geometry><material><diffuse>0.75 0.72 0.65 1</diffuse></material></visual></link>
+    </model>
+    <model name="south_wall">
+      <static>true</static><pose>0 -6.5 1.5 0 0 0</pose>
+      <link name="link"><collision name="collision"><geometry><box><size>20 0.20 3</size></box></geometry></collision>
+      <visual name="visual"><geometry><box><size>20 0.20 3</size></box></geometry><material><diffuse>0.75 0.72 0.65 1</diffuse></material></visual></link>
+    </model>
+    <model name="west_wall">
+      <static>true</static><pose>-9.5 0 1.5 0 0 0</pose>
+      <link name="link"><collision name="collision"><geometry><box><size>0.20 13 3</size></box></geometry></collision>
+      <visual name="visual"><geometry><box><size>0.20 13 3</size></box></geometry><material><diffuse>0.75 0.72 0.65 1</diffuse></material></visual></link>
+    </model>
+
+    <model name="structural_columns">
+      <static>true</static>
+      <link name="column_1"><pose>-3 -2 1.5 0 0 0</pose><collision name="collision"><geometry><box><size>0.45 0.45 3</size></box></geometry></collision><visual name="visual"><geometry><box><size>0.45 0.45 3</size></box></geometry><material><diffuse>0.62 0.65 0.68 1</diffuse></material></visual></link>
+      <link name="column_2"><pose>-3 3 1.5 0 0 0</pose><collision name="collision"><geometry><box><size>0.45 0.45 3</size></box></geometry></collision><visual name="visual"><geometry><box><size>0.45 0.45 3</size></box></geometry><material><diffuse>0.62 0.65 0.68 1</diffuse></material></visual></link>
+      <link name="column_3"><pose>4 3 1.5 0 0 0</pose><collision name="collision"><geometry><box><size>0.45 0.45 3</size></box></geometry></collision><visual name="visual"><geometry><box><size>0.45 0.45 3</size></box></geometry><material><diffuse>0.62 0.65 0.68 1</diffuse></material></visual></link>
+    </model>
+
+    <!-- Actual MEP pipe is y=0.45 m; BIM expects y=0.0 m. -->
+    <model name="actual_pipe_offset_01">
+      <static>true</static><pose>2 0.45 2.20 1.5707963 0 0</pose>
+      <link name="link">
+        <collision name="collision"><geometry><cylinder><radius>0.12</radius><length>5.0</length></cylinder></geometry></collision>
+        <visual name="visual"><geometry><cylinder><radius>0.12</radius><length>5.0</length></cylinder></geometry><material><diffuse>0.90 0.28 0.08 1</diffuse></material></visual>
+      </link>
+    </model>
+
+    <!-- This is deliberately present in reality but absent from the BIM. -->
+    <model name="actual_crate_unexpected_01">
+      <static>true</static><pose>1 -2 0.40 0 0 0.20</pose>
+      <link name="link">
+        <collision name="collision"><geometry><box><size>0.8 0.8 0.8</size></box></geometry></collision>
+        <visual name="visual"><geometry><box><size>0.8 0.8 0.8</size></box></geometry><material><diffuse>0.55 0.28 0.08 1</diffuse></material></visual>
+      </link>
+    </model>
+
+    <!-- Beam beam_missing_01 is deliberately absent; its expected pose lives
+         only in discrepancies.yaml so camera observations see the real scene. -->
+    <model name="scaffold">
+      <static>true</static><pose>5 -3 0 0 0 0</pose>
+      <link name="link">
+        <visual name="post_1"><pose>-1 -0.7 1.5 0 0 0</pose><geometry><cylinder><radius>0.04</radius><length>3</length></cylinder></geometry><material><diffuse>0.8 0.7 0.05 1</diffuse></material></visual>
+        <visual name="post_2"><pose>1 -0.7 1.5 0 0 0</pose><geometry><cylinder><radius>0.04</radius><length>3</length></cylinder></geometry><material><diffuse>0.8 0.7 0.05 1</diffuse></material></visual>
+        <visual name="post_3"><pose>-1 0.7 1.5 0 0 0</pose><geometry><cylinder><radius>0.04</radius><length>3</length></cylinder></geometry><material><diffuse>0.8 0.7 0.05 1</diffuse></material></visual>
+        <visual name="post_4"><pose>1 0.7 1.5 0 0 0</pose><geometry><cylinder><radius>0.04</radius><length>3</length></cylinder></geometry><material><diffuse>0.8 0.7 0.05 1</diffuse></material></visual>
+        <collision name="deck_collision"><pose>0 0 1.6 0 0 0</pose><geometry><box><size>2.1 1.5 0.10</size></box></geometry></collision>
+        <visual name="deck"><pose>0 0 1.6 0 0 0</pose><geometry><box><size>2.1 1.5 0.10</size></box></geometry><material><diffuse>0.65 0.52 0.15 1</diffuse></material></visual>
+      </link>
+    </model>
+  </world>
+</sdf>
+

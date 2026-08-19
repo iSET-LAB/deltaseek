@@ -1,0 +1,130 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="deltaseek_a300_ur5e">
+  <xacro:arg name="is_sim" default="true"/>
+  <xacro:arg name="namespace" default="a300_0000"/>
+  <xacro:arg name="gazebo_controllers" default=""/>
+  <xacro:arg name="use_platform_controllers" default="true"/>
+  <xacro:arg name="use_manipulation_controllers" default="false"/>
+
+  <xacro:include filename="$(find clearpath_platform_description)/urdf/common.urdf.xacro"/>
+
+  <!-- Released Clearpath Husky A300 model and drivetrain. -->
+  <xacro:include filename="$(find clearpath_platform_description)/urdf/a300/a300.urdf.xacro"/>
+  <xacro:a300 control="diff_4wd" front_wheels="outdoor" rear_wheels="outdoor"/>
+
+  <xacro:include filename="$(find clearpath_platform_description)/urdf/a300/attachments/bumper.urdf.xacro"/>
+  <xacro:bumper name="front_bumper" parent_link="front_bumper_mount">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </xacro:bumper>
+  <xacro:bumper name="rear_bumper" parent_link="rear_bumper_mount">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </xacro:bumper>
+
+  <!-- The Clearpath mobile-manipulator build uses the A300 AMP enclosure,
+       not the flat accessory plate.  This is the official Clearpath mesh
+       with the yellow access panels and its top-center mounting rail. -->
+  <xacro:include filename="$(find clearpath_platform_description)/urdf/a300/attachments/amp_enclosure.urdf.xacro"/>
+  <xacro:amp_enclosure name="mobile_manipulator" parent_link="base_link">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </xacro:amp_enclosure>
+
+
+  <!-- The UR macro supplies official kinematics, inertial data, and meshes.
+       sim_ignition is disabled here so one Gazebo control plugin owns both
+       the base and arm hardware systems. -->
+  <xacro:include filename="$(find clearpath_manipulators_description)/urdf/arm/universal_robots.urdf.xacro"/>
+  <xacro:universal_robots
+      name="arm_0"
+      parent_link="mobile_manipulator_center_mount"
+      ur_type="ur5e"
+      sim_ignition="false">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </xacro:universal_robots>
+
+  <!-- Add the arm to the same gz_ros2_control manager used by the A300. -->
+  <ros2_control name="ur5e_sim_hardware" type="system">
+    <hardware>
+      <plugin>gz_ros2_control/GazeboSimSystem</plugin>
+    </hardware>
+    <joint name="arm_0_shoulder_pan_joint">
+      <command_interface name="position"/>
+      <state_interface name="position"><param name="initial_value">0.0</param></state_interface>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="arm_0_shoulder_lift_joint">
+      <command_interface name="position"/>
+      <state_interface name="position"><param name="initial_value">-1.20</param></state_interface>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="arm_0_elbow_joint">
+      <command_interface name="position"/>
+      <state_interface name="position"><param name="initial_value">1.60</param></state_interface>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="arm_0_wrist_1_joint">
+      <command_interface name="position"/>
+      <state_interface name="position"><param name="initial_value">-1.90</param></state_interface>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="arm_0_wrist_2_joint">
+      <command_interface name="position"/>
+      <state_interface name="position"><param name="initial_value">-1.5708</param></state_interface>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="arm_0_wrist_3_joint">
+      <command_interface name="position"/>
+      <state_interface name="position"><param name="initial_value">0.0</param></state_interface>
+      <state_interface name="velocity"/>
+    </joint>
+  </ros2_control>
+
+  <!-- Lightweight generic RGB-D camera fixed to the UR5e tool. -->
+  <link name="inspection_camera_link">
+    <visual>
+      <geometry><box size="0.08 0.12 0.035"/></geometry>
+      <material name="clearpath_dark_grey"/>
+    </visual>
+    <collision>
+      <geometry><box size="0.08 0.12 0.035"/></geometry>
+    </collision>
+    <inertial>
+      <mass value="0.10"/>
+      <inertia ixx="0.00013" ixy="0" ixz="0" iyy="0.00006" iyz="0" izz="0.00017"/>
+    </inertial>
+  </link>
+  <joint name="inspection_camera_joint" type="fixed">
+    <parent link="arm_0_tool0"/>
+    <child link="inspection_camera_link"/>
+    <origin xyz="0.07 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <link name="inspection_camera_optical_frame"/>
+  <joint name="inspection_camera_optical_joint" type="fixed">
+    <parent link="inspection_camera_link"/>
+    <child link="inspection_camera_optical_frame"/>
+    <origin xyz="0.041 0 0" rpy="-1.5707963 0 -1.5707963"/>
+  </joint>
+
+  <gazebo reference="inspection_camera_link">
+    <sensor name="inspection_camera" type="rgbd_camera">
+      <always_on>true</always_on>
+      <update_rate>15</update_rate>
+      <visualize>true</visualize>
+      <topic>$(arg namespace)/sensors/inspection_camera</topic>
+      <gz_frame_id>inspection_camera_optical_frame</gz_frame_id>
+      <camera>
+        <horizontal_fov>1.20</horizontal_fov>
+        <image>
+          <width>640</width>
+          <height>480</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip>
+          <near>0.15</near>
+          <far>20.0</far>
+        </clip>
+      </camera>
+    </sensor>
+  </gazebo>
+</robot>
+
