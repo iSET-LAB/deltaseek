@@ -1,0 +1,33 @@
+schema_version: 1
+scenario:
+  id: demo
+  seed: 4756
+  description: Deterministic smoke-test deviations for the IFC fixture.
+deviations:
+  - id: pipe_displaced_01
+    type: displaced
+    target: 3pEp8vIzrQ48x8Cb1N6zbE
+    translation: [0.0, 0.45, 0.0]
+    severity: 0.90
+
+  - id: beam_missing_01
+    type: missing
+    target: 1oTetZHTbSC89CoF_sOIS7
+    severity: 0.75
+
+  - id: duct_resized_01
+    type: resized
+    target: 0fZ$MiOnzIshQgTqMC2x8T
+    scale_factors: [1.0, 1.4, 1.0]
+    severity: 0.55
+
+  - id: crate_unexpected_01
+    type: unexpected
+    severity: 0.25
+    element:
+      id: unexpected-crate-01
+      ifc_class: IfcBuildingElementProxy
+      name: Unexpected site crate
+      pose: {xyz: [1.0, -2.0, 0.4], rpy: [0.0, 0.0, 0.2]}
+      geometry: {type: box, size: [0.8, 0.8, 0.8]}
+      material: {rgba: [0.55, 0.28, 0.08, 1.0]}

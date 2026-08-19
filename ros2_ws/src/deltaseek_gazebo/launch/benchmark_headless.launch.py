@@ -1,0 +1,81 @@
+"""Run an IFC-derived DeltaSeek benchmark with the official Clearpath robot."""
+
+import os
+
+from ament_index_python.packages import get_package_share_directory
+from launch import LaunchDescription
+from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
+from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch.substitutions import LaunchConfiguration
+from launch_ros.actions import Node
+
+
+def generate_launch_description():
+    package_share = get_package_share_directory('deltaseek_gazebo')
+    default_output = os.path.join(package_share, 'worlds', 'generated')
+
+    setup_path = LaunchConfiguration('setup_path')
+    world_file = LaunchConfiguration('world_file')
+    world_name = LaunchConfiguration('world_name')
+    ground_truth_file = LaunchConfiguration('ground_truth_file')
+
+    official_robot = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(package_share, 'launch', 'clearpath_headless.launch.py')),
+        launch_arguments={
+            'setup_path': setup_path,
+            'world_file': world_file,
+            'world_name': world_name,
+            'generate': 'true',
+        }.items(),
+    )
+
+    ground_truth = Node(
+        package='deltaseek_gazebo',
+        executable='ground_truth_publisher',
+        name='ground_truth_publisher',
+        output='screen',
+        parameters=[{
+            'config_file': ground_truth_file,
+            'use_sim_time': True,
+        }],
+    )
+
+    world_to_odom = Node(
+        package='tf2_ros',
+        executable='static_transform_publisher',
+        name='world_to_odom',
+        output='screen',
+        arguments=[
+            '--frame-id', 'world',
+            '--child-frame-id', 'odom',
+        ],
+        parameters=[{'use_sim_time': True}],
+        remappings=[
+            ('/tf', '/a300_00000/tf'),
+            ('/tf_static', '/a300_00000/tf_static'),
+        ],
+    )
+
+    return LaunchDescription([
+        DeclareLaunchArgument(
+            'setup_path',
+            default_value='/ISET/sxa4756/deltaseek/clearpath',
+            description='Clearpath setup directory containing robot.yaml.'),
+        DeclareLaunchArgument(
+            'world_file',
+            default_value=os.path.join(default_output, 'demo_deviated.sdf'),
+            description='Generated deviated SDF world.'),
+        DeclareLaunchArgument(
+            'world_name',
+            default_value='deltaseek_ifc_nominal_demo',
+            description='World name embedded in the generated SDF.'),
+        DeclareLaunchArgument(
+            'ground_truth_file',
+            default_value=os.path.join(
+                default_output, 'demo_ground_truth.yaml'),
+            description='Ground-truth YAML generated with the SDF.'),
+        official_robot,
+        ground_truth,
+        world_to_odom,
+    ])

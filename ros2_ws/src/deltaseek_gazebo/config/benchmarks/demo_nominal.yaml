@@ -1,0 +1,202 @@
+schema_version: 1
+source:
+  type: ifc
+  file: config/benchmarks/demo_construction.ifc
+  ifc_schema: IFC4
+  units: metre
+  geometry_approximation: world_aligned_bounding_box
+  origin_offset:
+  - 0.0
+  - 0.0
+  - 0.0
+  skipped_degenerate_products: 0
+world:
+  name: deltaseek_ifc_nominal
+  frame_id: world
+  gravity:
+  - 0.0
+  - 0.0
+  - -9.81
+elements:
+- id: 0fZ$MiOnzIshQgTqMC2x8T
+  ifc_class: IfcFlowSegment
+  name: Rectangular duct
+  pose:
+    xyz:
+    - 3.5
+    - 2.0
+    - 2.35
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.0
+  geometry:
+    type: box
+    size:
+    - 3.2
+    - 0.5
+    - 0.4
+  material:
+    rgba:
+    - 0.8
+    - 0.34
+    - 0.1
+    - 1.0
+  static: true
+  collision: true
+- id: 0tcngImXHTB9LROQcp5wi9
+  ifc_class: IfcWall
+  name: North wall
+  pose:
+    xyz:
+    - 0.0
+    - 5.5
+    - 1.5
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.0
+  geometry:
+    type: box
+    size:
+    - 18.0
+    - 0.2
+    - 3.0
+  material:
+    rgba:
+    - 0.72
+    - 0.69
+    - 0.62
+    - 1.0
+  static: true
+  collision: true
+- id: 1HpDGQbvzKeRG_mP1$QqzX
+  ifc_class: IfcColumn
+  name: Column A
+  pose:
+    xyz:
+    - -3.0
+    - -2.0
+    - 1.5
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.0
+  geometry:
+    type: box
+    size:
+    - 0.45
+    - 0.45
+    - 3.0
+  material:
+    rgba:
+    - 0.55
+    - 0.58
+    - 0.62
+    - 1.0
+  static: true
+  collision: true
+- id: 1oTetZHTbSC89CoF_sOIS7
+  ifc_class: IfcBeam
+  name: Cross beam
+  pose:
+    xyz:
+    - -1.5
+    - 1.5
+    - 2.65
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.0
+  geometry:
+    type: box
+    size:
+    - 3.0
+    - 0.22
+    - 0.3
+  material:
+    rgba:
+    - 0.55
+    - 0.58
+    - 0.62
+    - 1.0
+  static: true
+  collision: true
+- id: 1rU08iNtHNGgti2n2Tf0b6
+  ifc_class: IfcColumn
+  name: Column B
+  pose:
+    xyz:
+    - -3.0
+    - 2.5
+    - 1.5
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.0
+  geometry:
+    type: box
+    size:
+    - 0.45
+    - 0.45
+    - 3.0
+  material:
+    rgba:
+    - 0.55
+    - 0.58
+    - 0.62
+    - 1.0
+  static: true
+  collision: true
+- id: 28tbQOrQDP4flHeG2NHcXl
+  ifc_class: IfcSlab
+  name: Ground slab
+  pose:
+    xyz:
+    - 0.0
+    - 0.0
+    - -0.1
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.0
+  geometry:
+    type: box
+    size:
+    - 18.0
+    - 12.0
+    - 0.2
+  material:
+    rgba:
+    - 0.5
+    - 0.5
+    - 0.48
+    - 1.0
+  static: true
+  collision: true
+- id: 3pEp8vIzrQ48x8Cb1N6zbE
+  ifc_class: IfcFlowSegment
+  name: Suspended pipe
+  pose:
+    xyz:
+    - 2.0
+    - 0.0
+    - 2.2
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.0
+  geometry:
+    type: box
+    size:
+    - 0.24
+    - 5.0
+    - 0.24
+  material:
+    rgba:
+    - 0.8
+    - 0.34
+    - 0.1
+    - 1.0
+  static: true
+  collision: true

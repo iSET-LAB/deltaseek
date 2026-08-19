@@ -1,0 +1,65 @@
+a300_0000:
+  controller_manager:
+    ros__parameters:
+      update_rate: 100
+      use_sim_time: true
+  
+      joint_state_broadcaster:
+        type: joint_state_broadcaster/JointStateBroadcaster
+  
+      platform_velocity_controller:
+        type: diff_drive_controller/DiffDriveController
+  
+      arm_controller:
+        type: joint_trajectory_controller/JointTrajectoryController
+  
+  platform_velocity_controller:
+    ros__parameters:
+      use_sim_time: true
+      left_wheel_names: [front_left_wheel_joint, rear_left_wheel_joint]
+      right_wheel_names: [front_right_wheel_joint, rear_right_wheel_joint]
+      wheel_separation: 0.562
+      wheels_per_side: 2
+      wheel_radius: 0.1651
+      wheel_separation_multiplier: 1.75
+      publish_rate: 50.0
+      odom_frame_id: odom
+      base_frame_id: base_link
+      pose_covariance_diagonal: [0.001, 0.001, 0.001, 0.001, 0.001, 0.01]
+      twist_covariance_diagonal: [0.001, 0.001, 0.001, 0.001, 0.001, 0.01]
+      open_loop: false
+      enable_odom_tf: true
+      tf_frame_prefix_enable: false
+      cmd_vel_timeout: 0.5
+      velocity_rolling_window_size: 5
+      preserve_turning_radius: true
+      publish_limited_velocity: true
+      publish_wheel_data: true
+      linear.x.max_velocity: 1.0
+      linear.x.min_velocity: -1.0
+      linear.x.max_acceleration: 1.5
+      linear.x.max_deceleration: -2.0
+      angular.z.max_velocity: 1.5
+      angular.z.min_velocity: -1.5
+      angular.z.max_acceleration: 3.0
+      angular.z.max_deceleration: -3.0
+  
+  arm_controller:
+    ros__parameters:
+      use_sim_time: true
+      joints:
+        - arm_0_shoulder_pan_joint
+        - arm_0_shoulder_lift_joint
+        - arm_0_elbow_joint
+        - arm_0_wrist_1_joint
+        - arm_0_wrist_2_joint
+        - arm_0_wrist_3_joint
+      command_interfaces: [position]
+      state_interfaces: [position, velocity]
+      state_publish_rate: 50.0
+      action_monitor_rate: 20.0
+      allow_partial_joints_goal: false
+      constraints:
+        stopped_velocity_tolerance: 0.02
+        goal_time: 1.0
+  

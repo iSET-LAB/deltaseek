@@ -1,0 +1,44 @@
+frame_id: odom
+description: >-
+  Ground truth for the hand-authored starter world. Poses are aligned with the
+  Gazebo world because the robot spawns at the origin with odom initialized at
+  the world origin.
+discrepancies:
+  - id: pipe_offset_01
+    type: displaced
+    severity: 0.90
+    element_class: MEP_pipe
+    geometry:
+      shape: cylinder
+      scale: [0.24, 0.24, 5.0]
+    reference_pose:
+      xyz: [2.0, 0.0, 2.20]
+      rpy: [1.5707963, 0.0, 0.0]
+    actual_pose:
+      xyz: [2.0, 0.45, 2.20]
+      rpy: [1.5707963, 0.0, 0.0]
+
+  - id: beam_missing_01
+    type: missing
+    severity: 0.75
+    element_class: structural_beam
+    geometry:
+      shape: box
+      scale: [3.0, 0.22, 0.30]
+    reference_pose:
+      xyz: [-2.0, 1.5, 2.65]
+      rpy: [0.0, 0.0, 0.0]
+    actual_pose: null
+
+  - id: crate_unexpected_01
+    type: unexpected
+    severity: 0.25
+    element_class: site_clutter
+    geometry:
+      shape: box
+      scale: [0.8, 0.8, 0.8]
+    reference_pose: null
+    actual_pose:
+      xyz: [1.0, -2.0, 0.40]
+      rpy: [0.0, 0.0, 0.20]
+

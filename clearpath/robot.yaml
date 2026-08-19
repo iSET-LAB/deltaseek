@@ -1,0 +1,61 @@
+# DeltaSeek public-spec baseline.
+#
+# This file uses only Clearpath-supported robot.yaml fields and released
+# description assets.  It is NOT the as-built configuration for the custom
+# showcase robot.  Before deploying to hardware, replace it with the physical
+# robot's /etc/clearpath/robot.yaml and retain project-specific overrides in a
+# separate overlay.
+
+serial_number: a300-00000
+version: 0
+
+system:
+  hosts:
+    - hostname: cpr-a300-00000
+      ip: 192.168.131.1
+  ros2:
+    namespace: a300_00000
+
+platform:
+  battery:
+    model: S_24V20_U1
+    configuration: S1P2
+  attachments:
+    - name: front_bumper
+      type: a300.bumper
+      parent: front_bumper_mount
+    - name: rear_bumper
+      type: a300.bumper
+      parent: rear_bumper_mount
+    - name: enclosure
+      type: a300.amp_enclosure
+      parent: base_link
+      xyz: [0.0, 0.0, 0.0]
+      rpy: [0.0, 0.0, 0.0]
+  mcu:
+    protocol: proton
+
+sensors:
+  imu:
+    - model: phidgets_spatial
+      urdf_enabled: true
+      launch_enabled: true
+      parent: base_link
+      xyz: [0.059, 0.0, 0.161275]
+      rpy: [0.0, 0.0, 0.0]
+      ros_parameters:
+        phidgets_spatial:
+          data_interval_ms: 20
+
+manipulators:
+  moveit:
+    enable: true
+  arms:
+    - model: universal_robots
+      parent: enclosure_center_mount
+      xyz: [0.0, 0.0, 0.0]
+      rpy: [0.0, 0.0, 0.0]
+      ur_type: ur5e
+      robot_ip: 192.168.131.40
+      headless_mode: false
+      kinematics_parameters_file: "$(find ur_description)/config/ur5e/default_kinematics.yaml"

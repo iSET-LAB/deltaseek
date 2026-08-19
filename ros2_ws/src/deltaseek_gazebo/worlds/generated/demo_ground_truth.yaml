@@ -1,0 +1,138 @@
+schema_version: 1
+scenario_id: demo
+seed: 4756
+frame_id: world
+source:
+  type: ifc
+  file: config/benchmarks/demo_construction.ifc
+  ifc_schema: IFC4
+  units: metre
+  geometry_approximation: world_aligned_bounding_box
+  origin_offset:
+  - 0.0
+  - 0.0
+  - 0.0
+  skipped_degenerate_products: 0
+summary:
+  nominal_element_count: 7
+  actual_element_count: 7
+  deviation_count: 4
+discrepancies:
+- id: pipe_displaced_01
+  type: displaced
+  element_id: 3pEp8vIzrQ48x8Cb1N6zbE
+  element_class: IfcFlowSegment
+  severity: 0.9
+  magnitude: 0.45
+  reference_pose:
+    xyz:
+    - 2.0
+    - 0.0
+    - 2.2
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.0
+  actual_pose:
+    xyz:
+    - 2.0
+    - 0.45
+    - 2.2
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.0
+  reference_geometry:
+    type: box
+    size:
+    - 0.24
+    - 5.0
+    - 0.24
+  actual_geometry:
+    type: box
+    size:
+    - 0.24
+    - 5.0
+    - 0.24
+- id: beam_missing_01
+  type: missing
+  element_id: 1oTetZHTbSC89CoF_sOIS7
+  element_class: IfcBeam
+  severity: 0.75
+  magnitude: 1.0
+  reference_pose:
+    xyz:
+    - -1.5
+    - 1.5
+    - 2.65
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.0
+  actual_pose: null
+  reference_geometry:
+    type: box
+    size:
+    - 3.0
+    - 0.22
+    - 0.3
+  actual_geometry: null
+- id: duct_resized_01
+  type: resized
+  element_id: 0fZ$MiOnzIshQgTqMC2x8T
+  element_class: IfcFlowSegment
+  severity: 0.55
+  magnitude: 0.4
+  reference_pose:
+    xyz:
+    - 3.5
+    - 2.0
+    - 2.35
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.0
+  actual_pose:
+    xyz:
+    - 3.5
+    - 2.0
+    - 2.35
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.0
+  reference_geometry:
+    type: box
+    size:
+    - 3.2
+    - 0.5
+    - 0.4
+  actual_geometry:
+    type: box
+    size:
+    - 3.2
+    - 0.7
+    - 0.4
+- id: crate_unexpected_01
+  type: unexpected
+  element_id: unexpected-crate-01
+  element_class: IfcBuildingElementProxy
+  severity: 0.25
+  magnitude: 1.0
+  reference_pose: null
+  actual_pose:
+    xyz:
+    - 1.0
+    - -2.0
+    - 0.4
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.2
+  reference_geometry: null
+  actual_geometry:
+    type: box
+    size:
+    - 0.8
+    - 0.8
+    - 0.8

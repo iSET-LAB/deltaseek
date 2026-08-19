@@ -1,0 +1,11 @@
+ros2_ws/build/
+ros2_ws/install/
+ros2_ws/log/
+__pycache__/
+*.pyc
+
+
+# colcon / pytest / setuptools artifacts
+log/
+.pytest_cache/
+*.egg-info/

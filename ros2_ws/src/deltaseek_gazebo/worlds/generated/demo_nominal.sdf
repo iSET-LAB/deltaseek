@@ -1,0 +1,192 @@
+<?xml version="1.0"?>
+<sdf version="1.10">
+  <world name="deltaseek_ifc_nominal">
+    <physics name="default_physics" type="ignored">
+      <max_step_size>0.003</max_step_size>
+      <real_time_factor>1.0</real_time_factor>
+    </physics>
+    <plugin filename="gz-sim-physics-system" name="gz::sim::systems::Physics" />
+    <plugin filename="gz-sim-user-commands-system" name="gz::sim::systems::UserCommands" />
+    <plugin filename="gz-sim-scene-broadcaster-system" name="gz::sim::systems::SceneBroadcaster" />
+    <gravity>0 0 -9.81</gravity>
+    <scene>
+      <ambient>0.55 0.55 0.55 1</ambient>
+      <background>0.78 0.84 0.92 1</background>
+      <shadows>false</shadows>
+    </scene>
+    <light type="directional" name="sun">
+      <cast_shadows>false</cast_shadows>
+      <pose>0 0 10 0 0 0</pose>
+      <diffuse>0.9 0.9 0.9 1</diffuse>
+      <direction>-0.4 0.2 -0.9</direction>
+    </light>
+    <model name="ifc_0fZ_MiOnzIshQgTqMC2x8T_36bd11d2">
+      <static>true</static>
+      <pose>3.5 2 2.35 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>3.2 0.5 0.4</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>3.2 0.5 0.4</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.8 0.34 0.1 1</ambient>
+            <diffuse>0.8 0.34 0.1 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+    <model name="ifc_0tcngImXHTB9LROQcp5wi9_3675f4a1">
+      <static>true</static>
+      <pose>0 5.5 1.5 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>18 0.2 3</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>18 0.2 3</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.72 0.69 0.62 1</ambient>
+            <diffuse>0.72 0.69 0.62 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+    <model name="ifc_1HpDGQbvzKeRG_mP1_QqzX_9cb5a086">
+      <static>true</static>
+      <pose>-3 -2 1.5 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.45 0.45 3</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.45 0.45 3</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.58 0.62 1</ambient>
+            <diffuse>0.55 0.58 0.62 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+    <model name="ifc_1oTetZHTbSC89CoF_sOIS7_66433da8">
+      <static>true</static>
+      <pose>-1.5 1.5 2.65 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>3 0.22 0.3</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>3 0.22 0.3</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.58 0.62 1</ambient>
+            <diffuse>0.55 0.58 0.62 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+    <model name="ifc_1rU08iNtHNGgti2n2Tf0b6_def564ba">
+      <static>true</static>
+      <pose>-3 2.5 1.5 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.45 0.45 3</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.45 0.45 3</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.58 0.62 1</ambient>
+            <diffuse>0.55 0.58 0.62 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+    <model name="ifc_28tbQOrQDP4flHeG2NHcXl_51d59407">
+      <static>true</static>
+      <pose>0 0 -0.1 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>18 12 0.2</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>18 12 0.2</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.5 0.5 0.48 1</ambient>
+            <diffuse>0.5 0.5 0.48 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+    <model name="ifc_3pEp8vIzrQ48x8Cb1N6zbE_f32cbd53">
+      <static>true</static>
+      <pose>2 0 2.2 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>0.24 5 0.24</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>0.24 5 0.24</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.8 0.34 0.1 1</ambient>
+            <diffuse>0.8 0.34 0.1 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+  </world>
+</sdf>
