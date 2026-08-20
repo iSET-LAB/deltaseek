@@ -21,6 +21,14 @@ from deltaseek_gazebo.kinematics import base_pose, pose_to_xyz_rpy
 from deltaseek_gazebo.visibility import OrientedBox
 
 
+# Half-extents of the A300 footprint declared in the platform's Nav2
+# configuration. Base-pose feasibility and the traversal cost grid must inflate
+# obstacles by the same amount, or the planner selects viewpoints it cannot
+# drive to.
+FOOTPRINT_HALF_EXTENTS = (0.495, 0.349)
+ROBOT_RADIUS = math.hypot(*FOOTPRINT_HALF_EXTENTS)
+
+
 @dataclass
 class Viewpoint:
     """A base pose plus arm configuration, and the camera pose it produces."""
@@ -50,7 +58,7 @@ ARM_POSTURES = {
 FIXED_POSTURE = 'forward'
 
 
-def footprints(elements, inflation=0.55, drivable_height=0.2,
+def footprints(elements, inflation=ROBOT_RADIUS, drivable_height=0.2,
                platform_height=1.0):
     """Return inflated 2D bounds for elements that block the base.
 
@@ -87,7 +95,8 @@ def is_blocked(point, blocked):
     return False
 
 
-def free_base_poses(elements, bounds, spacing=1.5, yaws=(0.0,), inflation=0.55):
+def free_base_poses(elements, bounds, spacing=1.5, yaws=(0.0,),
+                    inflation=ROBOT_RADIUS):
     """Return grid base poses that clear every blocking element footprint."""
     blocked = footprints(elements, inflation)
     (x_min, x_max), (y_min, y_max) = bounds
