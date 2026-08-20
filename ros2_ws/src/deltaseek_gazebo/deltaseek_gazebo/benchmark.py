@@ -336,6 +336,22 @@ def make_world_sdf(world_config, elements, world_name):
             'filename': 'gz-sim-scene-broadcaster-system',
             'name': 'gz::sim::systems::SceneBroadcaster',
         })
+    # Without the sensors system a camera in this world renders nothing, which
+    # silently produces a benchmark run with no observations at all.
+    sensors = ET.SubElement(
+        world, 'plugin', {
+            'filename': 'gz-sim-sensors-system',
+            'name': 'gz::sim::systems::Sensors',
+        })
+    ET.SubElement(sensors, 'render_engine').text = 'ogre2'
+    # The platform's IMU is declared in the robot description, so Gazebo
+    # advertises its topic either way. Without this system nothing ever fills
+    # it, and the EKF silently runs on wheel odometry alone.
+    ET.SubElement(
+        world, 'plugin', {
+            'filename': 'gz-sim-imu-system',
+            'name': 'gz::sim::systems::Imu',
+        })
     ET.SubElement(world, 'gravity').text = _format(world_config['gravity'])
     scene = ET.SubElement(world, 'scene')
     ET.SubElement(scene, 'ambient').text = '0.55 0.55 0.55 1'
