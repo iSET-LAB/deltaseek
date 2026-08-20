@@ -91,6 +91,28 @@ def generate_launch_description():
         ],
     )
 
+    # The Clearpath realsense macro runs with use_nominal_extrinsics disabled,
+    # so it never emits optical frames, yet the Gazebo sensor stamps every
+    # image and point cloud with camera_0_color_optical_frame. Without this
+    # transform any TF-aware consumer silently drops the camera stream, which
+    # is what makes RViz's Camera display stay blank.
+    camera_optical_frame = Node(
+        package='tf2_ros',
+        executable='static_transform_publisher',
+        name='camera_0_optical_frame',
+        output='screen',
+        arguments=[
+            '--frame-id', 'camera_0_link',
+            '--child-frame-id', 'camera_0_color_optical_frame',
+            '--roll', '-1.5707963', '--pitch', '0', '--yaw', '-1.5707963',
+        ],
+        parameters=[{'use_sim_time': True}],
+        remappings=[
+            ('/tf', '/a300_00000/tf'),
+            ('/tf_static', '/a300_00000/tf_static'),
+        ],
+    )
+
     return LaunchDescription([
         DeclareLaunchArgument(
             'setup_path',
@@ -120,4 +142,5 @@ def generate_launch_description():
         clearpath_spawn,
         clock_bridge,
         imu_bridge,
+        camera_optical_frame,
     ])
