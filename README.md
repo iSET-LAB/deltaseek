@@ -17,30 +17,56 @@ photographs.
 ROS 2 Jazzy and `ros-jazzy-clearpath-simulator` are installed system-wide. Do
 not put ROS in Conda: the Ubuntu packages are built against the system Python.
 
+Conda must not be active when building or launching. Anaconda places its own
+`python3` and its own `libstdc++` ahead of the system ones, and ROS's compiled
+extensions then fail to load:
+
+```text
+import rclpy -> ImportError: libstdc++.so.6: version `GLIBCXX_3.4.30' not found
+```
+
+Keep base deactivated so that an ordinary shell is a working ROS shell, and
+activate `deltaseek-ifc` only for the IFC conversion step:
+
+```bash
+conda config --set auto_activate_base false
+```
+
+Avoid paths containing spaces. `launch.substitutions.Command` splits its input
+with `shlex.split`, so a space in the workspace path breaks the xacro call in
+`simulation.launch.py`.
+
 ```bash
 source /opt/ros/jazzy/setup.bash
-cd /ISET/sxa4756/deltaseek/ros2_ws
+cd ~/deltaseek/ros2_ws
 rosdep install --from-paths src --ignore-src -r -y
 colcon build --symlink-install
 source install/setup.bash
 ```
 
-## Run on the GPU server over SSH
+The launch files resolve their own location back to this checkout to find
+[`clearpath/robot.yaml`](clearpath/robot.yaml), so `setup_path` only needs to
+be passed when pointing at a different configuration, such as an installed
+robot's `/etc/clearpath`. `DELTASEEK_SETUP_PATH` overrides it for a shell.
 
-The headless wrapper starts the official Clearpath construction world,
-generates the robot description and controllers, and does not require a
-display:
+## Run the simulation
+
+`clearpath_sim.launch.py` starts the official Clearpath construction world and
+generates the robot description and controllers. The Gazebo GUI is on by
+default:
 
 ```bash
 source /opt/ros/jazzy/setup.bash
-cd /ISET/sxa4756/deltaseek/ros2_ws
+cd ~/deltaseek/ros2_ws
 source install/setup.bash
-ros2 launch deltaseek_gazebo clearpath_headless.launch.py \
-  setup_path:=/ISET/sxa4756/deltaseek/clearpath
+ros2 launch deltaseek_gazebo clearpath_sim.launch.py
 ```
 
-Leave that terminal running. In a second SSH terminal, source the same two
-setup files before using ROS commands.
+Add `rviz:=true` for the Clearpath RViz configuration. On a machine reached
+over SSH, add `headless:=true` to run the Gazebo server with no display.
+
+Leave that terminal running. In a second terminal, source the same two setup
+files before using ROS commands.
 
 Drive slowly for two seconds, then send a stop:
 
@@ -70,21 +96,21 @@ Use MoveIt or a collision-checked trajectory before commanding broad arm
 motions; a small controller smoke test is shown in
 [`clearpath/README.md`](clearpath/README.md).
 
-## GUI options
+## Upstream launch and remote displays
 
-Gazebo's GUI must render on a machine with a display. For occasional use, log
-in with trusted X11 forwarding (`ssh -Y server`) and run:
+The unmodified Clearpath entry point is also available, and is the reference
+when checking whether a problem comes from this project's wrapper:
 
 ```bash
-QT_X11_NO_MITSHM=1 ros2 launch clearpath_gz simulation.launch.py \
-  setup_path:=/ISET/sxa4756/deltaseek/clearpath \
+ros2 launch clearpath_gz simulation.launch.py \
+  setup_path:=$HOME/deltaseek/clearpath \
   world:=construction
 ```
 
-For better performance, run Gazebo headlessly on the server and visualize ROS
-topics locally with RViz/Foxglove over a suitable ROS 2 network or bridge.
-Running the whole simulation on the local PC is optional, but the local PC
-would need the same ROS 2 Jazzy and Clearpath simulator packages.
+Gazebo's GUI must render on a machine with a display. Over SSH, either use
+trusted X11 forwarding (`ssh -Y`, with `QT_X11_NO_MITSHM=1`), which is slow, or
+run `headless:=true` on the remote machine and visualize ROS topics locally
+with RViz/Foxglove over a suitable ROS 2 network or bridge.
 
 ## IFC-derived deviation benchmark
 
@@ -94,14 +120,74 @@ deviated SDF, and exact ground-truth YAML from an explicit scenario:
 
 ```bash
 source /opt/ros/jazzy/setup.bash
-cd /ISET/sxa4756/deltaseek/ros2_ws
+cd ~/deltaseek/ros2_ws
 source install/setup.bash
-ros2 launch deltaseek_gazebo benchmark_headless.launch.py
+ros2 launch deltaseek_gazebo benchmark.launch.py
 ```
 
 See
 [`config/benchmarks/README.md`](ros2_ws/src/deltaseek_gazebo/config/benchmarks/README.md)
 for IFC conversion, deviation generation, and schema details.
+
+## Inspection sensor
+
+`robot.yaml` mounts an Intel RealSense D435 on `arm_0_tool0`, aimed along the
+tool's approach axis. Putting the camera on the arm rather than the base is
+what the project's claim depends on: viewpoint selection can then reach behind
+and beneath assemblies and into enclosures without repositioning the base.
+Clearpath indexes the sensor as `camera_0`, so it publishes under
+`/a300_00000/sensors/camera_0/`. The mounting transform is a placeholder until
+the as-built mount is measured.
+
+## Evaluating a run
+
+Scenarios can be sampled at a controlled deviation density, and a trajectory
+can be scored against exact ground truth:
+
+```bash
+cd ~/deltaseek/ros2_ws/src/deltaseek_gazebo
+ros2 run deltaseek_gazebo sample_deviations \
+  --manifest config/benchmarks/demo_nominal.yaml \
+  --output /tmp/sampled.yaml --density 0.5 --seed 7
+ros2 run deltaseek_gazebo evaluate_run \
+  --manifest config/benchmarks/demo_nominal.yaml \
+  --scenario /tmp/sampled.yaml \
+  --trajectory config/trajectories/demo_sweep.yaml
+```
+
+The report gives detection rate against traversal-distance budget, which is
+the quantity the planner is meant to improve. Detection uses a geometric
+visibility model rather than rendering, so it is fast enough to run inside a
+planner loop; the trade-offs are documented in the benchmarks README.
+
+## Viewpoint planning
+
+`compare_planners` runs the deviation-seeking planner against the three
+baselines on one scenario, from a shared candidate set and a shared distance
+budget:
+
+```bash
+cd ~/deltaseek/ros2_ws/src/deltaseek_gazebo
+ros2 run deltaseek_gazebo compare_planners \
+  --manifest config/benchmarks/demo_nominal.yaml \
+  --scenario config/benchmarks/demo_deviations.yaml \
+  --budget 12 --max-range 2.5
+```
+
+Add `--fixed-sensor` to repeat the run with the arm frozen at one posture,
+which isolates what including the manipulator in viewpoint selection is worth.
+
+Every planner sees only the nominal model; ground truth is used afterwards, by
+the evaluation harness, to score what the plan actually found. Because
+planners spend different amounts of their budget, they are compared at matched
+absolute distances rather than at their own totals.
+
+Camera poses come from forward kinematics over the generated URDF, so the arm
+mount and camera transform stay driven by `robot.yaml`. That chain is verified
+against the running simulation's TF tree to machine precision.
+
+Travel cost is Euclidean. `cost_fn` in `planner.py` is pluggable so a Nav2 path
+length can replace it without touching the selection logic.
 
 ## Legacy experimental overlay
 
