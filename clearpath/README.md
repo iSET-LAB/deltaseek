@@ -22,22 +22,26 @@ Generate and launch the official Gazebo configuration with:
 ```bash
 source /opt/ros/jazzy/setup.bash
 ros2 launch clearpath_gz simulation.launch.py \
-  setup_path:=/ISET/sxa4756/deltaseek/clearpath \
+  setup_path:=$HOME/deltaseek/clearpath \
   world:=construction
 ```
 
-That upstream command starts the Gazebo GUI and therefore needs a display. For
-an SSH-safe server-only run, build the workspace and use the local wrapper:
+That upstream command always starts the Gazebo GUI and therefore needs a
+display. The local wrapper adds the missing IMU bridge and makes the GUI
+optional, so the same command also works on a machine reached over SSH:
 
 ```bash
 source /opt/ros/jazzy/setup.bash
-source /ISET/sxa4756/deltaseek/ros2_ws/install/setup.bash
-ros2 launch deltaseek_gazebo clearpath_headless.launch.py \
-  setup_path:=/ISET/sxa4756/deltaseek/clearpath
+source ~/deltaseek/ros2_ws/install/setup.bash
+ros2 launch deltaseek_gazebo clearpath_sim.launch.py
+ros2 launch deltaseek_gazebo clearpath_sim.launch.py headless:=true
 ```
 
+The wrapper defaults `setup_path` to this directory, so it only has to be
+passed when targeting a different configuration.
+
 The installed `clearpath_generator_gz` 2.9.2 generates an empty bridge file for
-the Phidgets Spatial IMU. The headless wrapper adds only that missing
+the Phidgets Spatial IMU. The wrapper adds only that missing
 simulation bridge; it does not modify the generated description or controller
 configuration.
 
