@@ -168,3 +168,56 @@ not. It assumes perfect recognition and perfect localization, so it measures
 *viewpoint quality*, not perception robustness. Replacing it with a
 depth-image detector behind the same interface is what the physical-robot
 evaluation will need.
+
+## Synthetic evaluation storey
+
+The demo fixture is seven elements in one open room; every planner sees
+everything and saturates, so it cannot separate them. `generate_storey`
+produces a scene that can:
+
+```bash
+ros2 run deltaseek_gazebo generate_storey \
+  --output /absolute/path/storey.yaml \
+  --rooms-per-side 4 --seed 1
+```
+
+The layout is a central corridor with rooms down both sides, which is the
+cheapest arrangement that forces the robot to enter a space to inspect it.
+Defaults give 110 elements: walls, columns, corridor services, and per-room
+equipment, branch ducts, wall panels and low fittings.
+
+Contents sit at heights chosen to reward different arm postures. Services run
+near the ceiling, wall panels at chest height, and fittings are tucked against
+the far side of equipment where only a viewpoint that reaches past the cabinet
+resolves them.
+
+### Why the geometry is built rather than imported
+
+Walls are emitted as segments around their openings — two jambs and a lintel —
+so a doorway is a real gap the sensor can see through. `ifc_to_manifest`
+cannot yet produce that: it approximates each IFC product by its world-aligned
+bounding box, which turns a wall with a door into a solid barrier and inflates
+occlusion exactly where the planner's reasoning depends on it. Building the
+scene from primitives sidesteps that until a tessellating IFC importer exists.
+`test_doorways_are_real_openings` guards the property.
+
+### Result on this scene
+
+At a 60 m budget, 5 m usable range, 28 deviations sampled at density 0.2:
+
+| planner | with arm | fixed sensor |
+| --- | --- | --- |
+| deviation seeking | **23 / 28** | 18 / 28 |
+| coverage | 20 / 28 | 19 / 28 |
+| frontier | 14 / 28 | 12 / 28 |
+| goal directed | 13 / 28 | 12 / 28 |
+
+Two things are worth reading off this. Deviation-seeking planning leads, and
+including the manipulator is worth five more deviations at the same traversal
+budget. But with the arm frozen the planner no longer beats coverage, so the
+advantage rests on the manipulator rather than on the objective alone.
+
+These are single-seed numbers on one scene and should not be quoted. Filling
+the abstract's figures needs sweeps over density and seed with intervals, and
+a traversal cost that accounts for walls: the planner currently measures
+distance in straight lines, which understates the cost of reaching a room.
