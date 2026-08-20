@@ -201,23 +201,53 @@ occlusion exactly where the planner's reasoning depends on it. Building the
 scene from primitives sidesteps that until a tessellating IFC importer exists.
 `test_doorways_are_real_openings` guards the property.
 
+### Traversal cost
+
+Distance is the denominator of the project's claim, so it has to be a distance
+the robot could drive. `navigation.py` computes it on an inflated occupancy
+grid using the platform's own Nav2 settings: NavfnPlanner is Dijkstra over a
+costmap, so the same quantity is computed directly rather than through an
+action server, which would cost a round trip for each of the tens of thousands
+of pairwise queries a planner makes.
+
+    costmap resolution   0.06 m
+    footprint            0.495 x 0.349 m half-extents
+    circumscribed radius 0.606 m, used as the inflation
+
+Obstacles inflated by the circumscribed radius are treated as lethal, which is
+the conservative reading of an inflation layer: Nav2 would let a path graze an
+inflated cell at higher cost, so these lengths bound what Nav2 returns from
+above. On the synthetic storey, drivable distance averages about 1.8x the
+straight line and reaches 11x, so the choice is not a refinement.
+
+`--path-cost euclidean` restores straight lines for comparison.
+
 ### Result on this scene
 
-At a 60 m budget, 5 m usable range, 28 deviations sampled at density 0.2:
+Five seeds at density 0.2, 60 m budget, 5 m usable range, detection rate as
+mean +/- standard deviation:
 
-| planner | with arm | fixed sensor |
+| planner | arm, drivable | arm, straight-line |
 | --- | --- | --- |
-| deviation seeking | **23 / 28** | 18 / 28 |
-| coverage | 20 / 28 | 19 / 28 |
-| frontier | 14 / 28 | 12 / 28 |
-| goal directed | 13 / 28 | 12 / 28 |
+| coverage | **70.0% +/- 5.3** | 70.0% +/- 5.3 |
+| deviation seeking | 63.6% +/- 6.1 | **72.1% +/- 5.7** |
+| frontier | 47.9% +/- 4.3 | 47.1% +/- 6.1 |
+| goal directed | 25.7% +/- 4.2 | 42.9% +/- 4.5 |
 
-Two things are worth reading off this. Deviation-seeking planning leads, and
-including the manipulator is worth five more deviations at the same traversal
-budget. But with the arm frozen the planner no longer beats coverage, so the
-advantage rests on the manipulator rather than on the objective alone.
+Read the first column, because it is the honest one: **the deviation-seeking
+planner does not beat coverage once distance is measured around walls.** Under
+straight-line distance it appears to lead, which is what made the earlier
+single-seed run look favourable, but the margin is inside one standard
+deviation and it disappears entirely under a realistic cost.
 
-These are single-seed numbers on one scene and should not be quoted. Filling
-the abstract's figures needs sweeps over density and seed with intervals, and
-a traversal cost that accounts for walls: the planner currently measures
-distance in straight lines, which understates the cost of reaching a room.
+A plausible explanation is that the objective and the search disagree. With a
+uniform prior, maximizing expected information about every element's deviation
+state is close to asking to see every element, which is what coverage does --
+and coverage routes better, because a nearest-neighbour tour is a decent
+travelling-salesman heuristic while greedy benefit-per-metre is myopic and
+pays for detours it cannot amortize. That points at the routing rather than
+the objective: selecting a tour, or refining the greedy order, before changing
+what the planner values.
+
+The manipulator still earns its place: with the arm frozen the same planner
+drops from 63.6% to 57.9%, and every planner loses ground.

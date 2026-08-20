@@ -20,8 +20,9 @@ from deltaseek_gazebo.benchmark import validate_manifest
 from deltaseek_gazebo.detection import ObservationParams
 from deltaseek_gazebo.evaluate import evaluate
 from deltaseek_gazebo.kinematics import Chain
+from deltaseek_gazebo.navigation import path_cost_for
 from deltaseek_gazebo.paths import default_setup_path
-from deltaseek_gazebo.planner import PLANNERS, visibility_matrix
+from deltaseek_gazebo.planner import PLANNERS, euclidean, visibility_matrix
 from deltaseek_gazebo.viewpoints import (
     build_viewpoints,
     fixed_sensor_viewpoints,
@@ -57,7 +58,8 @@ def resolve_urdf(explicit=None):
 
 
 def run(manifest, scenario, chain, budget, params, fixed_sensor=False,
-        spacing=1.5, yaws=(0.0, 1.5707963, 3.1415927, -1.5707963)):
+        spacing=1.5, yaws=(0.0, 1.5707963, 3.1415927, -1.5707963),
+        path_cost='grid'):
     """Return one report per planner for this scenario."""
     nominal = validate_manifest(manifest)
     elements = nominal['elements']
@@ -70,23 +72,34 @@ def run(manifest, scenario, chain, budget, params, fixed_sensor=False,
 
     keys, matrix = visibility_matrix(viewpoints, elements, params)
 
+    # Straight-line distance lets every planner reach a room without paying
+    # for the doorway, which flatters all of them and distorts the metric the
+    # project is judged on.
+    cost_fn = euclidean if path_cost == 'euclidean' else path_cost_for(elements)
+    # Start from the reachable pose nearest the west end of the storey rather
+    # than the origin, which need not be drivable.
+    start = min((xy for xy, _ in bases), key=lambda xy: (xy[0], abs(xy[1])))
+
     reports = {}
     for name, planner in PLANNERS.items():
         if name == 'deviation_seeking':
-            order, info = planner(viewpoints, matrix, budget, params=None)
+            order, info = planner(viewpoints, matrix, budget, start=start,
+                                  params=None, cost_fn=cost_fn)
         else:
-            order, info = planner(viewpoints, budget)
+            order, info = planner(viewpoints, budget, start=start,
+                                  cost_fn=cost_fn)
         if not order:
             reports[name] = None
             continue
         trajectory = to_trajectory([viewpoints[i] for i in order], name)
-        report = evaluate(manifest, scenario, trajectory, params)
+        report = evaluate(manifest, scenario, trajectory, params, cost_fn)
         report['planner'] = name
         report['planned_distance'] = info.get('distance')
         reports[name] = report
 
     return reports, {'viewpoints': len(viewpoints), 'base_poses': len(bases),
-                     'elements': len(keys)}
+                     'elements': len(keys), 'path_cost': path_cost,
+                     'start': [round(v, 3) for v in start]}
 
 
 def detections_within(report, limit):
@@ -113,6 +126,10 @@ def _parser():
     parser.add_argument('--min-visible-fraction', type=float, default=0.05)
     parser.add_argument('--max-range', type=float, default=6.0)
     parser.add_argument('--output', type=Path)
+    parser.add_argument(
+        '--path-cost', choices=['grid', 'euclidean'], default='grid',
+        help='grid routes around walls at the platform Nav2 footprint and '
+             'costmap resolution; euclidean is the straight-line baseline.')
     return parser
 
 
@@ -125,12 +142,14 @@ def main(argv=None):
 
     reports, info = run(
         _load(args.manifest), _load(args.scenario), chain, args.budget,
-        params, fixed_sensor=args.fixed_sensor, spacing=args.spacing)
+        params, fixed_sensor=args.fixed_sensor, spacing=args.spacing,
+        path_cost=args.path_cost)
 
     print(f'candidates: {info["viewpoints"]} viewpoints over '
           f'{info["base_poses"]} base poses, {info["elements"]} elements')
     print(f'budget: {args.budget:.1f} m'
-          f'{"  (fixed sensor)" if args.fixed_sensor else "  (arm included)"}')
+          f'{"  (fixed sensor)" if args.fixed_sensor else "  (arm included)"}'
+          f'   traversal cost: {info["path_cost"]}   start: {info["start"]}')
     print()
     # Planners spend different amounts, so their own totals are not
     # comparable. Score every planner at the same absolute distances.

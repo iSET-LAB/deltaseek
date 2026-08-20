@@ -50,11 +50,22 @@ def load_trajectory(document):
     return np.asarray(bases, dtype=float), cameras
 
 
-def cumulative_distance(bases):
-    """Return traversal distance up to and including each viewpoint."""
+def cumulative_distance(bases, cost_fn=None):
+    """Return traversal distance up to and including each viewpoint.
+
+    ``cost_fn`` must be the same cost the planner selected against. Choosing
+    viewpoints by drivable distance and then scoring them by straight-line
+    distance would report a budget the robot never actually spent.
+    """
     if len(bases) < 2:
         return np.zeros(len(bases))
-    steps = np.linalg.norm(np.diff(bases[:, :2], axis=0), axis=1)
+    if cost_fn is None:
+        steps = np.linalg.norm(np.diff(bases[:, :2], axis=0), axis=1)
+    else:
+        steps = np.array([
+            cost_fn(tuple(a[:2]), tuple(b[:2]))
+            for a, b in zip(bases[:-1], bases[1:])
+        ])
     return np.concatenate([[0.0], np.cumsum(steps)])
 
 
@@ -111,13 +122,13 @@ def summarize(records, distances, budgets=DEFAULT_BUDGETS):
     }
 
 
-def evaluate(manifest, scenario, trajectory, params=None):
+def evaluate(manifest, scenario, trajectory, params=None, cost_fn=None):
     """Replay a trajectory against a scenario and return its metrics."""
     nominal, actual_elements, ground_truth = apply_scenario(manifest, scenario)
     bases, cameras = load_trajectory(trajectory)
     records = detect_along(
         cameras, nominal['elements'], actual_elements, ground_truth, params)
-    distances = cumulative_distance(bases)
+    distances = cumulative_distance(bases, cost_fn)
     report = summarize(records, distances)
     report['schema_version'] = 1
     report['scenario_id'] = ground_truth['scenario_id']
