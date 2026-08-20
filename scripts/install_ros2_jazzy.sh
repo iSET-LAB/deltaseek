@@ -31,6 +31,14 @@ curl -fsSL -o "${ros_apt_deb}" \
   "https://github.com/ros-infrastructure/ros-apt-source/releases/download/${ros_apt_source_version}/ros2-apt-source_${ros_apt_source_version}.noble_all.deb"
 sudo dpkg -i "${ros_apt_deb}"
 
+# The ros2-apt-source package ships /etc/apt/sources.list.d/ros2.sources with an
+# embedded key. A hand-written ros2.list from an older install describes the same
+# repository with a different Signed-By, which apt rejects outright.
+if [[ -e /etc/apt/sources.list.d/ros2.list ]]; then
+  sudo mv /etc/apt/sources.list.d/ros2.list \
+    /etc/apt/sources.list.d/ros2.list.disabled
+fi
+
 sudo apt-get update
 sudo apt-get install -y \
   ros-jazzy-desktop \
@@ -40,6 +48,8 @@ sudo apt-get install -y \
   ros-jazzy-clearpath-control \
   ros-jazzy-clearpath-platform-description \
   ros-jazzy-clearpath-manipulators-description \
+  ros-jazzy-clearpath-simulator \
+  ros-jazzy-clearpath-gz \
   ros-jazzy-ur-description \
   ros-jazzy-controller-manager \
   ros-jazzy-diff-drive-controller \

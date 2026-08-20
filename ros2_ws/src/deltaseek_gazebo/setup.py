@@ -31,7 +31,7 @@ setup(
         ('share/' + package_name, ['package.xml']),
     ] + package_files('launch') + package_files('config') + package_files('urdf')
     + package_files('worlds'),
-    install_requires=['setuptools', 'PyYAML'],
+    install_requires=['setuptools', 'PyYAML', 'numpy'],
     zip_safe=True,
     maintainer='DeltaSeek project',
     maintainer_email='sxa4756@example.com',
@@ -43,6 +43,10 @@ setup(
             'ground_truth_publisher = deltaseek_gazebo.ground_truth_publisher:main',
             'generate_benchmark = deltaseek_gazebo.generate_benchmark:main',
             'ifc_to_manifest = deltaseek_gazebo.ifc_to_manifest:main',
+            'sample_deviations = deltaseek_gazebo.deviation_sampler:main',
+            'generate_storey = deltaseek_gazebo.synthetic_storey:main',
+            'evaluate_run = deltaseek_gazebo.evaluate:main',
+            'compare_planners = deltaseek_gazebo.compare:main',
         ],
     },
 )

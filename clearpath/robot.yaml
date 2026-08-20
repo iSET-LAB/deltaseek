@@ -47,6 +47,28 @@ sensors:
         phidgets_spatial:
           data_interval_ms: 20
 
+  # Eye-in-hand inspection sensor.  Mounting the camera on the tool flange is
+  # what lets viewpoint selection reach vantage points a base-mounted sensor
+  # cannot: behind and beneath assemblies, and into enclosures.
+  #
+  # rpy aims the camera's +x view axis along the tool's +z approach axis; the
+  # Clearpath realsense macro derives the optical frame from <name>_link.
+  # The transform is a placeholder until the as-built mount is measured.
+  camera:
+    - model: intel_realsense
+      urdf_enabled: true
+      launch_enabled: true
+      parent: arm_0_tool0
+      xyz: [0.0, 0.0, 0.035]
+      rpy: [0.0, -1.5707963, 0.0]
+      ros_parameters:
+        intel_realsense:
+          camera_name: inspection_camera
+          device_type: d435
+          enable_color: true
+          enable_depth: true
+          pointcloud.enable: true
+
 manipulators:
   moveit:
     enable: true
