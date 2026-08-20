@@ -20,8 +20,11 @@ IFC conversion is intentionally separate from the ROS runtime. IfcOpenShell
 is installed without administrator access in the `deltaseek-ifc` Conda
 environment:
 
+The explicit `PYTHONPATH` matters: a ROS shell exports its own, and leaving it
+in place would shadow the Conda environment's packages.
+
 ```bash
-cd /ISET/sxa4756/deltaseek
+cd ~/deltaseek
 PYTHONPATH=ros2_ws/src/deltaseek_gazebo \
 conda run -n deltaseek-ifc python -m deltaseek_gazebo.ifc_to_manifest \
   --ifc /absolute/path/model.ifc \
@@ -67,7 +70,7 @@ ros2 run deltaseek_gazebo generate_benchmark \
 The checked-in smoke-test data can be regenerated from the source tree with:
 
 ```bash
-cd /ISET/sxa4756/deltaseek/ros2_ws/src/deltaseek_gazebo
+cd ~/deltaseek/ros2_ws/src/deltaseek_gazebo
 PYTHONPATH=. python3 -m deltaseek_gazebo.generate_benchmark \
   --manifest config/benchmarks/demo_nominal.yaml \
   --scenario config/benchmarks/demo_deviations.yaml \
@@ -81,10 +84,87 @@ or scenario and regenerate them.
 
 ```bash
 source /opt/ros/jazzy/setup.bash
-source /ISET/sxa4756/deltaseek/ros2_ws/install/setup.bash
-ros2 launch deltaseek_gazebo benchmark_headless.launch.py
+source ~/deltaseek/ros2_ws/install/setup.bash
+ros2 launch deltaseek_gazebo benchmark.launch.py
 ```
 
 The demo launch starts the official Clearpath-generated A300/UR5e in the
 deviated world and publishes durable reference/actual markers on
-`/deltaseek/ground_truth/discrepancies`.
+`/deltaseek/ground_truth/discrepancies`. It shows the Gazebo GUI by default;
+pass `headless:=true` on a machine without a display, and `rviz:=true` to see
+the ground-truth markers.
+
+## Sample scenarios at a controlled density
+
+Hand-written scenarios pin one difficulty. A density sweep is what shows
+whether a deviation-seeking planner keeps its advantage as deviations become
+rare, so scenarios can also be sampled:
+
+```bash
+ros2 run deltaseek_gazebo sample_deviations \
+  --manifest config/benchmarks/demo_nominal.yaml \
+  --output /absolute/path/sampled.yaml \
+  --scenario-id sweep_d50_s7 \
+  --density 0.5 \
+  --unexpected-rate 0.15 \
+  --seed 7
+```
+
+`--density` is the fraction of nominal elements carrying a deviation.
+Unexpected elements are counted separately by `--unexpected-rate`, because they
+add to the scene rather than modifying an element, and so cannot consume an
+element's single-deviation slot. A scenario id plus a seed reproduces a
+benchmark exactly; the output is an ordinary scenario file that
+`generate_benchmark` consumes unchanged.
+
+## Score a run
+
+`evaluate_run` replays a trajectory against exact ground truth and reports
+detections against a *traversal distance budget*, which is the comparison the
+project's claim rests on:
+
+```bash
+ros2 run deltaseek_gazebo evaluate_run \
+  --manifest config/benchmarks/demo_nominal.yaml \
+  --scenario config/benchmarks/demo_deviations.yaml \
+  --trajectory config/trajectories/demo_sweep.yaml \
+  --output /absolute/path/report.yaml
+```
+
+A trajectory is a list of viewpoints, each with a world-frame `base` position
+and `camera` pose:
+
+```yaml
+schema_version: 1
+trajectory: {id: demo_sweep, frame_id: world}
+viewpoints:
+  - base: {xyz: [-6.0, -3.0, 0.0], yaw: 0.0}
+    camera: {xyz: [-6.0, -3.0, 1.45], rpy: [0.0, -0.35, 0.0]}
+```
+
+Distance accumulates over base positions only. Arm motion is excluded on
+purpose: the claim under test is that including the manipulator in viewpoint
+selection buys detections *without* extra driving, so charging the arm for
+distance would obscure the result.
+
+### How an element counts as observed
+
+Detection is geometric rather than image-based. An element's surface is
+sampled, and a sample counts when it is inside the view frustum, faces the
+camera within an incidence limit, and is not occluded by another element.
+`--min-visible-fraction` is the share of surface required, and stands in for a
+detector's sensitivity.
+
+Each deviation type has its own evidence:
+
+| Type | Revealed by |
+| --- | --- |
+| `missing` | seeing into the nominal volume and finding it empty |
+| `displaced` | seeing the element misplaced, or its modelled place empty |
+| `rotated`, `resized`, `unexpected` | seeing the as-built element |
+
+This model is fast enough to sit inside a planner loop, which rendering is
+not. It assumes perfect recognition and perfect localization, so it measures
+*viewpoint quality*, not perception robustness. Replacing it with a
+depth-image detector behind the same interface is what the physical-robot
+evaluation will need.
