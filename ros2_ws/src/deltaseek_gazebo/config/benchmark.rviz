@@ -1,0 +1,45 @@
+# RViz layout for the IFC deviation benchmark.
+#
+# Kept separate from deltaseek.rviz because the benchmark runs the official
+# Clearpath-generated robot in the a300_00000 namespace and publishes ground
+# truth in the world frame, while the legacy overlay uses a300_0000 and odom.
+Panels:
+  - Class: rviz_common/Displays
+    Name: Displays
+Visualization Manager:
+  Class: ""
+  Global Options:
+    Background Color: 35; 35; 35
+    Fixed Frame: world
+  Displays:
+    - Class: rviz_default_plugins/Grid
+      Name: Grid
+      Enabled: true
+      Cell Size: 1
+    - Class: rviz_default_plugins/RobotModel
+      Name: A300 + UR5e
+      Enabled: true
+      Description Topic:
+        Value: /a300_00000/robot_description
+    - Class: rviz_default_plugins/MarkerArray
+      Name: Discrepancy ground truth
+      Enabled: true
+      Topic:
+        Value: /deltaseek/ground_truth/discrepancies
+    - Class: rviz_default_plugins/Camera
+      Name: Wrist camera
+      Enabled: true
+      Topic:
+        Value: /a300_00000/sensors/camera_0/color/image
+      Overlay Alpha: 0.5
+      Visibility:
+        Grid: false
+        TF: false
+    - Class: rviz_default_plugins/TF
+      Name: TF
+      Enabled: false
+  Enabled: true
+  Name: root
+Window Geometry:
+  Height: 900
+  Width: 1400
