@@ -44,6 +44,7 @@ setup(
             'generate_benchmark = deltaseek_gazebo.generate_benchmark:main',
             'ifc_to_manifest = deltaseek_gazebo.ifc_to_manifest:main',
             'sample_deviations = deltaseek_gazebo.deviation_sampler:main',
+            'generate_storey = deltaseek_gazebo.synthetic_storey:main',
             'evaluate_run = deltaseek_gazebo.evaluate:main',
             'compare_planners = deltaseek_gazebo.compare:main',
         ],
