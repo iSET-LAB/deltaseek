@@ -36,11 +36,25 @@ conda run -n deltaseek-ifc python -m deltaseek_gazebo.ifc_to_manifest \
 Use `--origin` to subtract a project/site coordinate offset when an IFC model
 is georeferenced far from the desired Gazebo origin.
 
-The first adapter represents each supported IFC product with a world-aligned
-bounding box. This is deterministic, conservative, and inexpensive for
-physics/planning development, but it does not preserve openings or detailed
-surface shape. A mesh/tessellation export will be required before evaluating
-image-based deviation detection on realistic geometry.
+Each supported IFC product is represented by a box oriented in its own
+placement frame. Orientation is not a refinement: building models are routinely
+exported on a site grid rotated a fraction of a degree off the world axes, and
+a world-aligned box inflates anything long and thin sitting on such a grid. On
+`ERS_B_STRUCT.ifc` (Revit 2025, IFC2X3, a 44 x 20 m storey rotated 0.90 deg)
+the world-aligned box turns 8-inch walls into 0.82 m ones -- a 4x error on the
+dimension that decides whether the robot fits -- and blocks 11% of the
+candidate base stations. `--geometry aabb` restores the old behaviour for
+comparison.
+
+Angles are written as roll-pitch-yaw in the `Rz @ Ry @ Rx` convention that
+`visibility.rotation_matrix` and SDF both use, so one orientation is shared by
+the planner, the evaluator, and Gazebo.
+
+The approximation is still a box: it does not preserve openings or detailed
+surface shape, so a wall exported as one 39 m entity with eleven doors in it
+becomes a solid 39 m barrier. A tessellating export, or splitting voided walls
+into jamb and lintel segments the way `synthetic_storey` does, is required
+before image-based deviation detection on realistic geometry means anything.
 
 ## Define deviations
 

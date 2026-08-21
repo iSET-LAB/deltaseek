@@ -116,7 +116,9 @@ with RViz/Foxglove over a suitable ROS 2 network or bridge.
 
 The CPU-only IFC/deviation benchmark pipeline converts IFC products into a
 nominal element manifest keyed by IFC GlobalId, then generates a nominal SDF,
-deviated SDF, and exact ground-truth YAML from an explicit scenario:
+deviated SDF, and exact ground-truth YAML from an explicit scenario. Elements
+are boxed in their own placement frame, because real exports sit on a rotated
+site grid and a world-aligned box would inflate every long wall:
 
 ```bash
 source /opt/ros/jazzy/setup.bash
