@@ -17,7 +17,8 @@ import math
 
 import numpy as np
 
-from deltaseek_gazebo.kinematics import base_pose, pose_to_xyz_rpy
+from deltaseek_gazebo.detection import CHASSIS, WRIST
+from deltaseek_gazebo.kinematics import Chain, base_pose, pose_to_xyz_rpy
 from deltaseek_gazebo.visibility import OrientedBox
 
 
@@ -27,6 +28,14 @@ from deltaseek_gazebo.visibility import OrientedBox
 # drive to.
 FOOTPRINT_HALF_EXTENTS = (0.495, 0.349)
 ROBOT_RADIUS = math.hypot(*FOOTPRINT_HALF_EXTENTS)
+
+# Clearpath indexes cameras positionally from robot.yaml, so the eye-in-hand
+# sensor is camera_0 and the chassis sensor camera_1.  Both mount transforms
+# are read out of the generated description by forward kinematics rather than
+# written down here: a guessed mount height would decide the outcome of the
+# sensor ablation by itself.
+WRIST_CAMERA_LINK = 'camera_0_link'
+CHASSIS_CAMERA_LINK = 'camera_1_link'
 
 
 @dataclass
@@ -38,10 +47,20 @@ class Viewpoint:
     joint_values: dict = field(default_factory=dict)
     camera_xyz: tuple = (0.0, 0.0, 0.0)
     camera_rpy: tuple = (0.0, 0.0, 0.0)
+    sensor_poses: dict = field(default_factory=dict)
 
     @property
     def base_xyz(self):
         return [float(self.base_xy[0]), float(self.base_xy[1]), 0.0]
+
+    def poses(self, sensors=None):
+        """Return ``{sensor_name: (xyz, rpy)}`` for the active sensors."""
+        available = self.sensor_poses or {
+            WRIST: (self.camera_xyz, self.camera_rpy)}
+        if sensors is None:
+            return dict(available)
+        return {name: pose for name, pose in available.items()
+                if name in sensors}
 
 
 # Representative inspection postures.  These are chosen for what they let the
@@ -120,9 +139,21 @@ def scene_bounds(elements, margin=1.0):
     )
 
 
-def build_viewpoints(chain, base_poses, postures=None, min_camera_height=0.25):
-    """Compose base poses with arm postures into camera viewpoints."""
+def chassis_chain(urdf_path, link=CHASSIS_CAMERA_LINK):
+    """Return the base_link -> chassis camera chain from the description."""
+    return Chain.from_urdf(urdf_path, 'base_link', link)
+
+
+def build_viewpoints(chain, base_poses, postures=None, min_camera_height=0.25,
+                     chassis=None):
+    """Compose base poses with arm postures into camera viewpoints.
+
+    ``chassis`` is an optional base_link -> chassis camera chain.  Its pose is
+    computed once, outside the posture loop, because a chassis sensor does not
+    move with the arm; that invariance is the whole point of the comparison.
+    """
     postures = ARM_POSTURES if postures is None else postures
+    chassis_local = None if chassis is None else chassis.forward()
     viewpoints = []
     cache = {}
     for name, values in postures.items():
@@ -138,16 +169,28 @@ def build_viewpoints(chain, base_poses, postures=None, min_camera_height=0.25):
             xyz, rpy = pose_to_xyz_rpy(camera)
             if xyz[2] < min_camera_height:
                 continue
+            poses = {WRIST: (tuple(xyz), tuple(rpy))}
+            if chassis_local is not None:
+                c_xyz, c_rpy = pose_to_xyz_rpy(world_base @ chassis_local)
+                poses[CHASSIS] = (tuple(c_xyz), tuple(c_rpy))
             viewpoints.append(Viewpoint(
                 base_xy=xy, base_yaw=yaw, joint_values=joints,
-                camera_xyz=tuple(xyz), camera_rpy=tuple(rpy)))
+                camera_xyz=tuple(xyz), camera_rpy=tuple(rpy),
+                sensor_poses=poses))
     return viewpoints
 
 
-def fixed_sensor_viewpoints(chain, base_poses, posture=FIXED_POSTURE):
-    """Return the comparison set: one frozen arm posture, base motion only."""
+def fixed_sensor_viewpoints(chain, base_poses, posture=FIXED_POSTURE,
+                            chassis=None):
+    """Return the comparison set: one frozen arm posture, base motion only.
+
+    Note this freezes the *arm*, leaving the camera on a parked tool flange.
+    It is not the same comparison as running with only the chassis sensor
+    active, which is what a real platform without a manipulator would have.
+    """
     return build_viewpoints(
-        chain, base_poses, postures={posture: ARM_POSTURES[posture]})
+        chain, base_poses, postures={posture: ARM_POSTURES[posture]},
+        chassis=chassis)
 
 
 def to_trajectory(viewpoints, trajectory_id='run'):
@@ -169,6 +212,13 @@ def to_trajectory(viewpoints, trajectory_id='run'):
                     round(float(value), 6)
                     for value in viewpoint.joint_values.values()
                 ],
+                'sensors': {
+                    name: {
+                        'xyz': [round(float(v), 6) for v in xyz],
+                        'rpy': [round(float(v), 6) for v in rpy],
+                    }
+                    for name, (xyz, rpy) in viewpoint.poses().items()
+                },
             }
             for viewpoint in viewpoints
         ],

@@ -21,7 +21,8 @@ import math
 
 import numpy as np
 
-from deltaseek_gazebo.detection import ObservationParams, Scene
+from deltaseek_gazebo.detection import (
+    ObservationParams, Scene, sensor_params)
 from deltaseek_gazebo.visibility import visible_fraction
 
 
@@ -30,23 +31,31 @@ def euclidean(a, b):
     return float(math.hypot(b[0] - a[0], b[1] - a[1]))
 
 
-def visibility_matrix(viewpoints, elements, params=None):
+def visibility_matrix(viewpoints, elements, params=None, sensors=None):
     """Return the visible surface fraction of each element from each viewpoint.
 
     Computed once against the nominal model and reused by every planner, so
-    planners are compared on identical information.
+    planners are compared on identical information.  With several sensors
+    active an element's fraction is the best any one of them achieves, matching
+    the detection model: one good look is enough.
+
+    ``sensors`` restricts which are active, so the planner reasons with the
+    same information the evaluation will score it on.  Planning with the arm
+    and scoring without it would flatter the arm.
     """
     params = params or ObservationParams()
     scene = Scene.from_elements(elements)
     keys = list(scene.boxes)
     matrix = np.zeros((len(viewpoints), len(keys)))
     for row, viewpoint in enumerate(viewpoints):
-        camera = params.camera(viewpoint.camera_xyz, viewpoint.camera_rpy)
-        for column, key in enumerate(keys):
-            matrix[row, column] = visible_fraction(
-                scene.boxes[key], camera, scene.occluders(exclude=key),
-                samples_per_face=params.samples_per_face,
-                max_incidence=params.max_incidence)
+        for name, (xyz, rpy) in viewpoint.poses(sensors).items():
+            active = sensor_params(params, name)
+            camera = active.camera(xyz, rpy)
+            for column, key in enumerate(keys):
+                matrix[row, column] = max(matrix[row, column], visible_fraction(
+                    scene.boxes[key], camera, scene.occluders(exclude=key),
+                    samples_per_face=active.samples_per_face,
+                    max_incidence=active.max_incidence))
     return keys, matrix
 
 

@@ -20,7 +20,17 @@ import numpy as np
 import yaml
 
 from deltaseek_gazebo.benchmark import apply_scenario
-from deltaseek_gazebo.detection import ObservationParams, detect_along
+from deltaseek_gazebo.detection import (
+    CHASSIS, WRIST, ObservationParams, detect_along)
+
+
+# 'both' is None rather than the full set so a trajectory without per-sensor
+# poses keeps working unchanged.
+SENSOR_SETS = {
+    'chassis': (CHASSIS,),
+    'wrist': (WRIST,),
+    'both': None,
+}
 
 
 DEFAULT_BUDGETS = (0.25, 0.5, 0.75, 1.0)
@@ -36,18 +46,28 @@ def load_trajectory(document):
     if not viewpoints:
         raise ValueError('trajectory contains no viewpoints')
     bases = []
-    cameras = []
+    stations = []
     for index, viewpoint in enumerate(viewpoints):
         camera = viewpoint.get('camera')
         if not camera:
             raise ValueError(f'viewpoints[{index}] has no camera pose')
-        cameras.append((
-            [float(value) for value in camera['xyz']],
-            [float(value) for value in camera.get('rpy', [0.0, 0.0, 0.0])],
-        ))
+        sensors = viewpoint.get('sensors')
+        if sensors:
+            stations.append({
+                name: (
+                    [float(v) for v in pose['xyz']],
+                    [float(v) for v in pose.get('rpy', [0.0, 0.0, 0.0])],
+                )
+                for name, pose in sensors.items()
+            })
+        else:
+            stations.append((
+                [float(value) for value in camera['xyz']],
+                [float(value) for value in camera.get('rpy', [0.0, 0.0, 0.0])],
+            ))
         base = viewpoint.get('base', {})
         bases.append([float(value) for value in base.get('xyz', camera['xyz'])])
-    return np.asarray(bases, dtype=float), cameras
+    return np.asarray(bases, dtype=float), stations
 
 
 def cumulative_distance(bases, cost_fn=None):
@@ -122,12 +142,14 @@ def summarize(records, distances, budgets=DEFAULT_BUDGETS):
     }
 
 
-def evaluate(manifest, scenario, trajectory, params=None, cost_fn=None):
+def evaluate(manifest, scenario, trajectory, params=None, cost_fn=None,
+             sensors=None):
     """Replay a trajectory against a scenario and return its metrics."""
     nominal, actual_elements, ground_truth = apply_scenario(manifest, scenario)
-    bases, cameras = load_trajectory(trajectory)
+    bases, stations = load_trajectory(trajectory)
     records = detect_along(
-        cameras, nominal['elements'], actual_elements, ground_truth, params)
+        stations, nominal['elements'], actual_elements, ground_truth, params,
+        sensors=sensors)
     distances = cumulative_distance(bases, cost_fn)
     report = summarize(records, distances)
     report['schema_version'] = 1
@@ -150,6 +172,10 @@ def _parser():
         '--max-range', type=float, default=6.0,
         help='Usable depth range in metres, not the render clip distance.')
     parser.add_argument(
+        '--sensors', choices=['chassis', 'wrist', 'both'], default='both',
+        help='Which sensors are active. Only meaningful for a trajectory that '
+             'carries per-sensor poses.')
+    parser.add_argument(
         '--samples-per-face', type=int, default=3,
         help='Grid resolution per box face; cost grows with its square.')
     return parser
@@ -164,7 +190,7 @@ def main(argv=None):
     )
     report = evaluate(
         _load(args.manifest), _load(args.scenario), _load(args.trajectory),
-        params)
+        params, sensors=SENSOR_SETS[args.sensors])
 
     if args.output:
         args.output.parent.mkdir(parents=True, exist_ok=True)

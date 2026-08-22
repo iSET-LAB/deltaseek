@@ -12,6 +12,11 @@ Each deviation type becomes visible through a different observation:
     Either observation suffices: seeing the element in the wrong place, or
     seeing that the modelled place is empty.
 
+A station may carry more than one sensor.  An element is observed when *any*
+active sensor observes it, which is what makes "would the chassis camera have
+seen this anyway?" a question the model can answer: run the same stations with
+different sensors enabled and compare.
+
 A deviation counts as detected the first time its governing observation clears
 ``min_visible_fraction``.  That threshold stands in for a detector's sensitivity
 and is the main knob separating this geometric model from a real perception
@@ -23,6 +28,9 @@ import math
 
 from deltaseek_gazebo.visibility import Camera, OrientedBox, visible_fraction
 
+
+WRIST = 'wrist'
+CHASSIS = 'chassis'
 
 ACTUAL = 'actual'
 NOMINAL = 'nominal'
@@ -74,6 +82,28 @@ class Scene:
         ]
 
 
+def normalise_station(station):
+    """Return ``{sensor_name: (xyz, rpy)}`` for one observation station.
+
+    A bare ``(xyz, rpy)`` pair is the single-camera form used before sensor
+    configurations existed, and is read as the wrist camera.
+    """
+    if isinstance(station, dict):
+        return station
+    xyz, rpy = station
+    return {WRIST: (xyz, rpy)}
+
+
+def sensor_params(params, name):
+    """Resolve the observation thresholds for one sensor."""
+    if isinstance(params, dict):
+        resolved = params.get(name)
+        if resolved is None:
+            raise KeyError(f'no ObservationParams supplied for sensor {name!r}')
+        return resolved
+    return params
+
+
 def _fraction(box, camera, occluders, params):
     return visible_fraction(
         box, camera, occluders,
@@ -116,11 +146,15 @@ def evidence_fractions(camera, discrepancy, nominal_boxes, scene, params):
 
 
 def detect_along(viewpoints, nominal_elements, actual_elements, ground_truth,
-                 params=None):
+                 params=None, sensors=None):
     """Replay viewpoints and record when each deviation first becomes visible.
 
-    ``viewpoints`` is a sequence of ``(xyz, rpy)`` camera poses in the world
-    frame.  Returns one record per ground-truth deviation.
+    ``viewpoints`` is a sequence of observation stations, each either a bare
+    ``(xyz, rpy)`` camera pose or a ``{sensor_name: (xyz, rpy)}`` mapping, in
+    the world frame.  ``sensors`` restricts which of them are active;
+    ``params`` is either one ``ObservationParams`` for all sensors or a mapping
+    from sensor name to its own.  Returns one record per ground-truth
+    deviation.
     """
     params = params or ObservationParams()
     scene = Scene.from_elements(actual_elements)
@@ -141,23 +175,32 @@ def detect_along(viewpoints, nominal_elements, actual_elements, ground_truth,
             'first_viewpoint': None,
             'best_visible_fraction': 0.0,
             'evidence': None,
+            'sensor': None,
         })
 
-    for index, (xyz, rpy) in enumerate(viewpoints):
-        camera = params.camera(xyz, rpy)
-        for record, discrepancy in zip(records, ground_truth['discrepancies']):
-            if record['detected']:
-                continue
-            fractions = evidence_fractions(
-                camera, discrepancy, nominal_boxes, scene, params)
-            if not fractions:
-                continue
-            source, value = max(fractions.items(), key=lambda item: item[1])
-            if value > record['best_visible_fraction']:
-                record['best_visible_fraction'] = round(float(value), 6)
-            if value >= params.min_visible_fraction:
-                record['detected'] = True
-                record['first_viewpoint'] = index
-                record['evidence'] = source
+    for index, station in enumerate(viewpoints):
+        poses = normalise_station(station)
+        if sensors is not None:
+            poses = {name: pose for name, pose in poses.items()
+                     if name in sensors}
+        for name, (xyz, rpy) in poses.items():
+            active = sensor_params(params, name)
+            camera = active.camera(xyz, rpy)
+            for record, discrepancy in zip(
+                    records, ground_truth['discrepancies']):
+                if record['detected']:
+                    continue
+                fractions = evidence_fractions(
+                    camera, discrepancy, nominal_boxes, scene, active)
+                if not fractions:
+                    continue
+                source, value = max(fractions.items(), key=lambda i: i[1])
+                if value > record['best_visible_fraction']:
+                    record['best_visible_fraction'] = round(float(value), 6)
+                if value >= active.min_visible_fraction:
+                    record['detected'] = True
+                    record['first_viewpoint'] = index
+                    record['evidence'] = source
+                    record['sensor'] = name
 
     return records

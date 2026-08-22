@@ -18,13 +18,14 @@ import yaml
 
 from deltaseek_gazebo.benchmark import validate_manifest
 from deltaseek_gazebo.detection import ObservationParams
-from deltaseek_gazebo.evaluate import evaluate
+from deltaseek_gazebo.evaluate import SENSOR_SETS, evaluate
 from deltaseek_gazebo.kinematics import Chain
 from deltaseek_gazebo.navigation import path_cost_for
 from deltaseek_gazebo.paths import default_setup_path
 from deltaseek_gazebo.planner import PLANNERS, euclidean, visibility_matrix
 from deltaseek_gazebo.viewpoints import (
     build_viewpoints,
+    chassis_chain,
     fixed_sensor_viewpoints,
     free_base_poses,
     scene_bounds,
@@ -59,18 +60,20 @@ def resolve_urdf(explicit=None):
 
 def run(manifest, scenario, chain, budget, params, fixed_sensor=False,
         spacing=1.5, yaws=(0.0, 1.5707963, 3.1415927, -1.5707963),
-        path_cost='grid', start=None):
+        path_cost='grid', start=None, sensors=None, chassis=None):
     """Return one report per planner for this scenario."""
     nominal = validate_manifest(manifest)
     elements = nominal['elements']
     bases = free_base_poses(
         elements, scene_bounds(elements), spacing=spacing, yaws=yaws)
     builder = fixed_sensor_viewpoints if fixed_sensor else build_viewpoints
-    viewpoints = builder(chain, bases)
+    viewpoints = builder(chain, bases, chassis=chassis)
     if not viewpoints:
         raise ValueError('no reachable viewpoints were generated')
 
-    keys, matrix = visibility_matrix(viewpoints, elements, params)
+    # The planner must see what the evaluation will score, so the same sensor
+    # set drives both.
+    keys, matrix = visibility_matrix(viewpoints, elements, params, sensors)
 
     # Straight-line distance lets every planner reach a room without paying
     # for the doorway, which flatters all of them and distorts the metric the
@@ -100,7 +103,8 @@ def run(manifest, scenario, chain, budget, params, fixed_sensor=False,
             reports[name] = None
             continue
         trajectory = to_trajectory([viewpoints[i] for i in order], name)
-        report = evaluate(manifest, scenario, trajectory, params, cost_fn)
+        report = evaluate(manifest, scenario, trajectory, params, cost_fn,
+                          sensors=sensors)
         report['planner'] = name
         report['planned_distance'] = info.get('distance')
         reports[name] = report
@@ -135,6 +139,9 @@ def _parser():
     parser.add_argument('--max-range', type=float, default=6.0)
     parser.add_argument('--output', type=Path)
     parser.add_argument(
+        '--sensors', choices=['chassis', 'wrist', 'both'], default='both',
+        help='Which sensors are active for both planning and scoring.')
+    parser.add_argument(
         '--start', nargs=2, type=float, default=None, metavar=('X', 'Y'),
         help='World-frame start position, snapped to the nearest candidate '
              'base pose. Defaults to the westmost candidate, which suits a '
@@ -156,13 +163,16 @@ def main(argv=None):
     reports, info = run(
         _load(args.manifest), _load(args.scenario), chain, args.budget,
         params, fixed_sensor=args.fixed_sensor, spacing=args.spacing,
-        path_cost=args.path_cost, start=args.start)
+        path_cost=args.path_cost, start=args.start,
+        sensors=SENSOR_SETS[args.sensors],
+        chassis=chassis_chain(resolve_urdf(args.urdf)))
 
     print(f'candidates: {info["viewpoints"]} viewpoints over '
           f'{info["base_poses"]} base poses, {info["elements"]} elements')
     print(f'budget: {args.budget:.1f} m'
           f'{"  (fixed sensor)" if args.fixed_sensor else "  (arm included)"}'
-          f'   traversal cost: {info["path_cost"]}   start: {info["start"]}')
+          f'   traversal cost: {info["path_cost"]}   start: {info["start"]}'
+          f'   sensors: {args.sensors}')
     print()
     # Planners spend different amounts, so their own totals are not
     # comparable. Score every planner at the same absolute distances.
