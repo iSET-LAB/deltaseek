@@ -1,0 +1,400 @@
+schema_version: 1
+source:
+  type: ifc
+  file: ERS_B_STRUCT.ifc
+  ifc_schema: IFC2X3
+  units: metre
+  geometry_approximation: oriented_bounding_box
+  origin_offset:
+  - 0.0
+  - 0.0
+  - 0.0
+  skipped_degenerate_products: 0
+  room:
+    id: hall_b
+    bounds:
+    - 2.7
+    - -6.55
+    - 10.1
+    - 6.5
+    z_range:
+    - -0.2
+    - 2.55
+    parent_elements: 131
+  fitout_note: 'Two modelled fit-out units added to the IFC-derived shell. The export
+    contains no furniture, and both occlusion and height-limited observability need
+    something to stand behind or on top of. Their 2.25 m height is set by measurement,
+    not taste: the chassis camera frustum reaches 2.170 m and the ceiling starts at
+    2.44 m.'
+world:
+  name: deltaseek_hall_b_ablation
+  frame_id: world
+  gravity:
+  - 0.0
+  - 0.0
+  - -9.81
+elements:
+- id: 05LeiFLbH7dBxLmOb3F9cv
+  ifc_class: IfcDoor
+  name: Door-Double-Flush_Panel:72" x 78":306349
+  pose:
+    xyz:
+    - 8.891095
+    - 6.334841
+    - 1.0287
+    rpy:
+    - 0.0
+    - 0.0
+    - 3.127303498
+  geometry:
+    type: box
+    size:
+    - 1.9812
+    - 0.174625
+    - 2.0574
+  material:
+    rgba:
+    - 0.55
+    - 0.32
+    - 0.14
+    - 1.0
+  static: true
+  collision: true
+- id: 0KvanlNQrCphrCb4tAxXpN
+  ifc_class: IfcWallStandardCase
+  name: Basic Wall:Generic - 8":294750
+  pose:
+    xyz:
+    - 2.796055
+    - 0.104399
+    - 1.275
+    rpy:
+    - 0.0
+    - 0.0
+    - -1.586517708
+  geometry:
+    type: box
+    size:
+    - 12.510271
+    - 0.2032
+    - 2.55
+  material:
+    rgba:
+    - 0.72
+    - 0.69
+    - 0.62
+    - 1.0
+  static: true
+  collision: true
+- id: 0KvanlNQrCphrCb4tAxkBj
+  ifc_class: IfcWallStandardCase
+  name: Basic Wall:Generic - 8":295268
+  pose:
+    xyz:
+    - 9.968354
+    - -0.003231
+    - 1.275
+    rpy:
+    - 0.0
+    - 0.0
+    - -1.586517708
+  geometry:
+    type: box
+    size:
+    - 12.520544
+    - 0.2032
+    - 2.55
+  material:
+    rgba:
+    - 0.72
+    - 0.69
+    - 0.62
+    - 1.0
+  static: true
+  collision: true
+- id: 0KvanlNQrCphrCb4tAxkG7
+  ifc_class: IfcWallStandardCase
+  name: Basic Wall:Interior - 4 7/8" Partition (1-hr):296846
+  pose:
+    xyz:
+    - 6.491373
+    - 6.369133
+    - 1.275
+    rpy:
+    - 0.0
+    - 0.0
+    - 3.127303498
+  geometry:
+    type: box
+    size:
+    - 7.585712
+    - 0.123825
+    - 2.55
+  material:
+    rgba:
+    - 0.72
+    - 0.69
+    - 0.62
+    - 1.0
+  static: true
+  collision: true
+- id: 0KvanlNQrCphrCb4tAxkvE
+  ifc_class: IfcWallStandardCase
+  name: Basic Wall:Generic - 12":298439
+  pose:
+    xyz:
+    - 5.176841
+    - -6.049325
+    - 1.275
+    rpy:
+    - 0.0
+    - 0.0
+    - 3.141592654
+  geometry:
+    type: box
+    size:
+    - 2.48285
+    - 0.3048
+    - 2.55
+  material:
+    rgba:
+    - 0.72
+    - 0.69
+    - 0.62
+    - 1.0
+  static: true
+  collision: true
+- id: 0KvanlNQrCphrCb4tAxkzA
+  ifc_class: IfcWallStandardCase
+  name: Basic Wall:Generic - 12":298179
+  pose:
+    xyz:
+    - 8.653188
+    - -6.097364
+    - 1.275
+    rpy:
+    - 0.0
+    - 0.0
+    - 3.125871272
+  geometry:
+    type: box
+    size:
+    - 2.2098
+    - 0.3048
+    - 2.55
+  material:
+    rgba:
+    - 0.72
+    - 0.69
+    - 0.62
+    - 1.0
+  static: true
+  collision: true
+- id: 1abtvTofT8EB1v01F0Dkt3
+  ifc_class: IfcWallStandardCase
+  name: Basic Wall:Generic - 8":291242
+  pose:
+    xyz:
+    - 6.301211
+    - -6.308232
+    - 1.275
+    rpy:
+    - 0.0
+    - 0.0
+    - -0.015721382
+  geometry:
+    type: box
+    size:
+    - 7.604241
+    - 0.2032
+    - 2.55
+  material:
+    rgba:
+    - 0.72
+    - 0.69
+    - 0.62
+    - 1.0
+  static: true
+  collision: true
+- id: 1s7WttW8LF3wo3GFHzG4HD
+  ifc_class: IfcWindow
+  name: Fixed:24" x 52":321421
+  pose:
+    xyz:
+    - 3.407035
+    - -6.262728
+    - 1.33985
+    rpy:
+    - 0.0
+    - 0.0
+    - 3.125871272
+  geometry:
+    type: box
+    size:
+    - 0.6096
+    - 0.2032
+    - 1.3716
+  material:
+    rgba:
+    - 0.25
+    - 0.55
+    - 0.72
+    - 0.55
+  static: true
+  collision: true
+- id: 1s7WttW8LF3wo3GFHzG4IH
+  ifc_class: IfcWindow
+  name: Fixed:24" x 52":321361
+  pose:
+    xyz:
+    - 6.972898
+    - -6.318793
+    - 1.33985
+    rpy:
+    - 0.0
+    - 0.0
+    - 3.125871272
+  geometry:
+    type: box
+    size:
+    - 0.6096
+    - 0.2032
+    - 1.3716
+  material:
+    rgba:
+    - 0.25
+    - 0.55
+    - 0.72
+    - 0.55
+  static: true
+  collision: true
+- id: 1s7WttW8LF3wo3GFHzG7VQ
+  ifc_class: IfcSlab
+  name: Floor:Concrete Slab - 6":316442
+  pose:
+    xyz:
+    - 6.4
+    - -0.025
+    - -0.0762
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.0
+  geometry:
+    type: box
+    size:
+    - 7.4
+    - 13.05
+    - 0.1524
+  material:
+    rgba:
+    - 0.5
+    - 0.5
+    - 0.48
+    - 1.0
+  static: true
+  collision: true
+- id: 2UiYIxdTHDMQxEBYlcrRAA
+  ifc_class: IfcCovering
+  name: Compound Ceiling:2' x 4' ACT System:326763
+  pose:
+    xyz:
+    - 6.366227
+    - 0.062508
+    - 2.466975
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.0
+  geometry:
+    type: box
+    size:
+    - 7.197574
+    - 12.589517
+    - 0.05715
+  material:
+    rgba:
+    - 0.65
+    - 0.68
+    - 0.72
+    - 1.0
+  static: true
+  collision: true
+- id: 2twF3dYLP0A94p8cE1aniu
+  ifc_class: IfcCovering
+  name: Compound Ceiling:2' x 4' ACT System:323873
+  pose:
+    xyz:
+    - 6.4
+    - 1.899848
+    - 2.466975
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.0
+  geometry:
+    type: box
+    size:
+    - 7.4
+    - 9.200305
+    - 0.05715
+  material:
+    rgba:
+    - 0.65
+    - 0.68
+    - 0.72
+    - 1.0
+  static: true
+  collision: true
+- id: fitout-rack-a
+  ifc_class: IfcFurnishingElement
+  name: Storage rack A (modelled)
+  pose:
+    xyz:
+    - 9.4
+    - 1.0
+    - 1.125
+    rpy:
+    - 0.0
+    - 0.0
+    - -0.0157
+  geometry:
+    type: box
+    size:
+    - 0.6
+    - 2.4
+    - 2.25
+  material:
+    rgba:
+    - 0.42
+    - 0.45
+    - 0.48
+    - 1.0
+  static: true
+  collision: true
+- id: fitout-cabinet-b
+  ifc_class: IfcFurnishingElement
+  name: Tall cabinet B (modelled)
+  pose:
+    xyz:
+    - 4.2
+    - 5.6
+    - 1.125
+    rpy:
+    - 0.0
+    - 0.0
+    - -0.0157
+  geometry:
+    type: box
+    size:
+    - 1.8
+    - 0.6
+    - 2.25
+  material:
+    rgba:
+    - 0.42
+    - 0.45
+    - 0.48
+    - 1.0
+  static: true
+  collision: true

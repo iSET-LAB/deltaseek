@@ -1,0 +1,135 @@
+schema_version: 1
+scenario:
+  id: hall_b_ablation
+  seed: 0
+  description: >
+    Eight hand-placed deviations in Hall B, two in each observability class.
+    Placement is by geometry, not by taste: the chassis camera sits at
+    z = 0.351 m pitched 9.7 deg down with a 56.8 deg vertical field, so the top
+    of its frustum rises at 18.7 deg and reaches z = 2.04 m at its 5 m range
+    limit. Anything whose lowest surface is above that is outside its reach at
+    every standoff, which is what the `height` pair tests. The wrist camera in
+    its raised posture sits at z = 1.019 m looking level, so it clears the same
+    points from 1.9 m away.
+
+    Nothing here is tuned to make the arm look necessary. `trivial` should be
+    resolved by either sensor and is included so that a configuration that
+    fails it is visibly broken.
+deviations:
+
+  # --- trivial: large, unmodelled, standing in open floor ------------------
+  - id: T1-pallet-stack
+    type: unexpected
+    class: trivial
+    severity: 0.8
+    element:
+      id: T1-pallet-stack
+      ifc_class: IfcBuildingElementProxy
+      name: Pallet stack in open floor (unmodelled)
+      pose: {xyz: [5.20, -1.80, 0.80], rpy: [0.0, 0.0, 0.30]}
+      geometry: {type: box, size: [1.20, 0.90, 1.60]}
+      material: {rgba: [0.62, 0.36, 0.14, 1.0]}
+      static: true
+      collision: true
+
+  - id: T2-site-cabin
+    type: unexpected
+    class: trivial
+    severity: 0.7
+    element:
+      id: T2-site-cabin
+      ifc_class: IfcBuildingElementProxy
+      name: Site storage box in open floor (unmodelled)
+      pose: {xyz: [8.30, -3.60, 0.70], rpy: [0.0, 0.0, -0.20]}
+      geometry: {type: box, size: [1.00, 0.80, 1.40]}
+      material: {rgba: [0.55, 0.18, 0.16, 1.0]}
+      static: true
+      collision: true
+
+  # --- height: lowest surface above the chassis frustum at any standoff ----
+  - id: H1-rack-tote
+    type: unexpected
+    class: height
+    severity: 0.5
+    element:
+      id: H1-rack-tote
+      ifc_class: IfcBuildingElementProxy
+      name: Tote on top of storage rack A (unmodelled)
+      # z spans 2.25 to 2.41, against a measured chassis ceiling of 2.170 m.
+      pose: {xyz: [9.40, 1.00, 2.33], rpy: [0.0, 0.0, 0.35]}
+      geometry: {type: box, size: [0.50, 0.45, 0.16]}
+      material: {rgba: [0.78, 0.66, 0.42, 1.0]}
+      static: true
+      collision: true
+
+  - id: H2-cabinet-carton
+    type: unexpected
+    class: height
+    severity: 0.5
+    element:
+      id: H2-cabinet-carton
+      ifc_class: IfcBuildingElementProxy
+      name: Carton on top of cabinet B (unmodelled)
+      # z spans 2.25 to 2.42.
+      pose: {xyz: [4.20, 5.60, 2.335], rpy: [0.0, 0.0, -0.42]}
+      geometry: {type: box, size: [0.45, 0.40, 0.17]}
+      material: {rgba: [0.78, 0.66, 0.42, 1.0]}
+      static: true
+      collision: true
+
+  # --- incidence: informative face nearly parallel to the usual sightline --
+  - id: I1-window-displaced
+    type: displaced
+    class: incidence
+    severity: 0.7
+    target: 1s7WttW8LF3wo3GFHzG4IH
+    translation: [0.35, 0.0, -0.18]
+
+  - id: I2-standing-panel
+    type: unexpected
+    class: incidence
+    severity: 0.6
+    element:
+      id: I2-standing-panel
+      ifc_class: IfcBuildingElementProxy
+      name: Sheet standing on edge, perpendicular to the south wall (unmodelled)
+      # Large faces point east and west, so a camera looking south at it sees
+      # only a 0.05 m edge. Resolving it needs an oblique approach along the
+      # wall, which is a base-yaw problem rather than an arm problem -- the
+      # class is here to test exactly that distinction.
+      pose: {xyz: [7.80, -5.28, 0.65], rpy: [0.0, 0.0, 1.5551]}
+      geometry: {type: box, size: [1.10, 0.05, 1.30]}
+      material: {rgba: [0.72, 0.70, 0.55, 1.0]}
+      static: true
+      collision: true
+
+  # --- occluded: in another object's shadow from most base positions -------
+  - id: O1-crate-behind-stack
+    type: unexpected
+    class: occluded
+    severity: 0.6
+    element:
+      id: O1-crate-behind-stack
+      ifc_class: IfcBuildingElementProxy
+      name: Low crate south of the pallet stack (unmodelled)
+      # 0.45 m tall, 0.19 m behind a 1.60 m stack: shadowed from the whole
+      # north half of the room, reachable only by driving around.
+      pose: {xyz: [5.20, -2.85, 0.225], rpy: [0.0, 0.0, -0.31]}
+      geometry: {type: box, size: [0.50, 0.50, 0.45]}
+      material: {rgba: [0.45, 0.47, 0.50, 1.0]}
+      static: true
+      collision: true
+
+  - id: O2-drum-behind-rack
+    type: unexpected
+    class: occluded
+    severity: 0.6
+    element:
+      id: O2-drum-behind-rack
+      ifc_class: IfcBuildingElementProxy
+      name: Drum north of storage rack A (unmodelled)
+      pose: {xyz: [9.40, 2.75, 0.475], rpy: [0.0, 0.0, 0.0]}
+      geometry: {type: box, size: [0.55, 0.55, 0.95]}
+      material: {rgba: [0.20, 0.42, 0.30, 1.0]}
+      static: true
+      collision: true

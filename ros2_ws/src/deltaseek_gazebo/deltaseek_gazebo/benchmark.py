@@ -13,6 +13,19 @@ SUPPORTED_DEVIATIONS = {
     'displaced', 'rotated', 'missing', 'unexpected', 'resized'
 }
 
+# Why a deviation is hard to observe, which is independent of what kind of
+# deviation it is.  A displaced window and an unmodelled crate can both be
+# occluded; a large object in open floor space is trivial whatever moved it.
+# The sensor ablation is reported against these, because "which deviations
+# need the arm" is a question about observability, not about deviation type.
+DEVIATION_CLASSES = {
+    'trivial',      # large, unmodelled, standing in open floor space
+    'height',       # on a top face above the chassis camera's sightline
+    'incidence',    # resolvable only from an oblique angle
+    'occluded',     # in another object's shadow from most base positions
+    'unclassified',
+}
+
 
 class BenchmarkError(ValueError):
     """Raised when a benchmark manifest or scenario is invalid."""
@@ -180,6 +193,12 @@ def apply_scenario(manifest, scenario):
                 f'{deviation_id}.type must be one of '
                 f'{sorted(SUPPORTED_DEVIATIONS)}')
 
+        deviation_class = str(deviation.get('class', 'unclassified'))
+        if deviation_class not in DEVIATION_CLASSES:
+            raise BenchmarkError(
+                f'{deviation_id}.class must be one of '
+                f'{sorted(DEVIATION_CLASSES)}')
+
         target_id = deviation.get('target')
         if deviation_type == 'unexpected':
             actual = _normalise_element(
@@ -241,6 +260,7 @@ def apply_scenario(manifest, scenario):
                 reference or actual or {}
             ).get('ifc_class', 'IfcBuildingElementProxy'),
             'severity': float(deviation.get('severity', 0.5)),
+            'class': deviation_class,
             'magnitude': _magnitude(deviation, reference, actual),
             'reference_pose': reference['pose'] if reference else None,
             'actual_pose': actual['pose'] if actual else None,
