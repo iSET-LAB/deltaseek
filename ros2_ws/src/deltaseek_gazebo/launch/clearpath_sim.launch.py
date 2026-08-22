@@ -27,6 +27,9 @@ def generate_launch_description():
     generate = LaunchConfiguration('generate')
     headless = LaunchConfiguration('headless')
     rviz = LaunchConfiguration('rviz')
+    spawn_x = LaunchConfiguration('x')
+    spawn_y = LaunchConfiguration('y')
+    spawn_yaw = LaunchConfiguration('yaw')
 
     resource_paths = [
         os.path.join(clearpath_gz_share, 'worlds'),
@@ -61,10 +64,10 @@ def generate_launch_description():
             'use_sim_time': 'true',
             'rviz': rviz,
             'generate': generate,
-            'x': '0.0',
-            'y': '0.0',
+            'x': spawn_x,
+            'y': spawn_y,
             'z': '0.3',
-            'yaw': '0.0',
+            'yaw': spawn_yaw,
         }.items(),
     )
 
@@ -135,6 +138,14 @@ def generate_launch_description():
         DeclareLaunchArgument(
             'rviz', default_value='false', choices=['true', 'false'],
             description='Start the Clearpath RViz configuration.'),
+        # A world generated from a single room does not contain the origin,
+        # so the spawn pose has to be settable or the robot lands outside it.
+        DeclareLaunchArgument(
+            'x', default_value='0.0', description='Spawn x in the world frame.'),
+        DeclareLaunchArgument(
+            'y', default_value='0.0', description='Spawn y in the world frame.'),
+        DeclareLaunchArgument(
+            'yaw', default_value='0.0', description='Spawn yaw in radians.'),
         SetEnvironmentVariable(
             'GZ_SIM_RESOURCE_PATH', os.pathsep.join(resource_paths)),
         gz_gui,

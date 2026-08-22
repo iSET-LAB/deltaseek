@@ -32,6 +32,15 @@ platform:
       parent: base_link
       xyz: [0.0, 0.0, 0.0]
       rpy: [0.0, 0.0, 0.0]
+    # Carries the chassis sensors clear of the arm's workspace.  Its mounts
+    # are what the base-mounted comparison in the evaluation stands on: the
+    # ablation must be "arm camera vs the sensors this robot really has",
+    # not "arm camera vs the same camera parked".
+    - name: sensor_arch
+      type: a300.amp_sensor_arch
+      parent: default_mount
+      xyz: [0.0, 0.0, 0.0]
+      rpy: [0.0, 0.0, 0.0]
   mcu:
     protocol: proton
 
@@ -54,7 +63,29 @@ sensors:
   # rpy aims the camera's +x view axis along the tool's +z approach axis; the
   # Clearpath realsense macro derives the optical frame from <name>_link.
   # The transform is a placeholder until the as-built mount is measured.
+  lidar3d:
+    # 360 deg geometry at chassis height.  It sees bulk presence and absence
+    # cheaply from anywhere in the room, which is exactly why it belongs in
+    # the baseline: it removes the easy detections from the comparison and
+    # leaves the ones that actually need a placed viewpoint.
+    #
+    # Mount clearance is not a detail here.  The sensor arch's centreline
+    # mounts sit 0.10-0.14 m from the UR5e shoulder, which is contact once
+    # link radii are counted: that arch is designed for a platform without a
+    # centre-mounted arm.  The enclosure's own front lidar mount is 0.50 m
+    # clear, so the lidar goes there.
+    - model: ouster_os1
+      urdf_enabled: true
+      launch_enabled: true
+      parent: enclosure_front_lidar_mount
+      xyz: [0.0, 0.0, 0.0]
+      rpy: [0.0, 0.0, 0.0]
+
   camera:
+    # Order is load-bearing: Clearpath indexes cameras positionally, so the
+    # eye-in-hand sensor must stay first to remain camera_0.  Reordering this
+    # list silently repoints every camera_0 reference in launch files, RViz
+    # configs, and the forward-kinematics chain.
     - model: intel_realsense
       urdf_enabled: true
       launch_enabled: true
@@ -64,6 +95,25 @@ sensors:
       ros_parameters:
         intel_realsense:
           camera_name: inspection_camera
+          device_type: d435
+          enable_color: true
+          enable_depth: true
+          pointcloud.enable: true
+
+    # Chassis camera.  Deliberately the same D435 as the eye-in-hand sensor,
+    # so the ablation isolates where a camera is mounted rather than how good
+    # it is.
+    - model: intel_realsense
+      urdf_enabled: true
+      launch_enabled: true
+      # Front-left corner of the arch: 0.34 m clear of the shoulder, and high
+      # enough (0.675 m) to see over the platform.
+      parent: sensor_arch_front_left_corner_mount
+      xyz: [0.0, 0.0, 0.0]
+      rpy: [0.0, 0.0, 0.0]
+      ros_parameters:
+        intel_realsense:
+          camera_name: chassis_camera
           device_type: d435
           enable_color: true
           enable_depth: true

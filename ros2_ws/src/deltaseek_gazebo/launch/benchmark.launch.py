@@ -23,6 +23,9 @@ def generate_launch_description():
     ground_truth_file = LaunchConfiguration('ground_truth_file')
     headless = LaunchConfiguration('headless')
     rviz = LaunchConfiguration('rviz')
+    spawn_x = LaunchConfiguration('x')
+    spawn_y = LaunchConfiguration('y')
+    spawn_yaw = LaunchConfiguration('yaw')
 
     official_robot = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
@@ -33,6 +36,9 @@ def generate_launch_description():
             'world_name': world_name,
             'generate': 'true',
             'headless': headless,
+            'x': spawn_x,
+            'y': spawn_y,
+            'yaw': spawn_yaw,
             # Clearpath's RViz layout has no marker display; this file starts
             # its own below.
             'rviz': 'false',
@@ -104,6 +110,12 @@ def generate_launch_description():
         DeclareLaunchArgument(
             'headless', default_value='false', choices=['true', 'false'],
             description='Run the Gazebo server without its GUI.'),
+        DeclareLaunchArgument(
+            'x', default_value='0.0', description='Spawn x in the world frame.'),
+        DeclareLaunchArgument(
+            'y', default_value='0.0', description='Spawn y in the world frame.'),
+        DeclareLaunchArgument(
+            'yaw', default_value='0.0', description='Spawn yaw in radians.'),
         DeclareLaunchArgument(
             'rviz', default_value='false', choices=['true', 'false'],
             description='Start RViz with the benchmark layout and ground-truth markers.'),
