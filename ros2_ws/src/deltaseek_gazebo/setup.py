@@ -47,6 +47,7 @@ setup(
             'generate_storey = deltaseek_gazebo.synthetic_storey:main',
             'evaluate_run = deltaseek_gazebo.evaluate:main',
             'extract_room = deltaseek_gazebo.extract_room:main',
+            'sensor_ablation = deltaseek_gazebo.sensor_ablation:main',
             'compare_planners = deltaseek_gazebo.compare:main',
         ],
     },
