@@ -59,7 +59,7 @@ def resolve_urdf(explicit=None):
 
 def run(manifest, scenario, chain, budget, params, fixed_sensor=False,
         spacing=1.5, yaws=(0.0, 1.5707963, 3.1415927, -1.5707963),
-        path_cost='grid'):
+        path_cost='grid', start=None):
     """Return one report per planner for this scenario."""
     nominal = validate_manifest(manifest)
     elements = nominal['elements']
@@ -78,7 +78,15 @@ def run(manifest, scenario, chain, budget, params, fixed_sensor=False,
     cost_fn = euclidean if path_cost == 'euclidean' else path_cost_for(elements)
     # Start from the reachable pose nearest the west end of the storey rather
     # than the origin, which need not be drivable.
-    start = min((xy for xy, _ in bases), key=lambda xy: (xy[0], abs(xy[1])))
+    if start is None:
+        start = min((xy for xy, _ in bases), key=lambda xy: (xy[0], abs(xy[1])))
+    else:
+        # Snap the requested start onto the candidate set, so every planner
+        # begins from a pose the traversal grid actually knows about.
+        target = (float(start[0]), float(start[1]))
+        start = min((xy for xy, _ in bases),
+                    key=lambda xy: (xy[0] - target[0]) ** 2
+                    + (xy[1] - target[1]) ** 2)
 
     reports = {}
     for name, planner in PLANNERS.items():
@@ -127,6 +135,11 @@ def _parser():
     parser.add_argument('--max-range', type=float, default=6.0)
     parser.add_argument('--output', type=Path)
     parser.add_argument(
+        '--start', nargs=2, type=float, default=None, metavar=('X', 'Y'),
+        help='World-frame start position, snapped to the nearest candidate '
+             'base pose. Defaults to the westmost candidate, which suits a '
+             'whole storey; a single room needs a start inside it.')
+    parser.add_argument(
         '--path-cost', choices=['grid', 'euclidean'], default='grid',
         help='grid routes around walls at the platform Nav2 footprint and '
              'costmap resolution; euclidean is the straight-line baseline.')
@@ -143,7 +156,7 @@ def main(argv=None):
     reports, info = run(
         _load(args.manifest), _load(args.scenario), chain, args.budget,
         params, fixed_sensor=args.fixed_sensor, spacing=args.spacing,
-        path_cost=args.path_cost)
+        path_cost=args.path_cost, start=args.start)
 
     print(f'candidates: {info["viewpoints"]} viewpoints over '
           f'{info["base_poses"]} base poses, {info["elements"]} elements')

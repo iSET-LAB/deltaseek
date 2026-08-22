@@ -46,6 +46,7 @@ setup(
             'sample_deviations = deltaseek_gazebo.deviation_sampler:main',
             'generate_storey = deltaseek_gazebo.synthetic_storey:main',
             'evaluate_run = deltaseek_gazebo.evaluate:main',
+            'extract_room = deltaseek_gazebo.extract_room:main',
             'compare_planners = deltaseek_gazebo.compare:main',
         ],
     },
