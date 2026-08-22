@@ -55,10 +55,42 @@ def test_chassis_pose_follows_the_base(urdf):
     np.testing.assert_allclose(b - a, [3.0, -1.0, 0.0], atol=1e-9)
 
 
-def test_chassis_camera_sits_below_the_arm_and_on_the_platform(urdf):
-    xyz = chassis_chain(urdf).forward()[:3, 3]
-    assert 0.2 < xyz[2] < 0.45, 'chassis camera should be at platform height'
-    assert abs(xyz[1]) < 0.349, 'must stay inside the navigation footprint'
+# AMP enclosure mesh extents, measured from observer_enclosure.stl. Its top
+# face is the deck the chassis sensors stand on.
+DECK_Z, DECK_HALF_X, DECK_HALF_Y = 0.407, 0.486, 0.226
+
+
+@pytest.mark.parametrize('link', ['camera_1_link', 'lidar3d_0_link'])
+def test_chassis_sensors_stand_on_the_enclosure_deck(urdf, link):
+    """Both must sit on the robot, not float beside it.
+
+    An earlier revision bracketed them at y = 0.30, which is 0.074 m past the
+    enclosure side face: inside the navigation footprint, and therefore
+    invisible to every other check, but hanging in mid-air next to the body.
+    Only a test against the enclosure's own extents catches that.
+    """
+    xyz = Chain.from_urdf(urdf, 'base_link', link).forward()[:3, 3]
+    assert abs(xyz[0]) <= DECK_HALF_X, f'{link} overhangs the deck in x'
+    assert abs(xyz[1]) <= DECK_HALF_Y, f'{link} overhangs the deck in y'
+    assert DECK_Z - 0.01 <= xyz[2] <= DECK_Z + 0.25, (
+        f'{link} should rest on the deck at z={DECK_Z}, found {xyz[2]:.3f}')
+
+
+def test_chassis_sensors_clear_the_arm_in_every_posture(urdf):
+    arm_links = ['arm_0_shoulder_link', 'arm_0_upper_arm_link',
+                 'arm_0_forearm_link', 'arm_0_wrist_1_link',
+                 'arm_0_wrist_2_link', 'arm_0_wrist_3_link']
+    chains = {name: Chain.from_urdf(urdf, 'base_link', name)
+              for name in arm_links}
+    for link in ('camera_1_link', 'lidar3d_0_link'):
+        sensor = Chain.from_urdf(urdf, 'base_link', link).forward()[:3, 3]
+        for values in ARM_POSTURES.values():
+            joints = dict(zip(chains[arm_links[0]].joint_names, values))
+            for name, chain in chains.items():
+                gap = np.linalg.norm(chain.forward(joints)[:3, 3] - sensor)
+                # Link origins only; real clearance is smaller by the link
+                # radii, so this is a floor rather than the true gap.
+                assert gap > 0.15, f'{link} is {gap:.3f} m from {name}'
 
 
 def test_chassis_link_name_exists_in_the_description(urdf):

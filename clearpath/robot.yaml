@@ -60,21 +60,22 @@ sensors:
     # the baseline: it removes the easy detections from the comparison and
     # leaves the ones that actually need a placed viewpoint.
     #
-    # Side bracket on the left flank, not a mast or an arch.  The enclosure
-    # side face is at y = 0.226 and the platform footprint reaches y = 0.349,
-    # so y = 0.30 is a real bracket that still stops short of the wheel line
-    # and does not widen the robot for planning.  Height is kept below the
-    # enclosure deck at 0.407 so the UR5e sweeps over the sensor rather than
-    # into it.
+    # On the enclosure deck, forward of the arm.  The deck is the top face of
+    # the AMP enclosure at z = 0.407, spanning x = +/-0.486 and y = +/-0.226,
+    # so anything mounted inside that rectangle at that height is standing on
+    # the robot.  An earlier revision put this on a side bracket at y = 0.30,
+    # which is 0.074 m beyond the side face: it hung in the air next to the
+    # body.
     #
-    # The cost is honest and worth stating: a flank-mounted lidar has the
-    # robot's own body in one azimuth sector, so it is not the 360 deg sensor
-    # a roof mount would be.
+    # Forward of the arm rather than behind it, so the mast has a clear view
+    # along the direction of travel; the arm and its own body still occupy a
+    # rearward sector, so this is not the unobstructed 360 deg sweep a tall
+    # mast would give.
     - model: ouster_os1
       urdf_enabled: true
       launch_enabled: true
       parent: base_link
-      xyz: [0.20, 0.30, 0.34]
+      xyz: [0.26, 0.0, 0.407]
       rpy: [0.0, 0.0, 0.0]
 
   camera:
@@ -102,10 +103,11 @@ sensors:
     - model: intel_realsense
       urdf_enabled: true
       launch_enabled: true
-      # Opposite flank from the lidar, angled slightly down for near-field
-      # inspection of what the platform is driving past.
+      # Also on the deck, at its front edge and offset off the lidar's
+      # forward axis so the two do not stare through each other.  Angled
+      # 0.17 rad down for near-field inspection.
       parent: base_link
-      xyz: [0.30, -0.30, 0.34]
+      xyz: [0.44, -0.10, 0.407]
       rpy: [0.0, 0.17, 0.0]
       ros_parameters:
         intel_realsense:

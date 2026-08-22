@@ -150,6 +150,12 @@ def _parser():
     parser.add_argument('--budget', type=float, default=25.0)
     parser.add_argument('--spacing', type=float, default=2.0)
     parser.add_argument('--max-viewpoints', type=int, default=8)
+    parser.add_argument('--start', nargs=2, type=float, default=[0.0, 0.0])
+    parser.add_argument(
+        '--room', nargs=4, type=float, default=None,
+        metavar=('X0', 'Y0', 'X1', 'Y1'),
+        help='Restrict candidate base poses to this rectangle. A single room '
+             'does not contain the origin and its grid spills past the walls.')
     parser.add_argument('--linear-speed', type=float, default=0.45)
     parser.add_argument('--angular-speed', type=float, default=0.7)
     parser.add_argument('--tolerance', type=float, default=0.25)
@@ -167,10 +173,18 @@ def plan(args):
     bases = free_base_poses(
         elements, scene_bounds(elements), spacing=args.spacing,
         yaws=(0.0, 1.5707963, 3.1415927, -1.5707963))
+    if args.room:
+        x0, y0, x1, y1 = args.room
+        bases = [((x, y), yaw) for (x, y), yaw in bases
+                 if x0 <= x <= x1 and y0 <= y <= y1]
     viewpoints = build_viewpoints(chain, bases)
-    _, matrix = visibility_matrix(viewpoints, elements, ObservationParams())
+    _, matrix = visibility_matrix(
+        viewpoints, elements, ObservationParams(far=5.0))
+    start = min((xy for xy, _ in bases),
+                key=lambda xy: (xy[0] - args.start[0]) ** 2
+                + (xy[1] - args.start[1]) ** 2)
     order, info = plan_deviation_seeking(
-        viewpoints, matrix, args.budget, start=(0.0, 0.0),
+        viewpoints, matrix, args.budget, start=start,
         cost_fn=path_cost_for(elements))
     return [viewpoints[index] for index in order[:args.max_viewpoints]], info
 
