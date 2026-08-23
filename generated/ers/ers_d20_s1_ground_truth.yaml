@@ -1,0 +1,1026 @@
+schema_version: 1
+scenario_id: ers_d20_s1
+seed: 1
+frame_id: world
+source:
+  type: ifc
+  file: ERS_B_STRUCT.ifc
+  ifc_schema: IFC2X3
+  units: metre
+  geometry_approximation: oriented_bounding_box
+  origin_offset:
+  - 0.0
+  - 0.0
+  - 0.0
+  skipped_degenerate_products: 0
+summary:
+  nominal_element_count: 131
+  actual_element_count: 131
+  deviation_count: 33
+discrepancies:
+- id: missing-000
+  type: missing
+  element_id: 05LeiFLbH7dBxLmOb3F9W7
+  element_class: IfcDoor
+  severity: 0.372
+  magnitude: 1.0
+  reference_pose:
+    xyz:
+    - 1.73713537
+    - 6.437072149
+    - 1.0287
+    rpy:
+    - 0.0
+    - 0.0
+    - 3.127303498
+  actual_pose: null
+  reference_geometry:
+    type: box
+    size:
+    - 1.9812
+    - 0.174625
+    - 2.0574
+  actual_geometry: null
+- id: resized-001
+  type: resized
+  element_id: 05LeiFLbH7dBxLmOb3F9k5
+  element_class: IfcDoor
+  severity: 0.876
+  magnitude: 0.159177
+  reference_pose:
+    xyz:
+    - -5.552827024
+    - 0.543890736
+    - 1.0287
+    rpy:
+    - 0.0
+    - 0.0
+    - -0.015721382
+  actual_pose:
+    xyz:
+    - -5.552827024
+    - 0.543890736
+    - 1.0287
+    rpy:
+    - 0.0
+    - 0.0
+    - -0.015721382
+  reference_geometry:
+    type: box
+    size:
+    - 1.0668
+    - 0.174625
+    - 2.0574
+  actual_geometry:
+    type: box
+    size:
+    - 0.8969899764
+    - 0.174625
+    - 2.0574
+- id: resized-002
+  type: resized
+  element_id: 0KvanlNQrCphrCb4tAxXz4
+  element_class: IfcWallStandardCase
+  severity: 0.486
+  magnitude: 0.21498
+  reference_pose:
+    xyz:
+    - 2.946968146
+    - 9.943847817
+    - 1.2954
+    rpy:
+    - 0.0
+    - 0.0
+    - -1.589974799
+  actual_pose:
+    xyz:
+    - 2.946968146
+    - 9.943847817
+    - 1.2954
+    rpy:
+    - 0.0
+    - 0.0
+    - -1.589974799
+  reference_geometry:
+    type: box
+    size:
+    - 3.67222109
+    - 0.2032
+    - 2.5908
+  actual_geometry:
+    type: box
+    size:
+    - 3.67222109
+    - 0.159516064
+    - 2.5908
+- id: rotated-003
+  type: rotated
+  element_id: 0KvanlNQrCphrCb4tAxkBj
+  element_class: IfcWallStandardCase
+  severity: 0.773
+  magnitude: 0.428936034
+  reference_pose:
+    xyz:
+    - 9.968353554
+    - -0.00323119
+    - 1.2954
+    rpy:
+    - 0.0
+    - 0.0
+    - -1.586517708
+  actual_pose:
+    xyz:
+    - 9.968353554
+    - -0.00323119
+    - 1.2954
+    rpy:
+    - 0.004532
+    - -0.01323
+    - -2.015225708
+  reference_geometry:
+    type: box
+    size:
+    - 12.520544283
+    - 0.2032
+    - 2.5908
+  actual_geometry:
+    type: box
+    size:
+    - 12.520544283
+    - 0.2032
+    - 2.5908
+- id: missing-004
+  type: missing
+  element_id: 0KvanlNQrCphrCb4tAxkcE
+  element_class: IfcWallStandardCase
+  severity: 0.914
+  magnitude: 1.0
+  reference_pose:
+    xyz:
+    - 29.242406815
+    - -1.418288774
+    - 1.2954
+    rpy:
+    - 0.0
+    - 0.0
+    - -1.570796327
+  actual_pose: null
+  reference_geometry:
+    type: box
+    size:
+    - 1.205522539
+    - 0.123825
+    - 2.5908
+  actual_geometry: null
+- id: resized-005
+  type: resized
+  element_id: 0KvanlNQrCphrCb4tAxkmn
+  element_class: IfcWallStandardCase
+  severity: 0.512
+  magnitude: 0.424881
+  reference_pose:
+    xyz:
+    - 1.468410629
+    - -5.998524972
+    - 1.524
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.0
+  actual_pose:
+    xyz:
+    - 1.468410629
+    - -5.998524972
+    - 1.524
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.0
+  reference_geometry:
+    type: box
+    size:
+    - 2.2098
+    - 0.3048
+    - 3.048
+  actual_geometry:
+    type: box
+    size:
+    - 2.2098
+    - 0.3048
+    - 1.7529627120000002
+- id: displaced-006
+  type: displaced
+  element_id: 0KvanlNQrCphrCb4tAxkzA
+  element_class: IfcWallStandardCase
+  severity: 0.944
+  magnitude: 0.538851128
+  reference_pose:
+    xyz:
+    - 8.653188363
+    - -6.097363609
+    - 1.524
+    rpy:
+    - 0.0
+    - 0.0
+    - 3.125871272
+  actual_pose:
+    xyz:
+    - 9.042565363
+    - -5.727595609000001
+    - 1.479081
+    rpy:
+    - 0.0
+    - 0.0
+    - 3.125871272
+  reference_geometry:
+    type: box
+    size:
+    - 2.2098
+    - 0.3048
+    - 3.048
+  actual_geometry:
+    type: box
+    size:
+    - 2.2098
+    - 0.3048
+    - 3.048
+- id: missing-007
+  type: missing
+  element_id: 1oS3rSNeDADhhumPXXPsjB
+  element_class: IfcDoor
+  severity: 0.733
+  magnitude: 1.0
+  reference_pose:
+    xyz:
+    - 24.249289203
+    - -1.388258818
+    - 1.0287
+    rpy:
+    - 0.0
+    - 0.0
+    - 1.555074945
+  actual_pose: null
+  reference_geometry:
+    type: box
+    size:
+    - 1.9812
+    - 0.254
+    - 2.0574
+  actual_geometry: null
+- id: resized-008
+  type: resized
+  element_id: 1pMTU_U0n8Z8G77fSA9Y0a
+  element_class: IfcSlab
+  severity: 0.517
+  magnitude: 0.399011
+  reference_pose:
+    xyz:
+    - -9.222950095
+    - -0.853720591
+    - -0.0762
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.0
+  actual_pose:
+    xyz:
+    - -9.222950095
+    - -0.853720591
+    - -0.0762
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.0
+  reference_geometry:
+    type: box
+    size:
+    - 2.513047554
+    - 2.426745237
+    - 0.1524
+  actual_geometry:
+    type: box
+    size:
+    - 2.513047554
+    - 2.426745237
+    - 0.0915907236
+- id: displaced-009
+  type: displaced
+  element_id: 1s7WttW8LF3wo3GFHzG43H
+  element_class: IfcWindow
+  severity: 0.641
+  magnitude: 0.547117142
+  reference_pose:
+    xyz:
+    - -2.350547351
+    - 11.956958667
+    - 1.33985
+    rpy:
+    - 0.0
+    - 0.0
+    - -0.014292658
+  actual_pose:
+    xyz:
+    - -2.039627351
+    - 11.506776667
+    - 1.341295
+    rpy:
+    - 0.0
+    - 0.0
+    - -0.014292658
+  reference_geometry:
+    type: box
+    size:
+    - 0.6096
+    - 0.2032
+    - 1.3716
+  actual_geometry:
+    type: box
+    size:
+    - 0.6096
+    - 0.2032
+    - 1.3716
+- id: rotated-010
+  type: rotated
+  element_id: 1s7WttW8LF3wo3GFHzG4AM
+  element_class: IfcWindow
+  severity: 0.226
+  magnitude: 0.185313045
+  reference_pose:
+    xyz:
+    - -7.710542248
+    - 10.081456598
+    - 1.33985
+    rpy:
+    - 0.0
+    - 0.0
+    - 1.555074945
+  actual_pose:
+    xyz:
+    - -7.710542248
+    - 10.081456598
+    - 1.33985
+    rpy:
+    - 0.011002
+    - -0.00317
+    - 1.370115945
+  reference_geometry:
+    type: box
+    size:
+    - 0.6096
+    - 0.2032
+    - 1.3716
+  actual_geometry:
+    type: box
+    size:
+    - 0.6096
+    - 0.2032
+    - 1.3716
+- id: displaced-011
+  type: displaced
+  element_id: 1s7WttW8LF3wo3GFHzG4IH
+  element_class: IfcWindow
+  severity: 0.862
+  magnitude: 0.509684474
+  reference_pose:
+    xyz:
+    - 6.97289846
+    - -6.318793046
+    - 1.33985
+    rpy:
+    - 0.0
+    - 0.0
+    - 3.125871272
+  actual_pose:
+    xyz:
+    - 6.93597446
+    - -6.816552046
+    - 1.236647
+    rpy:
+    - 0.0
+    - 0.0
+    - 3.125871272
+  reference_geometry:
+    type: box
+    size:
+    - 0.6096
+    - 0.2032
+    - 1.3716
+  actual_geometry:
+    type: box
+    size:
+    - 0.6096
+    - 0.2032
+    - 1.3716
+- id: missing-012
+  type: missing
+  element_id: 1s7WttW8LF3wo3GFHzG4Jk
+  element_class: IfcWindow
+  severity: 0.281
+  magnitude: 1.0
+  reference_pose:
+    xyz:
+    - 10.528459015
+    - -6.374695976
+    - 1.33985
+    rpy:
+    - 0.0
+    - 0.0
+    - 3.125871272
+  actual_pose: null
+  reference_geometry:
+    type: box
+    size:
+    - 0.6096
+    - 0.2032
+    - 1.3716
+  actual_geometry: null
+- id: displaced-013
+  type: displaced
+  element_id: 1s7WttW8LF3wo3GFHzG4Kh
+  element_class: IfcWindow
+  severity: 0.83
+  magnitude: 0.316772451
+  reference_pose:
+    xyz:
+    - 17.672103263
+    - -6.487013186
+    - 1.33985
+    rpy:
+    - 0.0
+    - 0.0
+    - 3.125871272
+  actual_pose:
+    xyz:
+    - 17.637872263000002
+    - -6.801893186
+    - 1.334991
+    rpy:
+    - 0.0
+    - 0.0
+    - 3.125871272
+  reference_geometry:
+    type: box
+    size:
+    - 0.6096
+    - 0.2032
+    - 1.3716
+  actual_geometry:
+    type: box
+    size:
+    - 0.6096
+    - 0.2032
+    - 1.3716
+- id: displaced-014
+  type: displaced
+  element_id: 1s7WttW8LF3wo3GFHzG4OH
+  element_class: IfcWindow
+  severity: 0.836
+  magnitude: 0.427817916
+  reference_pose:
+    xyz:
+    - 26.196136641
+    - 11.548922879
+    - 1.33985
+    rpy:
+    - 0.0
+    - 0.0
+    - -0.014292658
+  actual_pose:
+    xyz:
+    - 25.819916641
+    - 11.347673878999998
+    - 1.371243
+    rpy:
+    - 0.0
+    - 0.0
+    - -0.014292658
+  reference_geometry:
+    type: box
+    size:
+    - 0.6096
+    - 0.2032
+    - 1.3716
+  actual_geometry:
+    type: box
+    size:
+    - 0.6096
+    - 0.2032
+    - 1.3716
+- id: displaced-015
+  type: displaced
+  element_id: 1s7WttW8LF3wo3GFHzG7HP
+  element_class: IfcCovering
+  severity: 0.37
+  magnitude: 0.15892992
+  reference_pose:
+    xyz:
+    - -2.410674312
+    - 10.017077085
+    - 2.466975
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.0
+  actual_pose:
+    xyz:
+    - -2.3621623119999997
+    - 10.164854085
+    - 2.499644
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.0
+  reference_geometry:
+    type: box
+    size:
+    - 3.437158698
+    - 3.72609334
+    - 0.05715
+  actual_geometry:
+    type: box
+    size:
+    - 3.437158698
+    - 3.72609334
+    - 0.05715
+- id: rotated-016
+  type: rotated
+  element_id: 1s7WttW8LF3wo3GFHzG7l0
+  element_class: IfcCovering
+  severity: 0.503
+  magnitude: 0.220965023
+  reference_pose:
+    xyz:
+    - 29.556127479
+    - -3.544056067
+    - 2.466975
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.0
+  actual_pose:
+    xyz:
+    - 29.556127479
+    - -3.544056067
+    - 2.466975
+    rpy:
+    - 0.015312
+    - -0.006466
+    - 0.220339
+  reference_geometry:
+    type: box
+    size:
+    - 3.36505038
+    - 5.457057127
+    - 0.05715
+  actual_geometry:
+    type: box
+    size:
+    - 3.36505038
+    - 5.457057127
+    - 0.05715
+- id: missing-017
+  type: missing
+  element_id: 1s7WttW8LF3wo3GFHzG7n0
+  element_class: IfcWindow
+  severity: 0.657
+  magnitude: 1.0
+  reference_pose:
+    xyz:
+    - -0.148525233
+    - -6.206825202
+    - 1.33985
+    rpy:
+    - 0.0
+    - 0.0
+    - 3.125871272
+  actual_pose: null
+  reference_geometry:
+    type: box
+    size:
+    - 0.6096
+    - 0.2032
+    - 1.3716
+  actual_geometry: null
+- id: missing-018
+  type: missing
+  element_id: 2UiYIxdTHDMQxEBYlcr4sm
+  element_class: IfcCovering
+  severity: 0.488
+  magnitude: 1.0
+  reference_pose:
+    xyz:
+    - -0.839897504
+    - -2.818550211
+    - 2.466975
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.0
+  actual_pose: null
+  reference_geometry:
+    type: box
+    size:
+    - 7.010252995
+    - 6.559844824
+    - 0.05715
+  actual_geometry: null
+- id: resized-019
+  type: resized
+  element_id: 2UiYIxdTHDMQxEBYlcr4xz
+  element_class: IfcCovering
+  severity: 0.916
+  magnitude: 0.431538
+  reference_pose:
+    xyz:
+    - 13.523868651
+    - -0.051368876
+    - 2.466975
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.0
+  actual_pose:
+    xyz:
+    - 13.523868651
+    - -0.051368876
+    - 2.466975
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.0
+  reference_geometry:
+    type: box
+    size:
+    - 7.104875561
+    - 12.612077933
+    - 0.05715
+  actual_geometry:
+    type: box
+    size:
+    - 7.104875561
+    - 12.612077933
+    - 0.0324876033
+- id: rotated-020
+  type: rotated
+  element_id: 2twF3dYLP0A94p8cE1aniu
+  element_class: IfcCovering
+  severity: 0.621
+  magnitude: 0.250790353
+  reference_pose:
+    xyz:
+    - 11.762107396
+    - 2.693238052
+    - 2.466975
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.0
+  actual_pose:
+    xyz:
+    - 11.762107396
+    - 2.693238052
+    - 2.466975
+    rpy:
+    - -0.022117
+    - 0.018436
+    - -0.249132
+  reference_geometry:
+    type: box
+    size:
+    - 39.179903673
+    - 10.787085127
+    - 0.05715
+  actual_geometry:
+    type: box
+    size:
+    - 39.179903673
+    - 10.787085127
+    - 0.05715
+- id: resized-021
+  type: resized
+  element_id: 38qgW_sXr868lESAj2QWhA
+  element_class: IfcDoor
+  severity: 0.51
+  magnitude: 0.394005
+  reference_pose:
+    xyz:
+    - 23.679309084
+    - 7.776767955
+    - 1.0287
+    rpy:
+    - 0.0
+    - 0.0
+    - -0.012316592
+  actual_pose:
+    xyz:
+    - 23.679309084
+    - 7.776767955
+    - 1.0287
+    rpy:
+    - 0.0
+    - 0.0
+    - -0.012316592
+  reference_geometry:
+    type: box
+    size:
+    - 1.0668
+    - 0.2032
+    - 2.0574
+  actual_geometry:
+    type: box
+    size:
+    - 1.0668
+    - 0.283261816
+    - 2.0574
+- id: displaced-022
+  type: displaced
+  element_id: 38qgW_sXr868lESAj2QZJZ
+  element_class: IfcDoor
+  severity: 0.605
+  magnitude: 0.504527774
+  reference_pose:
+    xyz:
+    - 2.217327416
+    - 8.041119802
+    - 1.0287
+    rpy:
+    - 0.0
+    - 0.0
+    - -0.012316592
+  actual_pose:
+    xyz:
+    - 1.9714224159999998
+    - 8.480944802000002
+    - 1.0538589999999999
+    rpy:
+    - 0.0
+    - 0.0
+    - -0.012316592
+  reference_geometry:
+    type: box
+    size:
+    - 1.0668
+    - 0.2032
+    - 2.0574
+  actual_geometry:
+    type: box
+    size:
+    - 1.0668
+    - 0.2032
+    - 2.0574
+- id: resized-023
+  type: resized
+  element_id: 3qo_AKI5r02OFVkPm$Owqu
+  element_class: IfcBuildingElementProxy
+  severity: 0.677
+  magnitude: 0.315227
+  reference_pose:
+    xyz:
+    - 30.49221103
+    - -3.498142783
+    - 1.057275
+    rpy:
+    - 0.0
+    - 0.0
+    - -1.585088985
+  actual_pose:
+    xyz:
+    - 30.49221103
+    - -3.498142783
+    - 1.057275
+    rpy:
+    - 0.0
+    - 0.0
+    - -1.585088985
+  reference_geometry:
+    type: box
+    size:
+    - 0.84455
+    - 1.49225
+    - 2.11455
+  actual_geometry:
+    type: box
+    size:
+    - 0.5783250371499999
+    - 1.49225
+    - 2.11455
+- id: missing-024
+  type: missing
+  element_id: 3qo_AKI5r02OFVkPm$Owxi
+  element_class: IfcBuildingElementProxy
+  severity: 0.798
+  magnitude: 1.0
+  reference_pose:
+    xyz:
+    - 30.538441158
+    - -0.263826389
+    - 1.057275
+    rpy:
+    - 0.0
+    - 0.0
+    - -1.585088985
+  actual_pose: null
+  reference_geometry:
+    type: box
+    size:
+    - 0.84455
+    - 1.49225
+    - 2.11455
+  actual_geometry: null
+- id: resized-025
+  type: resized
+  element_id: 3xoURert943RLFHAzdmQBo
+  element_class: IfcDoor
+  severity: 0.391
+  magnitude: 0.402523
+  reference_pose:
+    xyz:
+    - -7.922284082
+    - -1.416697265
+    - 1.1176
+    rpy:
+    - 0.0
+    - 0.0
+    - 1.555074945
+  actual_pose:
+    xyz:
+    - -7.922284082
+    - -1.416697265
+    - 1.1176
+    rpy:
+    - 0.0
+    - 0.0
+    - 1.555074945
+  reference_geometry:
+    type: box
+    size:
+    - 1.016
+    - 0.2016125
+    - 2.2352
+  actual_geometry:
+    type: box
+    size:
+    - 1.016
+    - 0.2016125
+    - 1.3354805904
+- id: unexpected-000
+  type: unexpected
+  element_id: unexpected-000
+  element_class: IfcBuildingElementProxy
+  severity: 0.262
+  magnitude: 1.0
+  reference_pose: null
+  actual_pose:
+    xyz:
+    - -6.402956
+    - -0.169136
+    - 0.2525
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.843963
+  reference_geometry: null
+  actual_geometry:
+    type: box
+    size:
+    - 0.505
+    - 0.505
+    - 0.505
+- id: unexpected-001
+  type: unexpected
+  element_id: unexpected-001
+  element_class: IfcBuildingElementProxy
+  severity: 0.798
+  magnitude: 1.0
+  reference_pose: null
+  actual_pose:
+    xyz:
+    - -9.657227
+    - 2.003791
+    - 0.219
+    rpy:
+    - 0.0
+    - 0.0
+    - 1.656814
+  reference_geometry: null
+  actual_geometry:
+    type: box
+    size:
+    - 0.438
+    - 0.438
+    - 0.438
+- id: unexpected-002
+  type: unexpected
+  element_id: unexpected-002
+  element_class: IfcBuildingElementProxy
+  severity: 0.326
+  magnitude: 1.0
+  reference_pose: null
+  actual_pose:
+    xyz:
+    - 11.062245
+    - 10.596193
+    - 0.368
+    rpy:
+    - 0.0
+    - 0.0
+    - 1.559781
+  reference_geometry: null
+  actual_geometry:
+    type: box
+    size:
+    - 0.736
+    - 0.736
+    - 0.736
+- id: unexpected-003
+  type: unexpected
+  element_id: unexpected-003
+  element_class: IfcBuildingElementProxy
+  severity: 0.286
+  magnitude: 1.0
+  reference_pose: null
+  actual_pose:
+    xyz:
+    - 3.496203
+    - 10.988706
+    - 0.2265
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.341685
+  reference_geometry: null
+  actual_geometry:
+    type: box
+    size:
+    - 0.453
+    - 0.453
+    - 0.453
+- id: unexpected-004
+  type: unexpected
+  element_id: unexpected-004
+  element_class: IfcBuildingElementProxy
+  severity: 0.875
+  magnitude: 1.0
+  reference_pose: null
+  actual_pose:
+    xyz:
+    - -5.500043
+    - -1.773269
+    - 0.2935
+    rpy:
+    - 0.0
+    - 0.0
+    - 3.064791
+  reference_geometry: null
+  actual_geometry:
+    type: box
+    size:
+    - 0.587
+    - 0.587
+    - 0.587
+- id: unexpected-005
+  type: unexpected
+  element_id: unexpected-005
+  element_class: IfcBuildingElementProxy
+  severity: 0.369
+  magnitude: 1.0
+  reference_pose: null
+  actual_pose:
+    xyz:
+    - 27.791951
+    - -4.719513
+    - 0.219
+    rpy:
+    - 0.0
+    - 0.0
+    - 2.213584
+  reference_geometry: null
+  actual_geometry:
+    type: box
+    size:
+    - 0.438
+    - 0.438
+    - 0.438
+- id: unexpected-006
+  type: unexpected
+  element_id: unexpected-006
+  element_class: IfcBuildingElementProxy
+  severity: 0.709
+  magnitude: 1.0
+  reference_pose: null
+  actual_pose:
+    xyz:
+    - -4.03115
+    - 11.727951
+    - 0.366
+    rpy:
+    - 0.0
+    - 0.0
+    - 1.416371
+  reference_geometry: null
+  actual_geometry:
+    type: box
+    size:
+    - 0.732
+    - 0.732
+    - 0.732

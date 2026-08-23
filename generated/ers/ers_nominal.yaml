@@ -1,0 +1,3426 @@
+schema_version: 1
+source:
+  type: ifc
+  file: ERS_B_STRUCT.ifc
+  ifc_schema: IFC2X3
+  units: metre
+  geometry_approximation: oriented_bounding_box
+  origin_offset:
+  - 0.0
+  - 0.0
+  - 0.0
+  skipped_degenerate_products: 0
+world:
+  name: deltaseek_ifc_nominal
+  frame_id: world
+  gravity:
+  - 0.0
+  - 0.0
+  - -9.81
+elements:
+- id: 05LeiFLbH7dBxLmOb3F9W7
+  ifc_class: IfcDoor
+  name: Door-Double-Flush_Panel:72" x 78":306451
+  pose:
+    xyz:
+    - 1.73713537
+    - 6.437072149
+    - 1.0287
+    rpy:
+    - 0.0
+    - 0.0
+    - 3.127303498
+  geometry:
+    type: box
+    size:
+    - 1.9812
+    - 0.174625
+    - 2.0574
+  material:
+    rgba:
+    - 0.55
+    - 0.32
+    - 0.14
+    - 1.0
+  static: true
+  collision: true
+- id: 05LeiFLbH7dBxLmOb3F9bE
+  ifc_class: IfcDoor
+  name: Door-Double-Flush_Panel:72" x 78":306266
+  pose:
+    xyz:
+    - 11.206506581
+    - 6.301753623
+    - 1.0287
+    rpy:
+    - 0.0
+    - 0.0
+    - 3.127303498
+  geometry:
+    type: box
+    size:
+    - 1.9812
+    - 0.174625
+    - 2.0574
+  material:
+    rgba:
+    - 0.55
+    - 0.32
+    - 0.14
+    - 1.0
+  static: true
+  collision: true
+- id: 05LeiFLbH7dBxLmOb3F9cv
+  ifc_class: IfcDoor
+  name: Door-Double-Flush_Panel:72" x 78":306349
+  pose:
+    xyz:
+    - 8.891095356
+    - 6.334841145
+    - 1.0287
+    rpy:
+    - 0.0
+    - 0.0
+    - 3.127303498
+  geometry:
+    type: box
+    size:
+    - 1.9812
+    - 0.174625
+    - 2.0574
+  material:
+    rgba:
+    - 0.55
+    - 0.32
+    - 0.14
+    - 1.0
+  static: true
+  collision: true
+- id: 05LeiFLbH7dBxLmOb3F9k5
+  ifc_class: IfcDoor
+  name: Single-Flush:36" x 78":306833
+  pose:
+    xyz:
+    - -5.552827024
+    - 0.543890736
+    - 1.0287
+    rpy:
+    - 0.0
+    - 0.0
+    - -0.015721382
+  geometry:
+    type: box
+    size:
+    - 1.0668
+    - 0.174625
+    - 2.0574
+  material:
+    rgba:
+    - 0.55
+    - 0.32
+    - 0.14
+    - 1.0
+  static: true
+  collision: true
+- id: 05LeiFLbH7dBxLmOb3F9l5
+  ifc_class: IfcDoor
+  name: Door-Double-Flush_Panel:72" x 78":306897
+  pose:
+    xyz:
+    - -4.36399862
+    - -0.789413286
+    - 1.0287
+    rpy:
+    - 0.0
+    - 0.0
+    - -1.586517708
+  geometry:
+    type: box
+    size:
+    - 1.9812
+    - 0.254
+    - 2.0574
+  material:
+    rgba:
+    - 0.55
+    - 0.32
+    - 0.14
+    - 1.0
+  static: true
+  collision: true
+- id: 05LeiFLbH7dBxLmOb3F9wh
+  ifc_class: IfcDoor
+  name: Door-Double-Flush_Panel:72" x 78":306111
+  pose:
+    xyz:
+    - 18.367363261
+    - 6.199424065
+    - 1.0287
+    rpy:
+    - 0.0
+    - 0.0
+    - 3.127303498
+  geometry:
+    type: box
+    size:
+    - 1.9812
+    - 0.174625
+    - 2.0574
+  material:
+    rgba:
+    - 0.55
+    - 0.32
+    - 0.14
+    - 1.0
+  static: true
+  collision: true
+- id: 0KvanlNQrCphrCb4tAxX$q
+  ifc_class: IfcWallStandardCase
+  name: Basic Wall:Generic - 8":294013
+  pose:
+    xyz:
+    - -0.625773948
+    - 9.991384596
+    - 1.2954
+    rpy:
+    - 0.0
+    - 0.0
+    - -1.589974799
+  geometry:
+    type: box
+    size:
+    - 3.679281813
+    - 0.2032
+    - 2.5908
+  material:
+    rgba:
+    - 0.72
+    - 0.69
+    - 0.62
+    - 1.0
+  static: true
+  collision: true
+- id: 0KvanlNQrCphrCb4tAxX_i
+  ifc_class: IfcWallStandardCase
+  name: Basic Wall:Generic - 8":293925
+  pose:
+    xyz:
+    - -4.208151316
+    - 10.039262858
+    - 1.2954
+    rpy:
+    - 0.0
+    - 0.0
+    - -1.583112919
+  geometry:
+    type: box
+    size:
+    - 3.685306999
+    - 0.2032
+    - 2.5908
+  material:
+    rgba:
+    - 0.72
+    - 0.69
+    - 0.62
+    - 1.0
+  static: true
+  collision: true
+- id: 0KvanlNQrCphrCb4tAxXpN
+  ifc_class: IfcWallStandardCase
+  name: Basic Wall:Generic - 8":294750
+  pose:
+    xyz:
+    - 2.796055385
+    - 0.104399145
+    - 1.2954
+    rpy:
+    - 0.0
+    - 0.0
+    - -1.586517708
+  geometry:
+    type: box
+    size:
+    - 12.510270769
+    - 0.2032
+    - 2.5908
+  material:
+    rgba:
+    - 0.72
+    - 0.69
+    - 0.62
+    - 1.0
+  static: true
+  collision: true
+- id: 0KvanlNQrCphrCb4tAxXt$
+  ifc_class: IfcWallStandardCase
+  name: Basic Wall:Generic - 8":294518
+  pose:
+    xyz:
+    - 13.669876034
+    - 9.801388348
+    - 1.2954
+    rpy:
+    - 0.0
+    - 0.0
+    - -1.583112919
+  geometry:
+    type: box
+    size:
+    - 3.64997568
+    - 0.2032
+    - 2.5908
+  material:
+    rgba:
+    - 0.72
+    - 0.69
+    - 0.62
+    - 1.0
+  static: true
+  collision: true
+- id: 0KvanlNQrCphrCb4tAxXvC
+  ifc_class: IfcWallStandardCase
+  name: Basic Wall:Generic - 8":294341
+  pose:
+    xyz:
+    - 10.088997519
+    - 9.848820225
+    - 1.2954
+    rpy:
+    - 0.0
+    - 0.0
+    - -1.589974799
+  geometry:
+    type: box
+    size:
+    - 3.658106471
+    - 0.2032
+    - 2.5908
+  material:
+    rgba:
+    - 0.72
+    - 0.69
+    - 0.62
+    - 1.0
+  static: true
+  collision: true
+- id: 0KvanlNQrCphrCb4tAxXwK
+  ifc_class: IfcWallStandardCase
+  name: Basic Wall:Generic - 8":294173
+  pose:
+    xyz:
+    - 6.513920015
+    - 9.896388078
+    - 1.2954
+    rpy:
+    - 0.0
+    - 0.0
+    - -1.589974799
+  geometry:
+    type: box
+    size:
+    - 3.665171809
+    - 0.2032
+    - 2.5908
+  material:
+    rgba:
+    - 0.72
+    - 0.69
+    - 0.62
+    - 1.0
+  static: true
+  collision: true
+- id: 0KvanlNQrCphrCb4tAxXz4
+  ifc_class: IfcWallStandardCase
+  name: Basic Wall:Generic - 8":294093
+  pose:
+    xyz:
+    - 2.946968146
+    - 9.943847817
+    - 1.2954
+    rpy:
+    - 0.0
+    - 0.0
+    - -1.589974799
+  geometry:
+    type: box
+    size:
+    - 3.67222109
+    - 0.2032
+    - 2.5908
+  material:
+    rgba:
+    - 0.72
+    - 0.69
+    - 0.62
+    - 1.0
+  static: true
+  collision: true
+- id: 0KvanlNQrCphrCb4tAxk1F
+  ifc_class: IfcWallStandardCase
+  name: Basic Wall:Generic - 8":295878
+  pose:
+    xyz:
+    - 25.94030509
+    - -4.512565547
+    - 1.2954
+    rpy:
+    - 0.0
+    - 0.0
+    - -1.570796327
+  geometry:
+    type: box
+    size:
+    - 3.416638076
+    - 0.2032
+    - 2.5908
+  material:
+    rgba:
+    - 0.72
+    - 0.69
+    - 0.62
+    - 1.0
+  static: true
+  collision: true
+- id: 0KvanlNQrCphrCb4tAxk2t
+  ifc_class: IfcWallStandardCase
+  name: Basic Wall:Generic - 8":295742
+  pose:
+    xyz:
+    - 24.220134343
+    - -3.242577907
+    - 1.2954
+    rpy:
+    - 0.0
+    - 0.0
+    - -1.586517708
+  geometry:
+    type: box
+    size:
+    - 6.490748383
+    - 0.2032
+    - 2.5908
+  material:
+    rgba:
+    - 0.72
+    - 0.69
+    - 0.62
+    - 1.0
+  static: true
+  collision: true
+- id: 0KvanlNQrCphrCb4tAxk7S
+  ifc_class: IfcWallStandardCase
+  name: Basic Wall:Generic - 8":295509
+  pose:
+    xyz:
+    - 17.112078234
+    - -0.11043274
+    - 1.2954
+    rpy:
+    - 0.0
+    - 0.0
+    - -1.586517708
+  geometry:
+    type: box
+    size:
+    - 12.530776869
+    - 0.2032
+    - 2.5908
+  material:
+    rgba:
+    - 0.72
+    - 0.69
+    - 0.62
+    - 1.0
+  static: true
+  collision: true
+- id: 0KvanlNQrCphrCb4tAxkBj
+  ifc_class: IfcWallStandardCase
+  name: Basic Wall:Generic - 8":295268
+  pose:
+    xyz:
+    - 9.968353554
+    - -0.00323119
+    - 1.2954
+    rpy:
+    - 0.0
+    - 0.0
+    - -1.586517708
+  geometry:
+    type: box
+    size:
+    - 12.520544283
+    - 0.2032
+    - 2.5908
+  material:
+    rgba:
+    - 0.72
+    - 0.69
+    - 0.62
+    - 1.0
+  static: true
+  collision: true
+- id: 0KvanlNQrCphrCb4tAxkC2
+  ifc_class: IfcWallStandardCase
+  name: Basic Wall:Generic - 8":295051
+  pose:
+    xyz:
+    - -4.395411276
+    - -2.787333659
+    - 1.2954
+    rpy:
+    - 0.0
+    - 0.0
+    - -1.586517708
+  geometry:
+    type: box
+    size:
+    - 6.501409605
+    - 0.2032
+    - 2.5908
+  material:
+    rgba:
+    - 0.72
+    - 0.69
+    - 0.62
+    - 1.0
+  static: true
+  collision: true
+- id: 0KvanlNQrCphrCb4tAxkG7
+  ifc_class: IfcWallStandardCase
+  name: Basic Wall:Interior - 4 7/8" Partition (1-hr):296846
+  pose:
+    xyz:
+    - 8.396124979
+    - 6.341914335
+    - 1.2954
+    rpy:
+    - 0.0
+    - 0.0
+    - 3.127303498
+  geometry:
+    type: box
+    size:
+    - 29.080790227
+    - 0.123825
+    - 2.5908
+  material:
+    rgba:
+    - 0.72
+    - 0.69
+    - 0.62
+    - 1.0
+  static: true
+  collision: true
+- id: 0KvanlNQrCphrCb4tAxkRi
+  ifc_class: IfcWallStandardCase
+  name: Basic Wall:Interior - 4 7/8" Partition (1-hr):296293
+  pose:
+    xyz:
+    - 22.953731042
+    - 3.109443116
+    - 1.2954
+    rpy:
+    - 0.0
+    - 0.0
+    - 1.556507171
+  geometry:
+    type: box
+    size:
+    - 6.172089814
+    - 0.123825
+    - 2.5908
+  material:
+    rgba:
+    - 0.72
+    - 0.69
+    - 0.62
+    - 1.0
+  static: true
+  collision: true
+- id: 0KvanlNQrCphrCb4tAxkS6
+  ifc_class: IfcWallStandardCase
+  name: Basic Wall:Interior - 4 7/8" Partition (1-hr):296079
+  pose:
+    xyz:
+    - 20.692414222
+    - -0.003257556
+    - 1.2954
+    rpy:
+    - 0.0
+    - 0.0
+    - 3.125871272
+  geometry:
+    type: box
+    size:
+    - 6.953217328
+    - 0.123825
+    - 2.5908
+  material:
+    rgba:
+    - 0.72
+    - 0.69
+    - 0.62
+    - 1.0
+  static: true
+  collision: true
+- id: 0KvanlNQrCphrCb4tAxkXq
+  ifc_class: IfcWallStandardCase
+  name: Basic Wall:Generic - 12":297981
+  pose:
+    xyz:
+    - 12.342661441
+    - -6.155172325
+    - 1.524
+    rpy:
+    - 0.0
+    - 0.0
+    - 3.125871272
+  geometry:
+    type: box
+    size:
+    - 2.4892
+    - 0.3048
+    - 3.048
+  material:
+    rgba:
+    - 0.72
+    - 0.69
+    - 0.62
+    - 1.0
+  static: true
+  collision: true
+- id: 0KvanlNQrCphrCb4tAxkYw
+  ifc_class: IfcWallStandardCase
+  name: Basic Wall:Generic - 12":297779
+  pose:
+    xyz:
+    - 19.498191603
+    - -6.256475812
+    - 1.524
+    rpy:
+    - 0.0
+    - 0.0
+    - 3.141592654
+  geometry:
+    type: box
+    size:
+    - 2.4638
+    - 0.3048
+    - 3.048
+  material:
+    rgba:
+    - 0.72
+    - 0.69
+    - 0.62
+    - 1.0
+  static: true
+  collision: true
+- id: 0KvanlNQrCphrCb4tAxkZw
+  ifc_class: IfcWallStandardCase
+  name: Basic Wall:Generic - 12":297843
+  pose:
+    xyz:
+    - 15.784069524
+    - -6.205007842
+    - 1.524
+    rpy:
+    - 0.0
+    - 0.0
+    - 3.141592654
+  geometry:
+    type: box
+    size:
+    - 2.2098
+    - 0.3048
+    - 3.048
+  material:
+    rgba:
+    - 0.72
+    - 0.69
+    - 0.62
+    - 1.0
+  static: true
+  collision: true
+- id: 0KvanlNQrCphrCb4tAxkaf
+  ifc_class: IfcWallStandardCase
+  name: Basic Wall:Interior - 4 7/8" Partition (1-hr):297632
+  pose:
+    xyz:
+    - 26.015518319
+    - -2.745106334
+    - 1.2954
+    rpy:
+    - 0.0
+    - 0.0
+    - 3.125871272
+  geometry:
+    type: box
+    size:
+    - 3.371482974
+    - 0.123825
+    - 2.5908
+  material:
+    rgba:
+    - 0.72
+    - 0.69
+    - 0.62
+    - 1.0
+  static: true
+  collision: true
+- id: 0KvanlNQrCphrCb4tAxkbh
+  ifc_class: IfcWallStandardCase
+  name: Basic Wall:Generic - 12":297698
+  pose:
+    xyz:
+    - 22.949453696
+    - -6.31686815
+    - 1.524
+    rpy:
+    - 0.0
+    - 0.0
+    - 3.141592654
+  geometry:
+    type: box
+    size:
+    - 2.2098
+    - 0.3048
+    - 3.048
+  material:
+    rgba:
+    - 0.72
+    - 0.69
+    - 0.62
+    - 1.0
+  static: true
+  collision: true
+- id: 0KvanlNQrCphrCb4tAxkcE
+  ifc_class: IfcWallStandardCase
+  name: Basic Wall:Interior - 4 7/8" Partition (1-hr):297479
+  pose:
+    xyz:
+    - 29.242406815
+    - -1.418288774
+    - 1.2954
+    rpy:
+    - 0.0
+    - 0.0
+    - -1.570796327
+  geometry:
+    type: box
+    size:
+    - 1.205522539
+    - 0.123825
+    - 2.5908
+  material:
+    rgba:
+    - 0.72
+    - 0.69
+    - 0.62
+    - 1.0
+  static: true
+  collision: true
+- id: 0KvanlNQrCphrCb4tAxkex
+  ifc_class: IfcWallStandardCase
+  name: Basic Wall:Interior - 4 7/8" Partition (1-hr):297394
+  pose:
+    xyz:
+    - 29.599505923
+    - -0.753615004
+    - 1.2954
+    rpy:
+    - 0.0
+    - 0.0
+    - 3.141592654
+  geometry:
+    type: box
+    size:
+    - 3.28183331
+    - 0.123825
+    - 2.5908
+  material:
+    rgba:
+    - 0.72
+    - 0.69
+    - 0.62
+    - 1.0
+  static: true
+  collision: true
+- id: 0KvanlNQrCphrCb4tAxkhO
+  ifc_class: IfcWallStandardCase
+  name: Basic Wall:Interior - 4 7/8" Partition (1-hr):297297
+  pose:
+    xyz:
+    - -1.706916205
+    - 0.483422723
+    - 1.2954
+    rpy:
+    - 0.0
+    - 0.0
+    - -0.015721382
+  geometry:
+    type: box
+    size:
+    - 8.813547299
+    - 0.123825
+    - 2.5908
+  material:
+    rgba:
+    - 0.72
+    - 0.69
+    - 0.62
+    - 1.0
+  static: true
+  collision: true
+- id: 0KvanlNQrCphrCb4tAxklk
+  ifc_class: IfcWallStandardCase
+  name: Basic Wall:Interior - 4 7/8" Partition (1-hr):297063
+  pose:
+    xyz:
+    - -6.128893086
+    - 3.489371982
+    - 1.2954
+    rpy:
+    - 0.0
+    - 0.0
+    - -1.586517708
+  geometry:
+    type: box
+    size:
+    - 5.995947133
+    - 0.123825
+    - 2.5908
+  material:
+    rgba:
+    - 0.72
+    - 0.69
+    - 0.62
+    - 1.0
+  static: true
+  collision: true
+- id: 0KvanlNQrCphrCb4tAxkmn
+  ifc_class: IfcWallStandardCase
+  name: Basic Wall:Generic - 12":298936
+  pose:
+    xyz:
+    - 1.468410629
+    - -5.998524972
+    - 1.524
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.0
+  geometry:
+    type: box
+    size:
+    - 2.2098
+    - 0.3048
+    - 3.048
+  material:
+    rgba:
+    - 0.72
+    - 0.69
+    - 0.62
+    - 1.0
+  static: true
+  collision: true
+- id: 0KvanlNQrCphrCb4tAxkqw
+  ifc_class: IfcWallStandardCase
+  name: Basic Wall:Generic - 12":298675
+  pose:
+    xyz:
+    - -5.695255975
+    - -5.858255213
+    - 1.524
+    rpy:
+    - 0.0
+    - 0.0
+    - 3.141592654
+  geometry:
+    type: box
+    size:
+    - 2.286
+    - 0.3048
+    - 3.048
+  material:
+    rgba:
+    - 0.72
+    - 0.69
+    - 0.62
+    - 1.0
+  static: true
+  collision: true
+- id: 0KvanlNQrCphrCb4tAxkta
+  ifc_class: IfcWallStandardCase
+  name: Basic Wall:Generic - 12":298605
+  pose:
+    xyz:
+    - -1.998503028
+    - -5.936407206
+    - 1.524
+    rpy:
+    - 0.0
+    - 0.0
+    - 3.125871272
+  geometry:
+    type: box
+    size:
+    - 2.4892
+    - 0.3048
+    - 3.048
+  material:
+    rgba:
+    - 0.72
+    - 0.69
+    - 0.62
+    - 1.0
+  static: true
+  collision: true
+- id: 0KvanlNQrCphrCb4tAxkvE
+  ifc_class: IfcWallStandardCase
+  name: Basic Wall:Generic - 12":298439
+  pose:
+    xyz:
+    - 5.176841155
+    - -6.049324972
+    - 1.524
+    rpy:
+    - 0.0
+    - 0.0
+    - 3.141592654
+  geometry:
+    type: box
+    size:
+    - 2.48285
+    - 0.3048
+    - 3.048
+  material:
+    rgba:
+    - 0.72
+    - 0.69
+    - 0.62
+    - 1.0
+  static: true
+  collision: true
+- id: 0KvanlNQrCphrCb4tAxkzA
+  ifc_class: IfcWallStandardCase
+  name: Basic Wall:Generic - 12":298179
+  pose:
+    xyz:
+    - 8.653188363
+    - -6.097363609
+    - 1.524
+    rpy:
+    - 0.0
+    - 0.0
+    - 3.125871272
+  geometry:
+    type: box
+    size:
+    - 2.2098
+    - 0.3048
+    - 3.048
+  material:
+    rgba:
+    - 0.72
+    - 0.69
+    - 0.62
+    - 1.0
+  static: true
+  collision: true
+- id: 0kOqgiFir1OwD68J2JXw_l
+  ifc_class: IfcDoor
+  name: Door-Double-Glass:68" x 80":376874
+  pose:
+    xyz:
+    - 31.440510062
+    - 6.197876519
+    - 1.0541
+    rpy:
+    - 0.0
+    - 0.0
+    - -1.585088985
+  geometry:
+    type: box
+    size:
+    - 1.8796
+    - 0.254
+    - 2.1082
+  material:
+    rgba:
+    - 0.55
+    - 0.32
+    - 0.14
+    - 1.0
+  static: true
+  collision: true
+- id: 1abtvTofT8EB1v01F0DkHX
+  ifc_class: IfcWallStandardCase
+  name: Basic Wall:Generic - 6":292872
+  pose:
+    xyz:
+    - 29.243859233
+    - 3.640102087
+    - 1.2954
+    rpy:
+    - 0.0
+    - 0.0
+    - -1.570796327
+  geometry:
+    type: box
+    size:
+    - 2.19075
+    - 0.1524
+    - 2.5908
+  material:
+    rgba:
+    - 0.72
+    - 0.69
+    - 0.62
+    - 1.0
+  static: true
+  collision: true
+- id: 1abtvTofT8EB1v01F0DkJJ
+  ifc_class: IfcWallStandardCase
+  name: Basic Wall:Generic - 6":293050
+  pose:
+    xyz:
+    - 29.546241563
+    - 2.468527087
+    - 1.2954
+    rpy:
+    - 0.0
+    - 0.0
+    - 3.141592654
+  geometry:
+    type: box
+    size:
+    - 3.480882695
+    - 0.1524
+    - 2.5908
+  material:
+    rgba:
+    - 0.72
+    - 0.69
+    - 0.62
+    - 1.0
+  static: true
+  collision: true
+- id: 1abtvTofT8EB1v01F0DkNK
+  ifc_class: IfcWallStandardCase
+  name: Basic Wall:Generic - 8":293309
+  pose:
+    xyz:
+    - 27.83717291
+    - -2.075096834
+    - 1.2954
+    rpy:
+    - 0.0
+    - 0.0
+    - -1.586517708
+  geometry:
+    type: box
+    size:
+    - 8.93914698
+    - 0.2032
+    - 2.5908
+  material:
+    rgba:
+    - 0.72
+    - 0.69
+    - 0.62
+    - 1.0
+  static: true
+  collision: true
+- id: 1abtvTofT8EB1v01F0Dkjc
+  ifc_class: IfcWallStandardCase
+  name: Basic Wall:Generic - 6":292623
+  pose:
+    xyz:
+    - 11.860453097
+    - 7.922343347
+    - 1.2954
+    rpy:
+    - 0.0
+    - 0.0
+    - 3.129276061
+  geometry:
+    type: box
+    size:
+    - 39.002584236
+    - 0.1524
+    - 2.5908
+  material:
+    rgba:
+    - 0.72
+    - 0.69
+    - 0.62
+    - 1.0
+  static: true
+  collision: true
+- id: 1abtvTofT8EB1v01F0Dkl5
+  ifc_class: IfcWallStandardCase
+  name: Basic Wall:Generic - 6":292780
+  pose:
+    xyz:
+    - 30.243917133
+    - 4.811677087
+    - 1.2954
+    rpy:
+    - 0.0
+    - 0.0
+    - 3.141592654
+  geometry:
+    type: box
+    size:
+    - 2.152515801
+    - 0.1524
+    - 2.5908
+  material:
+    rgba:
+    - 0.72
+    - 0.69
+    - 0.62
+    - 1.0
+  static: true
+  collision: true
+- id: 1abtvTofT8EB1v01F0Dkt3
+  ifc_class: IfcWallStandardCase
+  name: Basic Wall:Generic - 8":291242
+  pose:
+    xyz:
+    - 11.747379397
+    - -6.393860667
+    - 1.524
+    rpy:
+    - 0.0
+    - 0.0
+    - -0.015721382
+  geometry:
+    type: box
+    size:
+    - 39.225842292
+    - 0.2032
+    - 3.048
+  material:
+    rgba:
+    - 0.72
+    - 0.69
+    - 0.62
+    - 1.0
+  static: true
+  collision: true
+- id: 1abtvTofT8EB1v01F0Dl5g
+  ifc_class: IfcWallStandardCase
+  name: Basic Wall:Generic - 8":290051
+  pose:
+    xyz:
+    - 11.816363963
+    - 11.754462054
+    - 1.524
+    rpy:
+    - 0.0
+    - 0.0
+    - 3.127299995
+  geometry:
+    type: box
+    size:
+    - 39.199914793
+    - 0.2032
+    - 3.048
+  material:
+    rgba:
+    - 0.72
+    - 0.69
+    - 0.62
+    - 1.0
+  static: true
+  collision: true
+- id: 1abtvTofT8EB1v01F0DlAk
+  ifc_class: IfcWallStandardCase
+  name: Basic Wall:Generic - 8":290503
+  pose:
+    xyz:
+    - -7.823877145
+    - 2.873085037
+    - 1.524
+    rpy:
+    - 0.0
+    - 0.0
+    - -1.586517708
+  geometry:
+    type: box
+    size:
+    - 18.119451987
+    - 0.2032
+    - 3.048
+  material:
+    rgba:
+    - 0.72
+    - 0.69
+    - 0.62
+    - 1.0
+  static: true
+  collision: true
+- id: 1ccFJmoz1FOhtUmg41tu3g
+  ifc_class: IfcRailing
+  name: Railing:Handrail - Rectangular:351582
+  pose:
+    xyz:
+    - 32.75936219
+    - 6.183295032
+    - 0.4572
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.0
+  geometry:
+    type: box
+    size:
+    - 2.362706696
+    - 2.960211303
+    - 0.9144
+  material:
+    rgba:
+    - 0.65
+    - 0.68
+    - 0.72
+    - 1.0
+  static: true
+  collision: true
+- id: 1ccFJmoz1FOhtUmg41tu60
+  ifc_class: IfcRailing
+  name: Railing:Handrail - Rectangular:351284
+  pose:
+    xyz:
+    - -9.269618149
+    - -0.935102746
+    - 0.4572
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.0
+  geometry:
+    type: box
+    size:
+    - 2.369773058
+    - 2.410469801
+    - 0.9144
+  material:
+    rgba:
+    - 0.65
+    - 0.68
+    - 0.72
+    - 1.0
+  static: true
+  collision: true
+- id: 1ccFJmoz1FOhtUmg41tuPp
+  ifc_class: IfcRailing
+  name: Railing:Handrail - Rectangular:351175
+  pose:
+    xyz:
+    - -8.176249863
+    - 1.088223521
+    - -0.050574106
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.0
+  geometry:
+    type: box
+    size:
+    - 0.0508
+    - 1.6764
+    - 1.929948211
+  material:
+    rgba:
+    - 0.65
+    - 0.68
+    - 0.72
+    - 1.0
+  static: true
+  collision: true
+- id: 1ccFJmoz1FOhtUmg41tuPt
+  ifc_class: IfcRailing
+  name: Railing:Handrail - Rectangular:351171
+  pose:
+    xyz:
+    - -9.039849863
+    - 1.088223521
+    - -0.050574106
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.0
+  geometry:
+    type: box
+    size:
+    - 0.0508
+    - 1.6764
+    - 1.929948211
+  material:
+    rgba:
+    - 0.65
+    - 0.68
+    - 0.72
+    - 1.0
+  static: true
+  collision: true
+- id: 1oS3rSNeDADhhumPXXPsjB
+  ifc_class: IfcDoor
+  name: Door-Double-Flush_Panel:72" x 78":316250
+  pose:
+    xyz:
+    - 24.249289203
+    - -1.388258818
+    - 1.0287
+    rpy:
+    - 0.0
+    - 0.0
+    - 1.555074945
+  geometry:
+    type: box
+    size:
+    - 1.9812
+    - 0.254
+    - 2.0574
+  material:
+    rgba:
+    - 0.55
+    - 0.32
+    - 0.14
+    - 1.0
+  static: true
+  collision: true
+- id: 1pMTU_U0n8Z8G77fSA9Y0a
+  ifc_class: IfcSlab
+  name: Floor:Concrete Slab - 6":332610
+  pose:
+    xyz:
+    - -9.222950095
+    - -0.853720591
+    - -0.0762
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.0
+  geometry:
+    type: box
+    size:
+    - 2.513047554
+    - 2.426745237
+    - 0.1524
+  material:
+    rgba:
+    - 0.5
+    - 0.5
+    - 0.48
+    - 1.0
+  static: true
+  collision: true
+- id: 1pMTU_U0n8Z8G77fSA9Y8b
+  ifc_class: IfcSlab
+  name: Floor:Concrete Slab - 6":332099
+  pose:
+    xyz:
+    - 32.746396744
+    - 6.187699779
+    - -0.0762
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.0
+  geometry:
+    type: box
+    size:
+    - 2.451544052
+    - 2.987380606
+    - 0.1524
+  material:
+    rgba:
+    - 0.5
+    - 0.5
+    - 0.48
+    - 1.0
+  static: true
+  collision: true
+- id: 1pMTU_U0n8Z8G77fSA9Y_k
+  ifc_class: IfcWindow
+  name: Fixed:30" X 30":335048
+  pose:
+    xyz:
+    - 29.700978626
+    - 11.498825958
+    - 1.7272
+    rpy:
+    - 0.0
+    - 0.0
+    - -0.014292658
+  geometry:
+    type: box
+    size:
+    - 0.762
+    - 0.2032
+    - 0.762
+  material:
+    rgba:
+    - 0.25
+    - 0.55
+    - 0.72
+    - 0.55
+  static: true
+  collision: true
+- id: 1r7fheSLj8Lx7wNZ5Zuy$B
+  ifc_class: IfcSlab
+  name: Basic Roof:Generic - 12":373380
+  pose:
+    xyz:
+    - 11.801809329
+    - 2.693300283
+    - 3.2004
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.0
+  geometry:
+    type: box
+    size:
+    - 39.755820172
+    - 18.951462908
+    - 0.3048
+  material:
+    rgba:
+    - 0.5
+    - 0.5
+    - 0.48
+    - 1.0
+  static: true
+  collision: true
+- id: 1s7WttW8LF3wo3GFHzG40a
+  ifc_class: IfcWindow
+  name: Fixed:24" x 52":320484
+  pose:
+    xyz:
+    - 4.786123647
+    - 11.85494972
+    - 1.33985
+    rpy:
+    - 0.0
+    - 0.0
+    - -0.014292658
+  geometry:
+    type: box
+    size:
+    - 0.6096
+    - 0.2032
+    - 1.3716
+  material:
+    rgba:
+    - 0.25
+    - 0.55
+    - 0.72
+    - 0.55
+  static: true
+  collision: true
+- id: 1s7WttW8LF3wo3GFHzG41K
+  ifc_class: IfcWindow
+  name: Fixed:24" x 52":320404
+  pose:
+    xyz:
+    - 1.230486851
+    - 11.905772683
+    - 1.33985
+    rpy:
+    - 0.0
+    - 0.0
+    - -0.014292658
+  geometry:
+    type: box
+    size:
+    - 0.6096
+    - 0.2032
+    - 1.3716
+  material:
+    rgba:
+    - 0.25
+    - 0.55
+    - 0.72
+    - 0.55
+  static: true
+  collision: true
+- id: 1s7WttW8LF3wo3GFHzG43H
+  ifc_class: IfcWindow
+  name: Fixed:24" x 52":320273
+  pose:
+    xyz:
+    - -2.350547351
+    - 11.956958667
+    - 1.33985
+    rpy:
+    - 0.0
+    - 0.0
+    - -0.014292658
+  geometry:
+    type: box
+    size:
+    - 0.6096
+    - 0.2032
+    - 1.3716
+  material:
+    rgba:
+    - 0.25
+    - 0.55
+    - 0.72
+    - 0.55
+  static: true
+  collision: true
+- id: 1s7WttW8LF3wo3GFHzG456
+  ifc_class: IfcWindow
+  name: Fixed:24" x 52":320134
+  pose:
+    xyz:
+    - -5.956978959
+    - 12.008507672
+    - 1.33985
+    rpy:
+    - 0.0
+    - 0.0
+    - -0.014292658
+  geometry:
+    type: box
+    size:
+    - 0.6096
+    - 0.2032
+    - 1.3716
+  material:
+    rgba:
+    - 0.25
+    - 0.55
+    - 0.72
+    - 0.55
+  static: true
+  collision: true
+- id: 1s7WttW8LF3wo3GFHzG4AM
+  ifc_class: IfcWindow
+  name: Fixed:24" x 52":319830
+  pose:
+    xyz:
+    - -7.710542248
+    - 10.081456598
+    - 1.33985
+    rpy:
+    - 0.0
+    - 0.0
+    - 1.555074945
+  geometry:
+    type: box
+    size:
+    - 0.6096
+    - 0.2032
+    - 1.3716
+  material:
+    rgba:
+    - 0.25
+    - 0.55
+    - 0.72
+    - 0.55
+  static: true
+  collision: true
+- id: 1s7WttW8LF3wo3GFHzG4Bb
+  ifc_class: IfcWindow
+  name: Fixed:24" x 52":319781
+  pose:
+    xyz:
+    - -7.821331466
+    - 3.034996366
+    - 1.33985
+    rpy:
+    - 0.0
+    - 0.0
+    - 1.555074945
+  geometry:
+    type: box
+    size:
+    - 0.6096
+    - 0.2032
+    - 1.3716
+  material:
+    rgba:
+    - 0.25
+    - 0.55
+    - 0.72
+    - 0.55
+  static: true
+  collision: true
+- id: 1s7WttW8LF3wo3GFHzG4HD
+  ifc_class: IfcWindow
+  name: Fixed:24" x 52":321421
+  pose:
+    xyz:
+    - 3.407035322
+    - -6.262728132
+    - 1.33985
+    rpy:
+    - 0.0
+    - 0.0
+    - 3.125871272
+  geometry:
+    type: box
+    size:
+    - 0.6096
+    - 0.2032
+    - 1.3716
+  material:
+    rgba:
+    - 0.25
+    - 0.55
+    - 0.72
+    - 0.55
+  static: true
+  collision: true
+- id: 1s7WttW8LF3wo3GFHzG4IH
+  ifc_class: IfcWindow
+  name: Fixed:24" x 52":321361
+  pose:
+    xyz:
+    - 6.97289846
+    - -6.318793046
+    - 1.33985
+    rpy:
+    - 0.0
+    - 0.0
+    - 3.125871272
+  geometry:
+    type: box
+    size:
+    - 0.6096
+    - 0.2032
+    - 1.3716
+  material:
+    rgba:
+    - 0.25
+    - 0.55
+    - 0.72
+    - 0.55
+  static: true
+  collision: true
+- id: 1s7WttW8LF3wo3GFHzG4JB
+  ifc_class: IfcWindow
+  name: Fixed:24" x 52":321291
+  pose:
+    xyz:
+    - 14.116542707
+    - -6.431110256
+    - 1.33985
+    rpy:
+    - 0.0
+    - 0.0
+    - 3.125871272
+  geometry:
+    type: box
+    size:
+    - 0.6096
+    - 0.2032
+    - 1.3716
+  material:
+    rgba:
+    - 0.25
+    - 0.55
+    - 0.72
+    - 0.55
+  static: true
+  collision: true
+- id: 1s7WttW8LF3wo3GFHzG4Jk
+  ifc_class: IfcWindow
+  name: Fixed:24" x 52":321326
+  pose:
+    xyz:
+    - 10.528459015
+    - -6.374695976
+    - 1.33985
+    rpy:
+    - 0.0
+    - 0.0
+    - 3.125871272
+  geometry:
+    type: box
+    size:
+    - 0.6096
+    - 0.2032
+    - 1.3716
+  material:
+    rgba:
+    - 0.25
+    - 0.55
+    - 0.72
+    - 0.55
+  static: true
+  collision: true
+- id: 1s7WttW8LF3wo3GFHzG4Kh
+  ifc_class: IfcWindow
+  name: Fixed:24" x 52":321259
+  pose:
+    xyz:
+    - 17.672103263
+    - -6.487013186
+    - 1.33985
+    rpy:
+    - 0.0
+    - 0.0
+    - 3.125871272
+  geometry:
+    type: box
+    size:
+    - 0.6096
+    - 0.2032
+    - 1.3716
+  material:
+    rgba:
+    - 0.25
+    - 0.55
+    - 0.72
+    - 0.55
+  static: true
+  collision: true
+- id: 1s7WttW8LF3wo3GFHzG4L3
+  ifc_class: IfcWindow
+  name: Fixed:24" x 52":321155
+  pose:
+    xyz:
+    - 21.272075657
+    - -6.543614389
+    - 1.33985
+    rpy:
+    - 0.0
+    - 0.0
+    - 3.125871272
+  geometry:
+    type: box
+    size:
+    - 0.6096
+    - 0.2032
+    - 1.3716
+  material:
+    rgba:
+    - 0.25
+    - 0.55
+    - 0.72
+    - 0.55
+  static: true
+  collision: true
+- id: 1s7WttW8LF3wo3GFHzG4OH
+  ifc_class: IfcWindow
+  name: Fixed:24" x 52":320977
+  pose:
+    xyz:
+    - 26.196136641
+    - 11.548922879
+    - 1.33985
+    rpy:
+    - 0.0
+    - 0.0
+    - -0.014292658
+  geometry:
+    type: box
+    size:
+    - 0.6096
+    - 0.2032
+    - 1.3716
+  material:
+    rgba:
+    - 0.25
+    - 0.55
+    - 0.72
+    - 0.55
+  static: true
+  collision: true
+- id: 1s7WttW8LF3wo3GFHzG4QU
+  ifc_class: IfcWindow
+  name: Fixed:24" x 52":320862
+  pose:
+    xyz:
+    - 22.665897251
+    - 11.59938282
+    - 1.33985
+    rpy:
+    - 0.0
+    - 0.0
+    - -0.014292658
+  geometry:
+    type: box
+    size:
+    - 0.6096
+    - 0.2032
+    - 1.3716
+  material:
+    rgba:
+    - 0.25
+    - 0.55
+    - 0.72
+    - 0.55
+  static: true
+  collision: true
+- id: 1s7WttW8LF3wo3GFHzG4Rk
+  ifc_class: IfcWindow
+  name: Fixed:24" x 52":320814
+  pose:
+    xyz:
+    - 19.084863049
+    - 11.650568805
+    - 1.33985
+    rpy:
+    - 0.0
+    - 0.0
+    - -0.014292658
+  geometry:
+    type: box
+    size:
+    - 0.6096
+    - 0.2032
+    - 1.3716
+  material:
+    rgba:
+    - 0.25
+    - 0.55
+    - 0.72
+    - 0.55
+  static: true
+  collision: true
+- id: 1s7WttW8LF3wo3GFHzG4S4
+  ifc_class: IfcWindow
+  name: Fixed:24" x 52":320708
+  pose:
+    xyz:
+    - 15.503828847
+    - 11.701754789
+    - 1.33985
+    rpy:
+    - 0.0
+    - 0.0
+    - -0.014292658
+  geometry:
+    type: box
+    size:
+    - 0.6096
+    - 0.2032
+    - 1.3716
+  material:
+    rgba:
+    - 0.25
+    - 0.55
+    - 0.72
+    - 0.55
+  static: true
+  collision: true
+- id: 1s7WttW8LF3wo3GFHzG4TO
+  ifc_class: IfcWindow
+  name: Fixed:24" x 52":320664
+  pose:
+    xyz:
+    - 11.922794645
+    - 11.752940773
+    - 1.33985
+    rpy:
+    - 0.0
+    - 0.0
+    - -0.014292658
+  geometry:
+    type: box
+    size:
+    - 0.6096
+    - 0.2032
+    - 1.3716
+  material:
+    rgba:
+    - 0.25
+    - 0.55
+    - 0.72
+    - 0.55
+  static: true
+  collision: true
+- id: 1s7WttW8LF3wo3GFHzG4UF
+  ifc_class: IfcWindow
+  name: Fixed:24" x 52":320591
+  pose:
+    xyz:
+    - 8.367157849
+    - 11.803763736
+    - 1.33985
+    rpy:
+    - 0.0
+    - 0.0
+    - -0.014292658
+  geometry:
+    type: box
+    size:
+    - 0.6096
+    - 0.2032
+    - 1.3716
+  material:
+    rgba:
+    - 0.25
+    - 0.55
+    - 0.72
+    - 0.55
+  static: true
+  collision: true
+- id: 1s7WttW8LF3wo3GFHzG7G1
+  ifc_class: IfcCovering
+  name: Compound Ceiling:2' x 4' ACT System:317377
+  pose:
+    xyz:
+    - 11.87314504
+    - 9.826689473
+    - 2.466975
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.0
+  geometry:
+    type: box
+    size:
+    - 3.435231525
+    - 3.697798417
+    - 0.05715
+  material:
+    rgba:
+    - 0.65
+    - 0.68
+    - 0.72
+    - 1.0
+  static: true
+  collision: true
+- id: 1s7WttW8LF3wo3GFHzG7G9
+  ifc_class: IfcCovering
+  name: Compound Ceiling:2' x 4' ACT System:317385
+  pose:
+    xyz:
+    - 19.023351434
+    - 9.734970832
+    - 2.466975
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.0
+  geometry:
+    type: box
+    size:
+    - 10.548720339
+    - 3.779228187
+    - 0.05715
+  material:
+    rgba:
+    - 0.65
+    - 0.68
+    - 0.72
+    - 1.0
+  static: true
+  collision: true
+- id: 1s7WttW8LF3wo3GFHzG7GH
+  ifc_class: IfcCovering
+  name: Compound Ceiling:2' x 4' ACT System:317393
+  pose:
+    xyz:
+    - 27.926826353
+    - 9.615000922
+    - 2.466975
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.0
+  geometry:
+    type: box
+    size:
+    - 6.851829499
+    - 3.713085001
+    - 0.05715
+  material:
+    rgba:
+    - 0.65
+    - 0.68
+    - 0.72
+    - 1.0
+  static: true
+  collision: true
+- id: 1s7WttW8LF3wo3GFHzG7GP
+  ifc_class: IfcCovering
+  name: Compound Ceiling:2' x 4' ACT System:317401
+  pose:
+    xyz:
+    - 30.319027959
+    - 3.640102087
+    - 2.466975
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.0
+  geometry:
+    type: box
+    size:
+    - 1.997937451
+    - 2.19075
+    - 0.05715
+  material:
+    rgba:
+    - 0.65
+    - 0.68
+    - 0.72
+    - 1.0
+  static: true
+  collision: true
+- id: 1s7WttW8LF3wo3GFHzG7Gu
+  ifc_class: IfcCovering
+  name: Compound Ceiling:2' x 4' ACT System:317432
+  pose:
+    xyz:
+    - 29.622520345
+    - 0.850312292
+    - 2.466975
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.0
+  geometry:
+    type: box
+    size:
+    - 3.323968432
+    - 3.084029591
+    - 0.05715
+  material:
+    rgba:
+    - 0.65
+    - 0.68
+    - 0.72
+    - 1.0
+  static: true
+  collision: true
+- id: 1s7WttW8LF3wo3GFHzG7HH
+  ifc_class: IfcCovering
+  name: Compound Ceiling:2' x 4' ACT System:317329
+  pose:
+    xyz:
+    - -5.96247575
+    - 10.064047336
+    - 2.466975
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.0
+  geometry:
+    type: box
+    size:
+    - 3.350853557
+    - 3.732093763
+    - 0.05715
+  material:
+    rgba:
+    - 0.65
+    - 0.68
+    - 0.72
+    - 1.0
+  static: true
+  collision: true
+- id: 1s7WttW8LF3wo3GFHzG7HP
+  ifc_class: IfcCovering
+  name: Compound Ceiling:2' x 4' ACT System:317337
+  pose:
+    xyz:
+    - -2.410674312
+    - 10.017077085
+    - 2.466975
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.0
+  geometry:
+    type: box
+    size:
+    - 3.437158698
+    - 3.72609334
+    - 0.05715
+  material:
+    rgba:
+    - 0.65
+    - 0.68
+    - 0.72
+    - 1.0
+  static: true
+  collision: true
+- id: 1s7WttW8LF3wo3GFHzG7HX
+  ifc_class: IfcCovering
+  name: Compound Ceiling:2' x 4' ACT System:317345
+  pose:
+    xyz:
+    - 1.160567098
+    - 9.969381063
+    - 2.466975
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.0
+  geometry:
+    type: box
+    size:
+    - 3.44002466
+    - 3.718715429
+    - 0.05715
+  material:
+    rgba:
+    - 0.65
+    - 0.68
+    - 0.72
+    - 1.0
+  static: true
+  collision: true
+- id: 1s7WttW8LF3wo3GFHzG7Hn
+  ifc_class: IfcCovering
+  name: Compound Ceiling:2' x 4' ACT System:317361
+  pose:
+    xyz:
+    - 4.730414134
+    - 9.921879943
+    - 2.466975
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.0
+  geometry:
+    type: box
+    size:
+    - 3.434099139
+    - 3.711584683
+    - 0.05715
+  material:
+    rgba:
+    - 0.65
+    - 0.68
+    - 0.72
+    - 1.0
+  static: true
+  collision: true
+- id: 1s7WttW8LF3wo3GFHzG7Hv
+  ifc_class: IfcCovering
+  name: Compound Ceiling:2' x 4' ACT System:317369
+  pose:
+    xyz:
+    - 8.301428744
+    - 9.874370161
+    - 2.466975
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.0
+  geometry:
+    type: box
+    size:
+    - 3.442089434
+    - 3.704636786
+    - 0.05715
+  material:
+    rgba:
+    - 0.65
+    - 0.68
+    - 0.72
+    - 1.0
+  static: true
+  collision: true
+- id: 1s7WttW8LF3wo3GFHzG7VQ
+  ifc_class: IfcSlab
+  name: Floor:Concrete Slab - 6":316442
+  pose:
+    xyz:
+    - 11.771309916
+    - 2.641432598
+    - -0.0762
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.0
+  geometry:
+    type: box
+    size:
+    - 39.67995936
+    - 18.989481446
+    - 0.1524
+  material:
+    rgba:
+    - 0.5
+    - 0.5
+    - 0.48
+    - 1.0
+  static: true
+  collision: true
+- id: 1s7WttW8LF3wo3GFHzG7Z4
+  ifc_class: IfcCovering
+  name: Compound Ceiling:2' x 4' ACT System:318212
+  pose:
+    xyz:
+    - 20.641236521
+    - -3.242794746
+    - 2.466975
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.0
+  geometry:
+    type: box
+    size:
+    - 7.052584028
+    - 6.45294681
+    - 0.05715
+  material:
+    rgba:
+    - 0.65
+    - 0.68
+    - 0.72
+    - 1.0
+  static: true
+  collision: true
+- id: 1s7WttW8LF3wo3GFHzG7l0
+  ifc_class: IfcCovering
+  name: Compound Ceiling:2' x 4' ACT System:317440
+  pose:
+    xyz:
+    - 29.556127479
+    - -3.544056067
+    - 2.466975
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.0
+  geometry:
+    type: box
+    size:
+    - 3.36505038
+    - 5.457057127
+    - 0.05715
+  material:
+    rgba:
+    - 0.65
+    - 0.68
+    - 0.72
+    - 1.0
+  static: true
+  collision: true
+- id: 1s7WttW8LF3wo3GFHzG7lC
+  ifc_class: IfcCovering
+  name: Compound Ceiling:2' x 4' ACT System:317452
+  pose:
+    xyz:
+    - 26.882767649
+    - -4.514162971
+    - 2.466975
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.0
+  geometry:
+    type: box
+    size:
+    - 1.68172512
+    - 3.413443228
+    - 0.05715
+  material:
+    rgba:
+    - 0.65
+    - 0.68
+    - 0.72
+    - 1.0
+  static: true
+  collision: true
+- id: 1s7WttW8LF3wo3GFHzG7lb
+  ifc_class: IfcCovering
+  name: Compound Ceiling:2' x 4' ACT System:317477
+  pose:
+    xyz:
+    - -1.659686639
+    - 3.481025805
+    - 2.466975
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.0
+  geometry:
+    type: box
+    size:
+    - 8.904970647
+    - 6.009951898
+    - 0.05715
+  material:
+    rgba:
+    - 0.65
+    - 0.68
+    - 0.72
+    - 1.0
+  static: true
+  collision: true
+- id: 1s7WttW8LF3wo3GFHzG7lj
+  ifc_class: IfcCovering
+  name: Compound Ceiling:2' x 4' ACT System:317485
+  pose:
+    xyz:
+    - 20.075679772
+    - 3.088679717
+    - 2.466975
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.0
+  geometry:
+    type: box
+    size:
+    - 5.71694254
+    - 6.127808969
+    - 0.05715
+  material:
+    rgba:
+    - 0.65
+    - 0.68
+    - 0.72
+    - 1.0
+  static: true
+  collision: true
+- id: 1s7WttW8LF3wo3GFHzG7lv
+  ifc_class: IfcCovering
+  name: Compound Ceiling:2' x 4' ACT System:317497
+  pose:
+    xyz:
+    - -6.194778788
+    - -4.170013214
+    - 2.466975
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.0
+  geometry:
+    type: box
+    size:
+    - 3.333831766
+    - 3.681283998
+    - 0.05715
+  material:
+    rgba:
+    - 0.65
+    - 0.68
+    - 0.72
+    - 1.0
+  static: true
+  collision: true
+- id: 1s7WttW8LF3wo3GFHzG7mz
+  ifc_class: IfcWindow
+  name: Fixed:24" x 52":319485
+  pose:
+    xyz:
+    - -7.934158477
+    - -4.141072482
+    - 1.33985
+    rpy:
+    - 0.0
+    - 0.0
+    - 1.555074945
+  geometry:
+    type: box
+    size:
+    - 0.6096
+    - 0.2032
+    - 1.3716
+  material:
+    rgba:
+    - 0.25
+    - 0.55
+    - 0.72
+    - 0.55
+  static: true
+  collision: true
+- id: 1s7WttW8LF3wo3GFHzG7n0
+  ifc_class: IfcWindow
+  name: Fixed:24" x 52":319360
+  pose:
+    xyz:
+    - -0.148525233
+    - -6.206825202
+    - 1.33985
+    rpy:
+    - 0.0
+    - 0.0
+    - 3.125871272
+  geometry:
+    type: box
+    size:
+    - 0.6096
+    - 0.2032
+    - 1.3716
+  material:
+    rgba:
+    - 0.25
+    - 0.55
+    - 0.72
+    - 0.55
+  static: true
+  collision: true
+- id: 1s7WttW8LF3wo3GFHzG7nx
+  ifc_class: IfcWindow
+  name: Fixed:24" x 52":319419
+  pose:
+    xyz:
+    - -7.380777283
+    - -6.09311484
+    - 1.33985
+    rpy:
+    - 0.0
+    - 0.0
+    - 3.125871272
+  geometry:
+    type: box
+    size:
+    - 0.6096
+    - 0.2032
+    - 1.3716
+  material:
+    rgba:
+    - 0.25
+    - 0.55
+    - 0.72
+    - 0.55
+  static: true
+  collision: true
+- id: 1s7WttW8LF3wo3GFHzG7uC
+  ifc_class: IfcWindow
+  name: Fixed:24" x 52":318924
+  pose:
+    xyz:
+    - -3.83878693
+    - -6.14880441
+    - 1.33985
+    rpy:
+    - 0.0
+    - 0.0
+    - 3.125871272
+  geometry:
+    type: box
+    size:
+    - 0.6096
+    - 0.2032
+    - 1.3716
+  material:
+    rgba:
+    - 0.25
+    - 0.55
+    - 0.72
+    - 0.55
+  static: true
+  collision: true
+- id: 28vH9qWOD0Axdrb4AN4j_q
+  ifc_class: IfcCovering
+  name: Compound Ceiling:2' x 4' ACT System:329282
+  pose:
+    xyz:
+    - 25.056307612
+    - -4.653124844
+    - 2.466975
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.0
+  geometry:
+    type: box
+    size:
+    - 1.564794954
+    - 3.74511948
+    - 0.05715
+  material:
+    rgba:
+    - 0.65
+    - 0.68
+    - 0.72
+    - 1.0
+  static: true
+  collision: true
+- id: 2ASREFGDX0cRYE$pE9Hn$G
+  ifc_class: IfcMember
+  name: Assembled Stair:Stair:351060 Stringer 2
+  pose:
+    xyz:
+    - -9.090649863
+    - 1.088223521
+    - -0.570987456
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.0
+  geometry:
+    type: box
+    size:
+    - 0.0508
+    - 1.6764
+    - 1.22763758
+  material:
+    rgba:
+    - 0.65
+    - 0.68
+    - 0.72
+    - 1.0
+  static: true
+  collision: true
+- id: 2ASREFGDX0cRYE$pE9Hn$N
+  ifc_class: IfcMember
+  name: Assembled Stair:Stair:351060 Stringer 1
+  pose:
+    xyz:
+    - -8.125449863
+    - 1.088223521
+    - -0.570987456
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.0
+  geometry:
+    type: box
+    size:
+    - 0.0508
+    - 1.6764
+    - 1.22763758
+  material:
+    rgba:
+    - 0.65
+    - 0.68
+    - 0.72
+    - 1.0
+  static: true
+  collision: true
+- id: 2ASREFGDX0cRYE$pE9Hnt0
+  ifc_class: IfcRailing
+  name: Railing:Handrail - Rectangular:387436
+  pose:
+    xyz:
+    - 31.534779553
+    - 0.185771464
+    - 0.169596877
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.0
+  geometry:
+    type: box
+    size:
+    - 0.194544113
+    - 9.143668613
+    - 1.489606246
+  material:
+    rgba:
+    - 0.65
+    - 0.68
+    - 0.72
+    - 1.0
+  static: true
+  collision: true
+- id: 2ASREFGDX0cRYE$pE9Hnt4
+  ifc_class: IfcRailing
+  name: Railing:Handrail - Rectangular:387432
+  pose:
+    xyz:
+    - 32.753828886
+    - 0.166604745
+    - 0.169596877
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.0
+  geometry:
+    type: box
+    size:
+    - 0.194544113
+    - 9.143668613
+    - 1.489606246
+  material:
+    rgba:
+    - 0.65
+    - 0.68
+    - 0.72
+    - 1.0
+  static: true
+  collision: true
+- id: 2UiYIxdTHDMQxEBYlcr4sm
+  ifc_class: IfcCovering
+  name: Compound Ceiling:2' x 4' ACT System:328529
+  pose:
+    xyz:
+    - -0.839897504
+    - -2.818550211
+    - 2.466975
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.0
+  geometry:
+    type: box
+    size:
+    - 7.010252995
+    - 6.559844824
+    - 0.05715
+  material:
+    rgba:
+    - 0.65
+    - 0.68
+    - 0.72
+    - 1.0
+  static: true
+  collision: true
+- id: 2UiYIxdTHDMQxEBYlcr4xz
+  ifc_class: IfcCovering
+  name: Compound Ceiling:2' x 4' ACT System:327708
+  pose:
+    xyz:
+    - 13.523868651
+    - -0.051368876
+    - 2.466975
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.0
+  geometry:
+    type: box
+    size:
+    - 7.104875561
+    - 12.612077933
+    - 0.05715
+  material:
+    rgba:
+    - 0.65
+    - 0.68
+    - 0.72
+    - 1.0
+  static: true
+  collision: true
+- id: 2UiYIxdTHDMQxEBYlcrRAA
+  ifc_class: IfcCovering
+  name: Compound Ceiling:2' x 4' ACT System:326763
+  pose:
+    xyz:
+    - 6.366227479
+    - 0.062507751
+    - 2.466975
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.0
+  geometry:
+    type: box
+    size:
+    - 7.197573838
+    - 12.589516697
+    - 0.05715
+  material:
+    rgba:
+    - 0.65
+    - 0.68
+    - 0.72
+    - 1.0
+  static: true
+  collision: true
+- id: 2twF3dYLP0A94p8cE1aniu
+  ifc_class: IfcCovering
+  name: Compound Ceiling:2' x 4' ACT System:323873
+  pose:
+    xyz:
+    - 11.762107396
+    - 2.693238052
+    - 2.466975
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.0
+  geometry:
+    type: box
+    size:
+    - 39.179903673
+    - 10.787085127
+    - 0.05715
+  material:
+    rgba:
+    - 0.65
+    - 0.68
+    - 0.72
+    - 1.0
+  static: true
+  collision: true
+- id: 38qgW_sXr868lESAj2QWIX
+  ifc_class: IfcWallStandardCase
+  name: Basic Wall:Generic - 12":299115
+  pose:
+    xyz:
+    - 26.533310232
+    - -6.373284585
+    - 1.524
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.0
+  geometry:
+    type: box
+    size:
+    - 2.251871729
+    - 0.3048
+    - 3.048
+  material:
+    rgba:
+    - 0.72
+    - 0.69
+    - 0.62
+    - 1.0
+  static: true
+  collision: true
+- id: 38qgW_sXr868lESAj2QWZy
+  ifc_class: IfcDoor
+  name: Single-Flush:36" x 78":302134
+  pose:
+    xyz:
+    - 28.608859233
+    - 2.468527087
+    - 1.0287
+    rpy:
+    - 0.0
+    - 0.0
+    - 3.141592654
+  geometry:
+    type: box
+    size:
+    - 1.0668
+    - 0.2032
+    - 2.0574
+  material:
+    rgba:
+    - 0.55
+    - 0.32
+    - 0.14
+    - 1.0
+  static: true
+  collision: true
+- id: 38qgW_sXr868lESAj2QWbe
+  ifc_class: IfcDoor
+  name: Single-Flush:36" x 78":302498
+  pose:
+    xyz:
+    - 25.044455532
+    - 7.759953152
+    - 1.0287
+    rpy:
+    - 0.0
+    - 0.0
+    - -0.012316592
+  geometry:
+    type: box
+    size:
+    - 1.0668
+    - 0.2032
+    - 2.0574
+  material:
+    rgba:
+    - 0.55
+    - 0.32
+    - 0.14
+    - 1.0
+  static: true
+  collision: true
+- id: 38qgW_sXr868lESAj2QWdb
+  ifc_class: IfcDoor
+  name: Single-Flush:36" x 78":302383
+  pose:
+    xyz:
+    - 29.243859233
+    - 4.202077087
+    - 1.0287
+    rpy:
+    - 0.0
+    - 0.0
+    - -1.570796327
+  geometry:
+    type: box
+    size:
+    - 1.0668
+    - 0.2032
+    - 2.0574
+  material:
+    rgba:
+    - 0.55
+    - 0.32
+    - 0.14
+    - 1.0
+  static: true
+  collision: true
+- id: 38qgW_sXr868lESAj2QWfz
+  ifc_class: IfcDoor
+  name: Single-Flush:36" x 78":302775
+  pose:
+    xyz:
+    - 14.351257009
+    - 7.89166358
+    - 1.0287
+    rpy:
+    - 0.0
+    - 0.0
+    - -0.012316592
+  geometry:
+    type: box
+    size:
+    - 1.0668
+    - 0.2032
+    - 2.0574
+  material:
+    rgba:
+    - 0.55
+    - 0.32
+    - 0.14
+    - 1.0
+  static: true
+  collision: true
+- id: 38qgW_sXr868lESAj2QWhA
+  ifc_class: IfcDoor
+  name: Single-Flush:36" x 78":302592
+  pose:
+    xyz:
+    - 23.679309084
+    - 7.776767955
+    - 1.0287
+    rpy:
+    - 0.0
+    - 0.0
+    - -0.012316592
+  geometry:
+    type: box
+    size:
+    - 1.0668
+    - 0.2032
+    - 2.0574
+  material:
+    rgba:
+    - 0.55
+    - 0.32
+    - 0.14
+    - 1.0
+  static: true
+  collision: true
+- id: 38qgW_sXr868lESAj2QWjv
+  ifc_class: IfcDoor
+  name: Single-Flush:36" x 78":303027
+  pose:
+    xyz:
+    - 5.798455773
+    - 7.997010273
+    - 1.0287
+    rpy:
+    - 0.0
+    - 0.0
+    - -0.012316592
+  geometry:
+    type: box
+    size:
+    - 1.0668
+    - 0.2032
+    - 2.0574
+  material:
+    rgba:
+    - 0.55
+    - 0.32
+    - 0.14
+    - 1.0
+  static: true
+  collision: true
+- id: 38qgW_sXr868lESAj2QWkz
+  ifc_class: IfcDoor
+  name: Single-Flush:36" x 78":302967
+  pose:
+    xyz:
+    - 9.37958413
+    - 7.952900744
+    - 1.0287
+    rpy:
+    - 0.0
+    - 0.0
+    - -0.012316592
+  geometry:
+    type: box
+    size:
+    - 1.0668
+    - 0.2032
+    - 2.0574
+  material:
+    rgba:
+    - 0.55
+    - 0.32
+    - 0.14
+    - 1.0
+  static: true
+  collision: true
+- id: 38qgW_sXr868lESAj2QWl4
+  ifc_class: IfcDoor
+  name: Single-Flush:36" x 78":302862
+  pose:
+    xyz:
+    - 12.960712487
+    - 7.908791216
+    - 1.0287
+    rpy:
+    - 0.0
+    - 0.0
+    - -0.012316592
+  geometry:
+    type: box
+    size:
+    - 1.0668
+    - 0.2032
+    - 2.0574
+  material:
+    rgba:
+    - 0.55
+    - 0.32
+    - 0.14
+    - 1.0
+  static: true
+  collision: true
+- id: 38qgW_sXr868lESAj2QWsq
+  ifc_class: IfcWallStandardCase
+  name: Basic Wall:Generic - 12":301438
+  pose:
+    xyz:
+    - 29.52496636
+    - -6.399286117
+    - 1.524
+    rpy:
+    - 0.0
+    - 0.0
+    - -0.015721382
+  geometry:
+    type: box
+    size:
+    - 3.2512
+    - 0.3048
+    - 3.048
+  material:
+    rgba:
+    - 0.72
+    - 0.69
+    - 0.62
+    - 1.0
+  static: true
+  collision: true
+- id: 38qgW_sXr868lESAj2QWuI
+  ifc_class: IfcDoor
+  name: Single-Flush:36" x 78":301784
+  pose:
+    xyz:
+    - 27.8475679
+    - -1.413950468
+    - 1.0287
+    rpy:
+    - 0.0
+    - 0.0
+    - -1.586517708
+  geometry:
+    type: box
+    size:
+    - 1.0668
+    - 0.254
+    - 2.0574
+  material:
+    rgba:
+    - 0.55
+    - 0.32
+    - 0.14
+    - 1.0
+  static: true
+  collision: true
+- id: 38qgW_sXr868lESAj2QZHb
+  ifc_class: IfcDoor
+  name: Single-Flush:36" x 78":303279
+  pose:
+    xyz:
+    - -4.917532438
+    - 8.129001406
+    - 1.0287
+    rpy:
+    - 0.0
+    - 0.0
+    - -0.012316592
+  geometry:
+    type: box
+    size:
+    - 1.0668
+    - 0.2032
+    - 2.0574
+  material:
+    rgba:
+    - 0.55
+    - 0.32
+    - 0.14
+    - 1.0
+  static: true
+  collision: true
+- id: 38qgW_sXr868lESAj2QZIc
+  ifc_class: IfcDoor
+  name: Single-Flush:36" x 78":303212
+  pose:
+    xyz:
+    - -1.361802155
+    - 8.085204711
+    - 1.0287
+    rpy:
+    - 0.0
+    - 0.0
+    - -0.012316592
+  geometry:
+    type: box
+    size:
+    - 1.0668
+    - 0.2032
+    - 2.0574
+  material:
+    rgba:
+    - 0.55
+    - 0.32
+    - 0.14
+    - 1.0
+  static: true
+  collision: true
+- id: 38qgW_sXr868lESAj2QZJZ
+  ifc_class: IfcDoor
+  name: Single-Flush:36" x 78":303145
+  pose:
+    xyz:
+    - 2.217327416
+    - 8.041119802
+    - 1.0287
+    rpy:
+    - 0.0
+    - 0.0
+    - -0.012316592
+  geometry:
+    type: box
+    size:
+    - 1.0668
+    - 0.2032
+    - 2.0574
+  material:
+    rgba:
+    - 0.55
+    - 0.32
+    - 0.14
+    - 1.0
+  static: true
+  collision: true
+- id: 38qgW_sXr868lESAj2QZL3
+  ifc_class: IfcDoor
+  name: Single-Flush:36" x 78":303497
+  pose:
+    xyz:
+    - 25.244272153
+    - -2.73298028
+    - 1.0287
+    rpy:
+    - 0.0
+    - 0.0
+    - 3.125871272
+  geometry:
+    type: box
+    size:
+    - 1.0668
+    - 0.174625
+    - 2.0574
+  material:
+    rgba:
+    - 0.55
+    - 0.32
+    - 0.14
+    - 1.0
+  static: true
+  collision: true
+- id: 38qgW_sXr868lESAj2QZNR
+  ifc_class: IfcDoor
+  name: Single-Flush:36" x 78":303377
+  pose:
+    xyz:
+    - 27.12962211
+    - -2.762623028
+    - 1.0287
+    rpy:
+    - 0.0
+    - 0.0
+    - 3.125871272
+  geometry:
+    type: box
+    size:
+    - 1.0668
+    - 0.174625
+    - 2.0574
+  material:
+    rgba:
+    - 0.55
+    - 0.32
+    - 0.14
+    - 1.0
+  static: true
+  collision: true
+- id: 38qgW_sXr868lESAj2QZQT
+  ifc_class: IfcDoor
+  name: Single-Flush:36" x 78":303703
+  pose:
+    xyz:
+    - -7.225309226
+    - -2.276550592
+    - 1.0287
+    rpy:
+    - 0.0
+    - 0.0
+    - 3.125871272
+  geometry:
+    type: box
+    size:
+    - 1.0668
+    - 0.174625
+    - 2.0574
+  material:
+    rgba:
+    - 0.55
+    - 0.32
+    - 0.14
+    - 1.0
+  static: true
+  collision: true
+- id: 38qgW_sXr868lESAj2QZRq
+  ifc_class: IfcWallStandardCase
+  name: Basic Wall:Interior - 4 7/8" Partition (1-hr):303678
+  pose:
+    xyz:
+    - -6.146378515
+    - -2.293514271
+    - 1.2954
+    rpy:
+    - 0.0
+    - 0.0
+    - 3.125871272
+  geometry:
+    type: box
+    size:
+    - 3.313828121
+    - 0.123825
+    - 2.5908
+  material:
+    rgba:
+    - 0.72
+    - 0.69
+    - 0.62
+    - 1.0
+  static: true
+  collision: true
+- id: 3C7tv_L0f0KfTGCJ7I6E_Q
+  ifc_class: IfcWallStandardCase
+  name: Basic Wall:Generic - 8":293628
+  pose:
+    xyz:
+    - 24.399311603
+    - 9.658650884
+    - 1.2954
+    rpy:
+    - 0.0
+    - 0.0
+    - -1.570796327
+  geometry:
+    type: box
+    size:
+    - 3.631594009
+    - 0.2032
+    - 2.5908
+  material:
+    rgba:
+    - 0.72
+    - 0.69
+    - 0.62
+    - 1.0
+  static: true
+  collision: true
+- id: 3_ZduKFZv0NPDqgIQEKqbf
+  ifc_class: IfcWindow
+  name: Fixed:24" x 52":388150
+  pose:
+    xyz:
+    - 31.48904551
+    - 9.59347599
+    - 1.33985
+    rpy:
+    - 0.0
+    - 0.0
+    - -1.585088985
+  geometry:
+    type: box
+    size:
+    - 0.6096
+    - 0.2032
+    - 1.3716
+  material:
+    rgba:
+    - 0.25
+    - 0.55
+    - 0.72
+    - 0.55
+  static: true
+  collision: true
+- id: 3qo_AKI5r02OFVkPm$OvPR
+  ifc_class: IfcBuildingElementProxy
+  name: Toilet Stall-Braced:58" x 56":385310
+  pose:
+    xyz:
+    - 30.565984854
+    - 1.663164351
+    - 1.057275
+    rpy:
+    - 0.0
+    - 0.0
+    - 1.556503668
+  geometry:
+    type: box
+    size:
+    - 1.50495
+    - 1.49225
+    - 2.11455
+  material:
+    rgba:
+    - 0.65
+    - 0.68
+    - 0.72
+    - 1.0
+  static: true
+  collision: true
+- id: 3qo_AKI5r02OFVkPm$OwZW
+  ifc_class: IfcBuildingElementProxy
+  name: Toilet Stall-Braced:58" x 56":384933
+  pose:
+    xyz:
+    - 30.463430521
+    - -5.511662523
+    - 1.057275
+    rpy:
+    - 0.0
+    - 0.0
+    - -1.585088985
+  geometry:
+    type: box
+    size:
+    - 1.50495
+    - 1.49225
+    - 2.11455
+  material:
+    rgba:
+    - 0.65
+    - 0.68
+    - 0.72
+    - 1.0
+  static: true
+  collision: true
+- id: 3qo_AKI5r02OFVkPm$Owps
+  ifc_class: IfcBuildingElementProxy
+  name: Toilet Stall-Braced:32" x 56" Clear:383923
+  pose:
+    xyz:
+    - 30.480192176
+    - -4.33899659
+    - 1.057275
+    rpy:
+    - 0.0
+    - 0.0
+    - -1.585088985
+  geometry:
+    type: box
+    size:
+    - 0.84455
+    - 1.49225
+    - 2.11455
+  material:
+    rgba:
+    - 0.65
+    - 0.68
+    - 0.72
+    - 1.0
+  static: true
+  collision: true
+- id: 3qo_AKI5r02OFVkPm$Owqu
+  ifc_class: IfcBuildingElementProxy
+  name: Toilet Stall-Braced:32" x 56" Clear:383613
+  pose:
+    xyz:
+    - 30.49221103
+    - -3.498142783
+    - 1.057275
+    rpy:
+    - 0.0
+    - 0.0
+    - -1.585088985
+  geometry:
+    type: box
+    size:
+    - 0.84455
+    - 1.49225
+    - 2.11455
+  material:
+    rgba:
+    - 0.65
+    - 0.68
+    - 0.72
+    - 1.0
+  static: true
+  collision: true
+- id: 3qo_AKI5r02OFVkPm$Owxi
+  ifc_class: IfcBuildingElementProxy
+  name: Toilet Stall-Braced:32" x 56" Clear:383401
+  pose:
+    xyz:
+    - 30.538441158
+    - -0.263826389
+    - 1.057275
+    rpy:
+    - 0.0
+    - 0.0
+    - -1.585088985
+  geometry:
+    type: box
+    size:
+    - 0.84455
+    - 1.49225
+    - 2.11455
+  material:
+    rgba:
+    - 0.65
+    - 0.68
+    - 0.72
+    - 1.0
+  static: true
+  collision: true
+- id: 3qo_AKI5r02OFVkPm$Owzm
+  ifc_class: IfcBuildingElementProxy
+  name: Toilet Stall-Braced:32" x 56" Clear:383029
+  pose:
+    xyz:
+    - 30.549318019
+    - 0.497132182
+    - 1.057275
+    rpy:
+    - 0.0
+    - 0.0
+    - -1.585088985
+  geometry:
+    type: box
+    size:
+    - 0.84455
+    - 1.49225
+    - 2.11455
+  material:
+    rgba:
+    - 0.65
+    - 0.68
+    - 0.72
+    - 1.0
+  static: true
+  collision: true
+- id: 3qo_AKI5r02OFVkPm$Ox26
+  ifc_class: IfcBuildingElementProxy
+  name: Urinal Screen:36" O.C.:378819
+  pose:
+    xyz:
+    - 30.997816746
+    - -1.669934008
+    - 0.889
+    rpy:
+    - 0.0
+    - 0.0
+    - 1.556503668
+  geometry:
+    type: box
+    size:
+    - 0.0254
+    - 0.4572
+    - 1.0668
+  material:
+    rgba:
+    - 0.65
+    - 0.68
+    - 0.72
+    - 1.0
+  static: true
+  collision: true
+- id: 3qo_AKI5r02OFVkPm$Oxz7
+  ifc_class: IfcBuildingElementProxy
+  name: Urinal Screen:36" O.C.:378882
+  pose:
+    xyz:
+    - 30.986536613
+    - -2.459105916
+    - 0.889
+    rpy:
+    - 0.0
+    - 0.0
+    - 1.556503668
+  geometry:
+    type: box
+    size:
+    - 0.0254
+    - 0.4572
+    - 1.0668
+  material:
+    rgba:
+    - 0.65
+    - 0.68
+    - 0.72
+    - 1.0
+  static: true
+  collision: true
+- id: 3xoURert943RLFHAzdmQ77
+  ifc_class: IfcWallStandardCase
+  name: Basic Wall:Generic - 8":315323
+  pose:
+    xyz:
+    - 31.387477647
+    - 2.487663772
+    - 1.524
+    rpy:
+    - 0.0
+    - 0.0
+    - -1.585088985
+  geometry:
+    type: box
+    size:
+    - 18.175476134
+    - 0.2032
+    - 3.048
+  material:
+    rgba:
+    - 0.72
+    - 0.69
+    - 0.62
+    - 1.0
+  static: true
+  collision: true
+- id: 3xoURert943RLFHAzdmQBo
+  ifc_class: IfcDoor
+  name: Door-Exterior-Single-Two_Lite:36" x 84":314510
+  pose:
+    xyz:
+    - -7.922284082
+    - -1.416697265
+    - 1.1176
+    rpy:
+    - 0.0
+    - 0.0
+    - 1.555074945
+  geometry:
+    type: box
+    size:
+    - 1.016
+    - 0.2016125
+    - 2.2352
+  material:
+    rgba:
+    - 0.55
+    - 0.32
+    - 0.14
+    - 1.0
+  static: true
+  collision: true

@@ -1,0 +1,241 @@
+schema_version: 1
+scenario_id: hall_b_ablation
+seed: 0
+frame_id: world
+source:
+  type: ifc
+  file: ERS_B_STRUCT.ifc
+  ifc_schema: IFC2X3
+  units: metre
+  geometry_approximation: oriented_bounding_box
+  origin_offset:
+  - 0.0
+  - 0.0
+  - 0.0
+  skipped_degenerate_products: 0
+  room:
+    id: hall_b
+    bounds:
+    - 2.7
+    - -6.55
+    - 10.1
+    - 6.5
+    z_range:
+    - -0.2
+    - 2.55
+    parent_elements: 131
+  fitout_note: 'Two modelled fit-out units added to the IFC-derived shell. The export
+    contains no furniture, and both occlusion and height-limited observability need
+    something to stand behind or on top of. Their 2.25 m height is set by measurement,
+    not taste: the chassis camera frustum reaches 2.170 m and the ceiling starts at
+    2.44 m.'
+summary:
+  nominal_element_count: 14
+  actual_element_count: 21
+  deviation_count: 8
+discrepancies:
+- id: T1-pallet-stack
+  type: unexpected
+  element_id: T1-pallet-stack
+  element_class: IfcBuildingElementProxy
+  severity: 0.8
+  class: trivial
+  magnitude: 1.0
+  reference_pose: null
+  actual_pose:
+    xyz:
+    - 5.2
+    - -1.8
+    - 0.8
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.3
+  reference_geometry: null
+  actual_geometry:
+    type: box
+    size:
+    - 1.2
+    - 0.9
+    - 1.6
+- id: T2-site-cabin
+  type: unexpected
+  element_id: T2-site-cabin
+  element_class: IfcBuildingElementProxy
+  severity: 0.7
+  class: trivial
+  magnitude: 1.0
+  reference_pose: null
+  actual_pose:
+    xyz:
+    - 8.3
+    - -3.6
+    - 0.7
+    rpy:
+    - 0.0
+    - 0.0
+    - -0.2
+  reference_geometry: null
+  actual_geometry:
+    type: box
+    size:
+    - 1.0
+    - 0.8
+    - 1.4
+- id: H1-rack-tote
+  type: unexpected
+  element_id: H1-rack-tote
+  element_class: IfcBuildingElementProxy
+  severity: 0.5
+  class: height
+  magnitude: 1.0
+  reference_pose: null
+  actual_pose:
+    xyz:
+    - 9.4
+    - 1.0
+    - 2.33
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.35
+  reference_geometry: null
+  actual_geometry:
+    type: box
+    size:
+    - 0.5
+    - 0.45
+    - 0.16
+- id: H2-cabinet-carton
+  type: unexpected
+  element_id: H2-cabinet-carton
+  element_class: IfcBuildingElementProxy
+  severity: 0.5
+  class: height
+  magnitude: 1.0
+  reference_pose: null
+  actual_pose:
+    xyz:
+    - 4.2
+    - 5.6
+    - 2.335
+    rpy:
+    - 0.0
+    - 0.0
+    - -0.42
+  reference_geometry: null
+  actual_geometry:
+    type: box
+    size:
+    - 0.45
+    - 0.4
+    - 0.17
+- id: I1-window-displaced
+  type: displaced
+  element_id: 1s7WttW8LF3wo3GFHzG4IH
+  element_class: IfcWindow
+  severity: 0.7
+  class: incidence
+  magnitude: 0.393573373
+  reference_pose:
+    xyz:
+    - 6.972898
+    - -6.318793
+    - 1.33985
+    rpy:
+    - 0.0
+    - 0.0
+    - 3.125871272
+  actual_pose:
+    xyz:
+    - 7.3228979999999995
+    - -6.318793
+    - 1.15985
+    rpy:
+    - 0.0
+    - 0.0
+    - 3.125871272
+  reference_geometry:
+    type: box
+    size:
+    - 0.6096
+    - 0.2032
+    - 1.3716
+  actual_geometry:
+    type: box
+    size:
+    - 0.6096
+    - 0.2032
+    - 1.3716
+- id: I2-standing-panel
+  type: unexpected
+  element_id: I2-standing-panel
+  element_class: IfcBuildingElementProxy
+  severity: 0.6
+  class: incidence
+  magnitude: 1.0
+  reference_pose: null
+  actual_pose:
+    xyz:
+    - 7.8
+    - -5.28
+    - 0.65
+    rpy:
+    - 0.0
+    - 0.0
+    - 1.5551
+  reference_geometry: null
+  actual_geometry:
+    type: box
+    size:
+    - 1.1
+    - 0.05
+    - 1.3
+- id: O1-crate-behind-stack
+  type: unexpected
+  element_id: O1-crate-behind-stack
+  element_class: IfcBuildingElementProxy
+  severity: 0.6
+  class: occluded
+  magnitude: 1.0
+  reference_pose: null
+  actual_pose:
+    xyz:
+    - 5.2
+    - -2.85
+    - 0.225
+    rpy:
+    - 0.0
+    - 0.0
+    - -0.31
+  reference_geometry: null
+  actual_geometry:
+    type: box
+    size:
+    - 0.5
+    - 0.5
+    - 0.45
+- id: O2-drum-behind-rack
+  type: unexpected
+  element_id: O2-drum-behind-rack
+  element_class: IfcBuildingElementProxy
+  severity: 0.6
+  class: occluded
+  magnitude: 1.0
+  reference_pose: null
+  actual_pose:
+    xyz:
+    - 9.4
+    - 2.75
+    - 0.475
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.0
+  reference_geometry: null
+  actual_geometry:
+    type: box
+    size:
+    - 0.55
+    - 0.55
+    - 0.95

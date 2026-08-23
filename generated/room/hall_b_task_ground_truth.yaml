@@ -1,0 +1,182 @@
+schema_version: 1
+scenario_id: hall_b_task
+seed: 0
+frame_id: world
+source:
+  type: ifc
+  file: ERS_B_STRUCT.ifc
+  ifc_schema: IFC2X3
+  units: metre
+  geometry_approximation: oriented_bounding_box
+  origin_offset:
+  - 0.0
+  - 0.0
+  - 0.0
+  skipped_degenerate_products: 0
+  room:
+    id: hall_b
+    bounds:
+    - 2.7
+    - -6.55
+    - 10.1
+    - 6.5
+    z_range:
+    - -0.2
+    - 2.55
+    parent_elements: 131
+summary:
+  nominal_element_count: 12
+  actual_element_count: 17
+  deviation_count: 6
+discrepancies:
+- id: window-displaced
+  type: displaced
+  element_id: 1s7WttW8LF3wo3GFHzG4IH
+  element_class: IfcWindow
+  severity: 0.7
+  magnitude: 0.393573373
+  reference_pose:
+    xyz:
+    - 6.972898
+    - -6.318793
+    - 1.33985
+    rpy:
+    - 0.0
+    - 0.0
+    - 3.125871272
+  actual_pose:
+    xyz:
+    - 7.3228979999999995
+    - -6.318793
+    - 1.15985
+    rpy:
+    - 0.0
+    - 0.0
+    - 3.125871272
+  reference_geometry:
+    type: box
+    size:
+    - 0.6096
+    - 0.2032
+    - 1.3716
+  actual_geometry:
+    type: box
+    size:
+    - 0.6096
+    - 0.2032
+    - 1.3716
+- id: unexpected-stack
+  type: unexpected
+  element_id: unexpected-stack
+  element_class: IfcBuildingElementProxy
+  severity: 0.8
+  magnitude: 1.0
+  reference_pose: null
+  actual_pose:
+    xyz:
+    - 6.9
+    - -4.6
+    - 0.8
+    rpy:
+    - 0.0
+    - 0.0
+    - -0.0157
+  reference_geometry: null
+  actual_geometry:
+    type: box
+    size:
+    - 1.2
+    - 0.9
+    - 1.6
+- id: unexpected-carton
+  type: unexpected
+  element_id: unexpected-carton
+  element_class: IfcBuildingElementProxy
+  severity: 0.5
+  magnitude: 1.0
+  reference_pose: null
+  actual_pose:
+    xyz:
+    - 6.7
+    - -4.5
+    - 1.8
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.42
+  reference_geometry: null
+  actual_geometry:
+    type: box
+    size:
+    - 0.45
+    - 0.45
+    - 0.4
+- id: unexpected-lowcrate
+  type: unexpected
+  element_id: unexpected-lowcrate
+  element_class: IfcBuildingElementProxy
+  severity: 0.6
+  magnitude: 1.0
+  reference_pose: null
+  actual_pose:
+    xyz:
+    - 6.9
+    - -5.5
+    - 0.22
+    rpy:
+    - 0.0
+    - 0.0
+    - -0.31
+  reference_geometry: null
+  actual_geometry:
+    type: box
+    size:
+    - 0.5
+    - 0.5
+    - 0.45
+- id: unexpected-drum
+  type: unexpected
+  element_id: unexpected-drum
+  element_class: IfcBuildingElementProxy
+  severity: 0.5
+  magnitude: 1.0
+  reference_pose: null
+  actual_pose:
+    xyz:
+    - 9.2
+    - 1.2
+    - 0.55
+    rpy:
+    - 0.0
+    - 0.0
+    - -0.0157
+  reference_geometry: null
+  actual_geometry:
+    type: box
+    size:
+    - 0.6
+    - 0.6
+    - 1.1
+- id: unexpected-toolbox
+  type: unexpected
+  element_id: unexpected-toolbox
+  element_class: IfcBuildingElementProxy
+  severity: 0.4
+  magnitude: 1.0
+  reference_pose: null
+  actual_pose:
+    xyz:
+    - 4.3
+    - 3.6
+    - 0.4
+    rpy:
+    - 0.0
+    - 0.0
+    - 0.86
+  reference_geometry: null
+  actual_geometry:
+    type: box
+    size:
+    - 0.8
+    - 0.8
+    - 0.8
