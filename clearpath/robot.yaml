@@ -75,7 +75,7 @@ sensors:
       urdf_enabled: true
       launch_enabled: true
       parent: base_link
-      xyz: [0.26, 0.0, 0.407]
+      xyz: [0.38, 0.0, 0.407]
       rpy: [0.0, 0.0, 0.0]
 
   camera:
@@ -107,7 +107,7 @@ sensors:
       # forward axis so the two do not stare through each other.  Angled
       # 0.17 rad down for near-field inspection.
       parent: base_link
-      xyz: [0.44, -0.10, 0.407]
+      xyz: [0.46, 0.0, 0.407]
       rpy: [0.0, 0.17, 0.0]
       ros_parameters:
         intel_realsense:
@@ -123,7 +123,10 @@ manipulators:
   arms:
     - model: universal_robots
       parent: enclosure_center_mount
-      xyz: [0.0, 0.0, 0.0]
+      # Forward of centre, a quarter of the 0.972 m deck length back from the
+      # front edge, which puts the arm between the platform centre and the
+      # sensor pair rather than behind both.
+      xyz: [0.243, 0.0, 0.0]
       rpy: [0.0, 0.0, 0.0]
       ur_type: ur5e
       robot_ip: 192.168.131.40

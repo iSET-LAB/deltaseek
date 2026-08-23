@@ -117,6 +117,24 @@ def run_configuration(manifest, scenario, chain, chassis, sensors, args):
                   'spent': float(distances[-1]) if len(distances) else 0.0}
 
 
+def observable_anywhere(manifest, scenario, viewpoints, sensors, params):
+    """Deviations a sensor set can resolve from *any* candidate viewpoint.
+
+    Whether the planner reached a viewpoint inside its budget is a routing
+    outcome; whether one exists at all is a capability. Reporting only the
+    planned run confuses the two, and the headline then moves with routing
+    noise: a panel visible from 70 of 600 chassis poses is not evidence that
+    the wrist camera is required, however the route happened to fall.
+    """
+    nominal = validate_manifest(manifest)
+    _, actual_elements, ground_truth = apply_scenario(manifest, scenario)
+    stations = [viewpoint.poses(sensors) for viewpoint in viewpoints]
+    records = detect_along(
+        stations, nominal['elements'], actual_elements, ground_truth, params,
+        sensors=sensors)
+    return {record['id'] for record in records if record['detected']}
+
+
 def summarise(results):
     """Return the per-class table and the headline counts."""
     classes = sorted(
@@ -174,6 +192,8 @@ def report(results, info, out_dir):
             for row in rows:
                 writer.writerow({'configuration': config, **row})
 
+    reachable = info.get('chassis_capability', set())
+
     classes, table = summarise(results)
     lines = ['# Sensor-configuration ablation, Hall B', '',
              'Detections by observability class, as `found / total`.', '',
@@ -192,6 +212,18 @@ def report(results, info, out_dir):
         value = _median_distance(rows)
         lines.append(f'| {config} | '
                      + ('never' if math.isinf(value) else f'{value:.1f} m')
+                     + ' |')
+    lines += ['',
+              '## Capability versus routing',
+              '',
+              'Deviations the chassis camera cannot resolve from any candidate '
+              'viewpoint, as opposed to ones it merely failed to reach inside '
+              'the budget.', '',
+              '| deviation | class | chassis can ever see it |',
+              '| --- | --- | --- |']
+    for row in results['both']:
+        lines.append(f'| {row["deviation"]} | {row["class"]} | '
+                     + ('yes' if row['deviation'] in reachable else '**no**')
                      + ' |')
     lines += ['',
               '## What the chassis camera pays instead',
@@ -225,20 +257,32 @@ def report(results, info, out_dir):
 
     chassis_rows = {r['deviation']: r for r in results['chassis']}
     both_rows = {r['deviation']: r for r in results['both']}
-    only_arm = [d for d, r in both_rows.items()
-                if r['detected'] and not chassis_rows[d]['detected']]
+    classes = {r['deviation']: r['class'] for r in results['both']}
+    reachable = info.get('chassis_capability')
+    only_arm = [d for d in both_rows if d not in reachable]
+    budget_only = [d for d, r in both_rows.items()
+                   if d in reachable and not chassis_rows[d]['detected']]
     missed = [d for d, r in both_rows.items() if not r['detected']]
 
     print('\n' + '=' * len(header))
     if not only_arm:
-        print('FINDING: the chassis camera alone resolved everything the full')
-        print('configuration did. On this scene the wrist camera adds nothing,')
-        print('which contradicts the premise the project is built on.')
+        print('FINDING: every deviation is visible to the chassis camera from')
+        print('somewhere in the candidate set. On this scene the wrist camera')
+        print('adds no capability, which contradicts the project premise.')
     else:
-        print(f'FINDING: {len(only_arm)} of {len(both_rows)} deviations were '
-              f'resolved only with the wrist camera:')
+        print(f'FINDING: {len(only_arm)} of {len(both_rows)} deviations are '
+              f'invisible to the chassis camera from every')
+        print('candidate viewpoint, so they require the wrist camera:')
         for name in only_arm:
-            print(f'  - {name}  [{both_rows[name]["class"]}]')
+            print(f'  - {name}  [{classes[name]}]')
+    if budget_only:
+        print(f'\n{len(budget_only)} further deviations the chassis-only run '
+              f'missed are visible to it somewhere,')
+        print('and were simply not reached within the budget. These are '
+              'routing outcomes,')
+        print('not evidence for the arm:')
+        for name in budget_only:
+            print(f'  - {name}  [{classes[name]}]')
     shared = distance_penalty(results)
     worse = [row for row in shared if row[2] > row[3] + 1.0e-9]
     if shared:
@@ -289,6 +333,16 @@ def main(argv=None):
         rows, meta = run_configuration(
             manifest, scenario, chain, chassis, sensors, args)
         results[config], info[config] = rows, meta
+
+    nominal = validate_manifest(manifest)
+    bases = room_base_poses(
+        nominal['elements'], scene_bounds(nominal['elements']), args.spacing,
+        (0.0, 1.5707963, 3.1415927, -1.5707963), args.room)
+    info['chassis_capability'] = observable_anywhere(
+        manifest, scenario, build_viewpoints(chain, bases, chassis=chassis),
+        CONFIGURATIONS['chassis'],
+        ObservationParams(far=args.max_range,
+                          min_visible_fraction=args.min_visible_fraction))
     report(results, info, args.output_dir)
     return 0
 
