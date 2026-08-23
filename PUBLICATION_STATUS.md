@@ -128,11 +128,12 @@ ros2 run deltaseek_gazebo sensor_ablation \
 **The headline is not 5/8.** A planned run conflates what a sensor *can* see
 with what a route happened to reach. Separating them:
 
-- **2 of 8 are invisible to the chassis camera from every one of 600 candidate
-  poses**, at 0.0000 visible fraction: `H1-rack-tote` and `H2-cabinet-carton`,
-  both `height`. This is a capability limit and it is stable.
+- **2 of 8 are invisible to the chassis camera from every one of 240 candidate
+  chassis poses**, at 0.0000 visible fraction: `H1-rack-tote` and
+  `H2-cabinet-carton`, both `height`. This is a capability limit and it is
+  stable under eightfold finer sampling.
 - **1 further deviation** (`I2-standing-panel`) was missed by the chassis-only
-  run but is visible to it from 70 of 600 poses. That is routing, not evidence
+  run but is visible from 14 of those 240 poses. That is routing, not evidence
   for the arm.
 
 This distinction was not academic. Repositioning the arm at the author's
@@ -143,11 +144,12 @@ drift with the planner's mood.
 
 #### Why only `height` works
 
-Measured over all base yaws at the 5 m range limit, the highest world point the
-chassis camera can place inside its frustum is **2.170 m**; the wrist camera
-reaches **3.195 m**. The suspended ceiling starts at 2.44 m. So the band only
-the wrist can see into is **2.170–2.440 m — 0.27 m tall**. The two height
-deviations sit in it at 2.25 m.
+In closed form, the highest world point a camera can place inside its frustum
+is `h + r(cos p · tan(v/2) − sin p)`, with no yaw term. At the 5 m limit that is
+**2.238 m** for the chassis camera and **4.627 m** for the wrist; both agree
+with a numeric sweep to 3 mm. The ceiling starts at 2.44 m, so the wrist-only
+band is **0.20 m tall** and the height pair sits in it at 2.25 m — clearing the
+chassis ceiling by just **11.8 mm**.
 
 **The narrowness is itself a finding.** In a 2.47 m room a pitched-down chassis
 camera covers nearly the whole vertical extent. The arm's height advantage is
@@ -157,8 +159,8 @@ room, warehouse or double-height space. Any claim must say which.
 #### What occlusion actually costs
 
 `occluded` and `incidence` were designed to require the arm and did not. The
-crate behind the pallet stack is hidden from 82.5% of chassis poses — genuinely
-occluded — but a planner only needs one of the remaining 105. Where both
+crate behind the pallet stack is hidden from 93% of chassis poses — genuinely
+occluded — but a planner only needs one of the remaining 16. Where both
 configurations succeed, the difference is distance:
 
 | configuration | median distance to detection |
@@ -203,7 +205,7 @@ deterministic geometric study by design.
 
 ### Issue 3 — the ablation is one scene and one room height
 **High, and it bounds the claim rather than blocking it.** Eight deviations in
-one 2.47 m room. The 0.27 m wrist-only band is a property of that ceiling. A
+one 2.47 m room. The 0.20 m wrist-only band is a property of that ceiling. A
 second room at a different height would turn a scene-specific observation into
 a trend, and is cheap: `extract_room` already does the extraction.
 
@@ -249,7 +251,7 @@ fallback was a negative result. Now there is a positive, reproducible,
 deterministic finding that needs no further experiments:
 
 > An eye-in-hand camera resolves deviations a chassis camera cannot, but on
-> this scene that is exactly the deviations in a 0.27 m band near the ceiling.
+> this scene that is exactly the deviations in a 0.20 m band near the ceiling.
 > Occlusion, which is the intuitive case for a manipulator, turns out to cost
 > distance rather than detections: 14.2 m against 6.0 m median.
 
@@ -262,7 +264,7 @@ If the deadline is the 24th, in order:
 1. **Rewrite around the ablation** (option 3). No experiments needed; the data
    exists and is committed.
 2. **Add a second room at a different ceiling height** if time allows — it
-   converts the 0.27 m band from an anecdote into a trend, and costs an hour.
+   converts the 0.20 m band from an anecdote into a trend, and costs an hour.
 3. Fix the administrative items in parallel.
 4. Keep §3.1 and §3.2 as a planner-comparison section under honest framing, or
    defer them entirely to the follow-up.

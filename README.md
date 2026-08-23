@@ -4,7 +4,7 @@ Deviation-seeking viewpoint planning for as-built verification with a mobile
 manipulator. The current headline result is a sensor-configuration ablation:
 of eight hand-placed deviations in a room clipped from a real Revit export,
 **two require the wrist-mounted camera and six do not**, and the two that do
-are the two in a 0.27 m band near the ceiling that a chassis camera cannot
+are the two in a 0.20 m band near the ceiling that a chassis camera cannot
 reach. See [`PUBLICATION_STATUS.md`](PUBLICATION_STATUS.md) for what that
 means for the paper, and the reproduction command below.
 
@@ -303,25 +303,28 @@ Result on Hall B, as `found / total`:
 
 **The headline is not 5/8.** A planned run conflates what a sensor can see with
 what a route happened to reach, so the report separates them. Exactly **two**
-deviations are invisible to the chassis camera from all 600 candidate poses, at
-0.0000 visible fraction, and both are `height`. One further deviation the
-chassis-only run missed is visible to it from 70 of those poses and was simply
+deviations are invisible to the chassis camera from all 240 candidate chassis
+poses, at 0.0000 visible fraction, and both are `height`. One further deviation
+the chassis-only run missed is visible from 14 of those poses and was simply
 not reached inside the budget -- routing, not evidence for the arm.
 
 That distinction is not academic: moving the arm forward on the deck once
 shifted the chassis headline from 6/8 to 5/8 on routing noise alone, while the
 capability answer did not move.
 
-Why only `height` works: swept over all base yaws at the 5 m range limit, the
-highest point the chassis camera can place inside its frustum is 2.170 m and
-the wrist camera reaches 3.195 m. The ceiling starts at 2.44 m, so the
-wrist-only band is 2.170-2.440 m, **0.27 m tall**. In a room this height a
-pitched-down chassis camera covers nearly the whole vertical extent; the arm's
-advantage would grow in a plant room or a warehouse.
+Why only `height` works: the highest world point a camera can place inside its
+frustum is `h + r*(cos(pitch)*tan(vfov/2) - sin(pitch))`, with no yaw term. At
+the 5 m range limit that is 2.238 m for the chassis camera and 4.627 m for the
+wrist. The ceiling starts at 2.44 m, so the wrist-only band is **0.20 m tall**,
+and the height pair sits in it at 2.25 m -- clearing the chassis ceiling by
+only 11.8 mm. In a room this height a pitched-down chassis camera covers nearly
+the whole vertical extent; the arm's advantage would grow in a taller space.
+See [`results/pose_construction.md`](results/pose_construction.md) for the
+derivation, the pose counts and a sampling-sensitivity check.
 
 `occluded` and `incidence` were designed to require the arm and did not. The
-crate behind the pallet stack is hidden from 82.5% of chassis poses, but a
-planner only needs one of the remaining 105. Where both configurations succeed
+crate behind the pallet stack is hidden from 93% of chassis poses, but a
+planner only needs one of the remaining 16. Where both configurations succeed
 the difference is distance, not detections: median 14.2 m for chassis against
 6.0 m for wrist. **Occlusion is a routing cost paid in metres.**
 

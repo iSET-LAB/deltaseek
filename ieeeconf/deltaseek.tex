@@ -74,7 +74,7 @@ perception rather than passively accumulate data.
 
 \begin{figure*}[t]
   \centering
-  \includegraphics[width=0.96\textwidth]{figures/fig_platform.pdf}
+  \includegraphics[width=0.90\textwidth]{figures/fig_platform.pdf}
   \caption{The study, in simulation. (a)~A Husky A300 with a UR5e, carrying a
   chassis RGB-D camera and a lidar on the deck and an identical RGB-D camera at
   the wrist. (b)~Hall~B, clipped from a real Revit IFC export, with eight
@@ -95,13 +95,12 @@ the parts a verification system cares about.
 
 Most robotic capture pipelines in construction are nevertheless organised
 around passive accumulation: drive a coverage route, collect point clouds or
-images, register them to the building model, and compute differences
-offline~\cite{bosche2010,turkan2012,golparvar2015}. This is a reasonable
-division of labour when the environment is nearly static. It degrades when it
-is not. Registration relies on correspondence between what was seen before and
-what is seen now, and large change is exactly the condition under which that
-correspondence thins out. The information the robot most needs is the
-information its pipeline is least equipped to acquire.
+images, register them to the model, and difference them
+offline~\cite{bosche2010,turkan2012,golparvar2015}. That is reasonable when the
+environment is nearly static, and it degrades when it is not. Registration
+relies on correspondence between what was seen before and what is seen now, and
+large change is exactly when that correspondence thins out: the information the
+robot most needs is what its pipeline is least equipped to acquire.
 
 Active perception offers the alternative
 framing~\cite{bajcsy1988,aloimonos1988}: treat sensor placement as a decision
@@ -110,11 +109,11 @@ means asking where to look next to determine whether part of the model still
 describes reality --- which requires answering, in sequence, where to observe,
 how to observe, and when enough evidence has been gathered.
 
-This paper takes the first step, and deliberately a narrow one. Before a
-planner can choose among sensing configurations, we need to know what the
-robot's embodiment makes available at all. A mobile manipulator can place a
-camera almost anywhere within its reachable workspace; a fixed chassis sensor
-cannot. That extra freedom is usually assumed to be valuable. We measure it.
+This paper takes a deliberately narrow first step. Before a planner can choose
+among sensing configurations, we need to know what the robot's embodiment makes
+available at all. A mobile manipulator can place a camera almost anywhere in
+its reachable workspace; a fixed chassis sensor cannot. That freedom is usually
+assumed valuable. We measure it.
 
 Fig.~\ref{fig:platform} shows the setup and the effect it measures. Our
 contribution is threefold. First, a reproducible IFC-derived benchmark that
@@ -232,19 +231,21 @@ inspection postures; that chain is verified against the running simulation's
 transform tree to machine precision.
 
 Candidate base poses are laid on a $1.0$~m grid of navigable free space inside
-the room, giving \textbf{240 admissible base poses}. Each combines with the
-five arm postures, so the wrist camera has $1200$ distinct poses while the
-chassis camera has $240$ --- it does not move with the arm. An element is
-observed if \emph{any} active sensor observes it.
+the room, at four yaw bins $90^\circ$ apart, giving \textbf{240 admissible base
+poses} from 60 positions. Each combines with the five arm postures, so the
+wrist camera has $1200$ distinct poses while the chassis camera has $240$ ---
+it does not move with the arm. An element is observed if \emph{any} active
+sensor observes it.
 
 \begin{figure}[t]
   \centering
   \includegraphics[width=0.86\columnwidth]{figures/fig_reach.pdf}
-  \caption{Why exactly two changes are unreachable. Sweeping all base yaws at
-  the $5$~m range limit, the highest point the chassis camera can place inside
-  its frustum is $2.23$~m; the wrist camera reaches $3.59$~m (swept at $5$~mm
-  resolution). The ceiling begins at $2.44$~m, leaving a wrist-only band
-  $0.21$~m tall. The two \emph{height} changes sit in it at $2.25$~m.}
+  \caption{Why exactly two changes are unreachable. At the $5$~m range limit
+  the highest point the chassis camera can place inside its frustum is
+  $2.24$~m; the wrist reaches $4.63$~m. The ceiling begins at $2.44$~m, leaving
+  a wrist-only band $0.20$~m tall, and the two \emph{height} changes sit in it
+  at $2.25$~m. Both reaches are closed-form, and agree with a numeric sweep to
+  $3$~mm.}
   \label{fig:reach}
 \end{figure}
 
@@ -253,11 +254,10 @@ observed if \emph{any} active sensor observes it.
 
 \begin{figure*}[t]
   \centering
-  \includegraphics[width=0.82\textwidth]{figures/fig_result.pdf}
-  \caption{(a)~Capability: the share of admissible sensor poses from which each
-  change is observable. Two changes are observable from no chassis pose at all.
-  (b)~Acquisition cost: drivable distance to first observation under a $25$~m
-  budget. Tick colours encode observability class.}
+  \includegraphics[width=0.74\textwidth]{figures/fig_result.pdf}
+  \caption{(a)~Capability: share of admissible sensor poses observing each
+  change; two are observable from no chassis pose at all. (b)~Acquisition cost:
+  drivable distance to first observation under a $25$~m budget.}
   \label{fig:result}
 \end{figure*}
 
@@ -297,22 +297,24 @@ development moved the chassis result from $6/8$ to $5/8$, which reads as the
 manipulator becoming more necessary and was entirely routing noise. The
 capability figure did not move.
 
-Fig.~\ref{fig:reach} explains why only \emph{height} produces a capability gap.
-Swept over all base yaws at the $5$~m range limit, the chassis camera reaches
-$2.23$~m and the wrist camera $3.59$~m, against a ceiling at $2.44$~m. The
-wrist-only band is therefore $0.21$~m tall, and the two \emph{height} changes
-were placed in it at $2.25$~m.
+Fig.~\ref{fig:reach} explains why only \emph{height} produces a capability
+gap. For a camera of pitch $p$ at height $h$, the highest world point inside
+its frustum is $h + r(\cos p \tan \tfrac{v}{2} - \sin p)$ at range $r$, with no
+yaw term: yaw rotates about the vertical axis and cannot change the vertical
+extent. At $r = 5$~m this gives $2.24$~m for the chassis camera and $4.63$~m
+for the wrist, against a ceiling at $2.44$~m. The wrist-only band is therefore
+$0.20$~m tall, and the two \emph{height} changes were placed in it at
+$2.25$~m.
 
 \subsection{Acquisition cost: what is merely expensive}
 
 The \emph{occluded} and \emph{incidence} pairs were designed to require the
 manipulator and did not. The crate behind the pallet stack is observable from
-16 of 240 chassis poses --- hidden from $93\%$ of the room, as intended --- but
-a planner needs only one of the remaining sixteen. Where both configurations
-succeed, the difference appears as distance rather than as detections
-(Fig.~\ref{fig:result}(b)). Median drivable distance to first observation is
-$6.0$~m for the wrist configuration and $14.2$~m for the chassis, a factor of
-$2.4$.
+16 of 240 chassis poses --- hidden from $93\%$ of them, as intended --- but a
+planner needs only one of the remaining sixteen. Where both configurations
+succeed the difference appears as distance, not detections
+(Fig.~\ref{fig:result}(b)): median drivable distance to first observation is
+$6.0$~m for the wrist and $14.2$~m for the chassis, a factor of $2.4$.
 
 Occlusion, the intuitive case for a manipulator, is in this environment a
 routing cost paid in metres, not a sensing limit.
@@ -330,11 +332,11 @@ lives. Conflating them is easy: a single run reports only ``observed'' or
 ``not observed'', so an expensive change is indistinguishable from an
 impossible one.
 
-The capability boundary is also a design variable. Hall~B's band is $0.21$~m
+The capability boundary is also a design variable. Hall~B's band is $0.20$~m
 because the chassis camera sits at $0.418$~m pitched $0.17$~rad down; levelling
-it would shrink the band toward zero, and a taller space would widen it. The
-useful output is therefore not ``the arm is worth two changes'' but a method
-for locating that boundary before committing to a design.
+it shrinks the band toward zero, and a taller space widens it. The useful
+output is not ``the arm is worth two changes'' but a method for locating that
+boundary before committing to a design.
 
 \section{LIMITATIONS}
 
@@ -344,21 +346,23 @@ differing height. Detection is geometric --- no detector, no renderer, no noise
 --- so these numbers describe viewpoint quality, not whether a perception stack
 would recover the change. Elements are boxes, discarding the 48 opening
 entities in the source model, so Hall~B is a sealed room the robot must be
-spawned inside. And the framework does not yet answer its third question:
-deciding \emph{when} enough evidence has been gathered needs graded belief and
-a stopping rule, not binary detection.
+spawned inside. The height margin is also thin: the pair clears the chassis
+ceiling by $11.8$~mm, so levelling or raising that camera would close the gap
+--- which is the design-variable point made above, stated as a caution.
+Finally, the framework does not yet answer its third question: deciding
+\emph{when} enough evidence has been gathered needs graded belief and a
+stopping rule, not binary detection.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{CONCLUSION}
 
 DeltaSeek is a first step toward robots that plan perception in environments
 that will not hold still. Using an IFC-derived, reproducible benchmark we asked
-what a mobile manipulator's embodiment buys. For a room-scale scene with eight
-controlled changes the answer is sharper and smaller than the usual assumption:
-two changes lie outside the chassis camera's reach entirely, and the rest cost
-roughly $2.4\times$ the travel without the arm. A robot that will one day decide
-when it has seen enough must first distinguish a view it cannot obtain from one
-it has not yet paid for.
+what a mobile manipulator's embodiment buys. The answer is sharper and smaller
+than the usual assumption: two of eight changes lie outside the chassis
+camera's reach entirely, and the rest cost roughly $2.4\times$ the travel
+without the arm. A robot that will one day decide when it has seen enough must
+first distinguish a view it cannot obtain from one it has not yet paid for.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{thebibliography}{99}

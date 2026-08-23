@@ -39,12 +39,7 @@ plt.rcParams.update({'font.size': 8, 'axes.titlesize': 8.5,
 
 
 def r2(value):
-    """Round half up to two decimals.
-
-    The measured reaches land on exact halves (2.235, 3.595) where binary
-    floats round down, so the figures would print 2.23 and 3.59 while the
-    text, rounded by hand, says 2.24 and 3.60.
-    """
+    """Round half up to two decimals, so figure and text agree."""
     return float(Decimal(repr(value)).quantize(Decimal('0.01'), ROUND_HALF_UP))
 
 
@@ -107,7 +102,10 @@ def fig_scene(nominal, actual, truth):
 
 
 def fig_reach(truth, actual, envelope):
-    chassis, wrist = envelope['chassis_reach'], envelope['wrist_reach']
+    # Analytic reaches, not swept ones: the sweep resolves to its grid step
+    # and, for the wrist, an earlier sweep reported its own z-range bound.
+    chassis = envelope['chassis_reach_analytic']
+    wrist = envelope['wrist_reach_analytic']
     ceiling = envelope['ceiling']
     boxes = {e['id']: OrientedBox.from_element(e) for e in actual}
     fig, ax = plt.subplots(figsize=(3.4, 3.0))
@@ -132,7 +130,7 @@ def fig_reach(truth, actual, envelope):
     lo, hi = min(envelope['wrist_heights']), max(envelope['wrist_heights'])
     ax.plot([0.18, 0.18], [lo, hi], color='#4c72b0', lw=3.2, solid_capstyle='butt',
             zorder=5)
-    ax.annotate('camera\nheights', (0.14, -0.30), fontsize=6.5, ha='center',
+    ax.annotate('camera\nheights', (0.145, -0.40), fontsize=6.5, ha='center',
                 color='#444')
 
     for d in truth['discrepancies']:
@@ -142,18 +140,18 @@ def fig_reach(truth, actual, envelope):
         low = box.center[2] - box.half_extents[2]
         ax.add_patch(Rectangle((0.40, low), 0.14, 2 * box.half_extents[2],
                                fc='#c44e52', ec='#111', lw=0.6, zorder=6))
-    ax.annotate('H1, H2\nat 2.25', (0.47, 2.63), fontsize=6.5, ha='center',
+    ax.annotate('H1, H2\nat 2.25', (0.47, 2.72), fontsize=6.5, ha='center',
                 color='#8c2f33')
 
     ax.annotate(f'wrist-only band\n{r2(ceiling - chassis):.2f} m',
-                xy=(0.62, (chassis + ceiling) / 2), xytext=(0.72, 1.55),
+                xy=(0.62, (chassis + ceiling) / 2), xytext=(0.72, 1.30),
                 fontsize=7, color='#8c2f33', ha='left',
                 arrowprops=dict(arrowstyle='->', color='#8c2f33', lw=0.9))
 
     ax.set_xlim(0, 1.0)
-    ax.set_ylim(-0.45, 4.0)
+    ax.set_ylim(-0.72, 5.15)
     ax.set_xticks([])
-    ax.set_yticks(np.arange(0, 4.1, 1.0))
+    ax.set_yticks(np.arange(0, 5.1, 1.0))
     ax.set_ylabel('height above floor [m]')
     ax.set_title('Vertical sensing envelope, 5 m range')
     fig.tight_layout(pad=0.3)

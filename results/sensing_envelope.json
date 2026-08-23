@@ -1,7 +1,19 @@
 {
-  "chassis_reach_analytic": 2.238180011112137,
-  "wrist_reach_analytic": 4.626674505751447,
+  "far": 5.0,
   "ceiling": 2.44,
+  "chassis_reach_analytic": 2.238180011112137,
+  "chassis_reach_swept": 2.2371800111121036,
+  "wrist_reach_analytic": 4.626674505751447,
+  "wrist_reach_swept": 4.623674505751547,
+  "chassis_height": [
+    0.418
+  ],
+  "wrist_heights": [
+    0.291,
+    0.612,
+    0.684,
+    1.019
+  ],
   "band": 0.20181998888786312,
   "height_margin_mm": 11.819988887863175
 }

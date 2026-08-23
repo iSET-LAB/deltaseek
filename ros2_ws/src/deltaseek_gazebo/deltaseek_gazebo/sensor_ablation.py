@@ -124,7 +124,7 @@ def observation_counts(manifest, scenario, viewpoints, sensors, params):
     """How many candidate viewpoints observe each deviation, per sensor set.
 
     The count is the difference between "impossible" and "awkward". A deviation
-    seen from 0 poses is a capability limit; one seen from 70 of 600 is a
+    seen from 0 poses is a capability limit; one seen from 14 of 240 is a
     routing problem wearing the same clothes in a single planned run.
     """
     nominal = validate_manifest(manifest)
@@ -165,7 +165,7 @@ def observable_anywhere(manifest, scenario, viewpoints, sensors, params):
     Whether the planner reached a viewpoint inside its budget is a routing
     outcome; whether one exists at all is a capability. Reporting only the
     planned run confuses the two, and the headline then moves with routing
-    noise: a panel visible from 70 of 600 chassis poses is not evidence that
+    noise: a panel visible from 14 of 240 chassis poses is not evidence that
     the wrist camera is required, however the route happened to fall.
     """
     nominal = validate_manifest(manifest)
