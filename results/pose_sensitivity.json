@@ -1,0 +1,129 @@
+{
+  "rows": [
+    {
+      "positions": 60,
+      "yaws": 4,
+      "poses": 240,
+      "counts": {
+        "T1-pallet-stack": 30,
+        "T2-site-cabin": 23,
+        "H1-rack-tote": 0,
+        "H2-cabinet-carton": 0,
+        "I1-window-displaced": 10,
+        "I2-standing-panel": 14,
+        "O1-crate-behind-stack": 16,
+        "O2-drum-behind-rack": 29
+      },
+      "best": {
+        "T1-pallet-stack": 0.3333333333333333,
+        "T2-site-cabin": 0.3333333333333333,
+        "H1-rack-tote": 0.0,
+        "H2-cabinet-carton": 0.0,
+        "I1-window-displaced": 0.16666666666666666,
+        "I2-standing-panel": 0.3333333333333333,
+        "O1-crate-behind-stack": 0.3333333333333333,
+        "O2-drum-behind-rack": 0.3333333333333333
+      }
+    },
+    {
+      "positions": 60,
+      "yaws": 8,
+      "poses": 480,
+      "counts": {
+        "T1-pallet-stack": 61,
+        "T2-site-cabin": 44,
+        "H1-rack-tote": 0,
+        "H2-cabinet-carton": 0,
+        "I1-window-displaced": 21,
+        "I2-standing-panel": 30,
+        "O1-crate-behind-stack": 34,
+        "O2-drum-behind-rack": 60
+      },
+      "best": {
+        "T1-pallet-stack": 0.3333333333333333,
+        "T2-site-cabin": 0.3333333333333333,
+        "H1-rack-tote": 0.0,
+        "H2-cabinet-carton": 0.0,
+        "I1-window-displaced": 0.16666666666666666,
+        "I2-standing-panel": 0.3333333333333333,
+        "O1-crate-behind-stack": 0.3333333333333333,
+        "O2-drum-behind-rack": 0.3333333333333333
+      }
+    },
+    {
+      "positions": 60,
+      "yaws": 16,
+      "poses": 960,
+      "counts": {
+        "T1-pallet-stack": 130,
+        "T2-site-cabin": 97,
+        "H1-rack-tote": 0,
+        "H2-cabinet-carton": 0,
+        "I1-window-displaced": 49,
+        "I2-standing-panel": 57,
+        "O1-crate-behind-stack": 66,
+        "O2-drum-behind-rack": 114
+      },
+      "best": {
+        "T1-pallet-stack": 0.3333333333333333,
+        "T2-site-cabin": 0.3333333333333333,
+        "H1-rack-tote": 0.0,
+        "H2-cabinet-carton": 0.0,
+        "I1-window-displaced": 0.16666666666666666,
+        "I2-standing-panel": 0.3333333333333333,
+        "O1-crate-behind-stack": 0.3333333333333333,
+        "O2-drum-behind-rack": 0.3333333333333333
+      }
+    },
+    {
+      "positions": 230,
+      "yaws": 4,
+      "poses": 920,
+      "counts": {
+        "T1-pallet-stack": 126,
+        "T2-site-cabin": 98,
+        "H1-rack-tote": 0,
+        "H2-cabinet-carton": 0,
+        "I1-window-displaced": 46,
+        "I2-standing-panel": 61,
+        "O1-crate-behind-stack": 63,
+        "O2-drum-behind-rack": 118
+      },
+      "best": {
+        "T1-pallet-stack": 0.3333333333333333,
+        "T2-site-cabin": 0.3333333333333333,
+        "H1-rack-tote": 0.0,
+        "H2-cabinet-carton": 0.0,
+        "I1-window-displaced": 0.16666666666666666,
+        "I2-standing-panel": 0.3333333333333333,
+        "O1-crate-behind-stack": 0.3333333333333333,
+        "O2-drum-behind-rack": 0.3333333333333333
+      }
+    },
+    {
+      "positions": 230,
+      "yaws": 8,
+      "poses": 1840,
+      "counts": {
+        "T1-pallet-stack": 245,
+        "T2-site-cabin": 181,
+        "H1-rack-tote": 0,
+        "H2-cabinet-carton": 0,
+        "I1-window-displaced": 98,
+        "I2-standing-panel": 126,
+        "O1-crate-behind-stack": 127,
+        "O2-drum-behind-rack": 234
+      },
+      "best": {
+        "T1-pallet-stack": 0.3333333333333333,
+        "T2-site-cabin": 0.3333333333333333,
+        "H1-rack-tote": 0.0,
+        "H2-cabinet-carton": 0.0,
+        "I1-window-displaced": 0.16666666666666666,
+        "I2-standing-panel": 0.3333333333333333,
+        "O1-crate-behind-stack": 0.3333333333333333,
+        "O2-drum-behind-rack": 0.3333333333333333
+      }
+    }
+  ]
+}

@@ -7,6 +7,7 @@ statement about the arm again, and nothing else in the suite would notice.
 """
 
 import math
+from pathlib import Path
 
 import numpy as np
 import pytest
@@ -118,3 +119,84 @@ def test_per_sensor_params_resolve_and_missing_ones_raise():
         sensor_params(table, 'nonexistent')
     # A single params object applies to every sensor.
     assert sensor_params(narrow, CHASSIS) is narrow
+
+
+def _chassis_camera(urdf, yaw=0.0, far=5.0):
+    from deltaseek_gazebo.detection import CHASSIS, ObservationParams
+    from deltaseek_gazebo.viewpoints import build_viewpoints, chassis_chain
+    params = ObservationParams(far=far)
+    viewpoint = build_viewpoints(
+        Chain.from_urdf(urdf, 'base_link', 'camera_0_link'),
+        [((0.0, 0.0), yaw)], postures={'forward': ARM_POSTURES['forward']},
+        chassis=chassis_chain(urdf))[0]
+    xyz, rpy = viewpoint.sensor_poses[CHASSIS]
+    return params, np.asarray(xyz), np.asarray(rpy)
+
+
+def _analytic_ceiling(params, xyz, rpy):
+    """Highest world z the chassis frustum can contain, in closed form.
+
+    The camera has zero roll, so the world-z row of its rotation is
+    (-sin(pitch), 0, cos(pitch)) and height is h - sin(p)*forward +
+    cos(p)*up. Both the vertical half-extent and the depth are bounded by
+    the forward component, so the maximum sits at the far plane's top edge.
+    """
+    tan_v = math.tan(params.hfov / 2.0) / params.aspect
+    pitch = float(rpy[1])
+    return float(xyz[2]) + params.far * (math.cos(pitch) * tan_v
+                                         - math.sin(pitch))
+
+
+def test_chassis_ceiling_matches_its_closed_form(urdf):
+    from deltaseek_gazebo.visibility import rotation_matrix
+    params, xyz, rpy = _chassis_camera(urdf)
+    ceiling = _analytic_ceiling(params, xyz, rpy)
+    camera = params.camera(xyz, rpy)
+
+    # The frustum's top far corner realises the bound, so a point just inside
+    # it must be contained and one just above it must not.
+    tan_v = math.tan(params.hfov / 2.0) / params.aspect
+    depth = params.far * (1.0 - 1e-9)
+    corner = xyz + rotation_matrix(rpy) @ np.array([depth, 0.0, depth * tan_v])
+    assert camera.contains(corner[None, :])[0]
+    assert abs(corner[2] - ceiling) < 1e-6
+
+    above = corner.copy()
+    above[2] += 5.0e-3
+    assert not camera.contains(above[None, :])[0]
+
+
+def test_chassis_ceiling_does_not_depend_on_yaw(urdf):
+    # Yaw rotates about the vertical axis, so it cannot change the frustum's
+    # vertical extent. The height result rests on this, so it is asserted
+    # rather than assumed.
+    ceilings = []
+    for yaw in np.linspace(0.0, 2.0 * math.pi, 12, endpoint=False):
+        params, xyz, rpy = _chassis_camera(urdf, yaw=yaw)
+        ceilings.append(_analytic_ceiling(params, xyz, rpy))
+    assert max(ceilings) - min(ceilings) < 1e-9
+
+
+def test_height_changes_sit_above_the_chassis_ceiling(urdf):
+    # The capability claim is that the height pair is unreachable. Its margin
+    # is small, so the guard is explicit: if a mount change erodes it, this
+    # fails before the ablation quietly changes its answer.
+    import yaml
+    from deltaseek_gazebo.benchmark import apply_scenario
+    from deltaseek_gazebo.visibility import OrientedBox
+    bench = Path(__file__).resolve().parents[1] / 'config' / 'benchmarks'
+    manifest = yaml.safe_load((bench / 'hall_b_ablation_nominal.yaml').read_text())
+    scenario = yaml.safe_load((bench / 'hall_b_ablation_deviations.yaml').read_text())
+    _, actual, truth = apply_scenario(manifest, scenario)
+    boxes = {e['id']: OrientedBox.from_element(e) for e in actual}
+
+    params, xyz, rpy = _chassis_camera(urdf)
+    ceiling = _analytic_ceiling(params, xyz, rpy)
+    for discrepancy in truth['discrepancies']:
+        if discrepancy['class'] != 'height':
+            continue
+        box = boxes[discrepancy['element_id']]
+        lowest = box.center[2] - box.half_extents[2]
+        assert lowest > ceiling, (
+            f'{discrepancy["id"]} bottom {lowest:.3f} m is not above the '
+            f'chassis ceiling {ceiling:.3f} m')
