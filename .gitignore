@@ -15,3 +15,6 @@ log/
 *.log
 *.out
 *.synctex.gz
+
+# regenerated from the figure PDFs by scripts/make_ieee_docx.py
+ieeeconf/figures/png/
