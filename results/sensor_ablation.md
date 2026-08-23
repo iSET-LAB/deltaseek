@@ -43,4 +43,4 @@ Deviations both configurations resolve, and the distance each spent getting ther
 | O1-crate-behind-stack | occluded | 14.2 m | 24.2 m |
 | O2-drum-behind-rack | occluded | 15.2 m | 0.0 m |
 
-Per-deviation detail is in `sensor_ablation.csv`.
+Per-deviation detail is in `sensor_ablation.csv`; the machine-readable form, including per-viewpoint observation counts, is in `sensor_ablation.json`.

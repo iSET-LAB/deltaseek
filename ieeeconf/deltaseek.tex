@@ -1,11 +1,10 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Extended abstract for the 5th Workshop on Future of Construction,
-% IEEE IROS 2026.  Target length: 3-4 pages including references.
+% Extended abstract for the Workshop on the Future of Construction Robots.
+% Target length: 3-4 pages including references.
 %
-% NOTE ON REFERENCES: every entry in the bibliography below is a real,
-% well-known work, but please verify volume/page/year details against the
-% publisher before submitting.  Two entries marked TODO are placeholders for
-% citations only the authors can supply.
+% NOTE ON REFERENCES: every entry below is a real, well-known work, but the
+% volume/page/year details were written from memory and must be checked against
+% the publisher before submission.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \documentclass[letterpaper, 10 pt, conference]{ieeeconf}
@@ -19,8 +18,7 @@
 \usepackage{url}
 
 \title{\LARGE \bf
-Where Should a Mobile Manipulator Look?\\
-A Reproducible Benchmark for Deviation-Seeking As-Built Verification
+DeltaSeek: Toward Active Perception in\\Evolving Construction Environments
 }
 
 \author{Sanjay Acharjee$^{1}$% <-this % stops a space
@@ -35,325 +33,340 @@ A Reproducible Benchmark for Deviation-Seeking As-Built Verification
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{abstract}
-As-built verification asks whether a building matches its model. Existing
-pipelines collect data along preset or coverage-driven routes and compare
-offline, so the verification objective never informs where the robot looks. We
-ask whether making deviation detection the planning objective actually pays,
-and we build the apparatus needed to answer that: an open benchmark that
-derives Gazebo worlds from building models, injects deviations of known type,
-location and magnitude at a controlled density, and scores a run by detections
-per metre of \emph{drivable} traversal. On a Clearpath Husky A300 with a UR5e
-and a wrist-mounted RGB-D camera, we compare a greedy information-gain planner
-that selects both base poses and arm configurations against coverage, frontier
-and goal-directed baselines. Three findings stand out. Measuring distance
-around walls rather than in straight lines reverses the ranking, so the
-accounting is not a detail. Under that honest accounting, greedy
-information-gain planning does \emph{not} beat systematic coverage. Including
-the manipulator in viewpoint selection helps every planner that stops to look,
-by up to $9.3$ percentage points. We release the benchmark so that the second
-finding can be attacked directly.
+Construction environments evolve continuously. Elements are installed,
+temporary objects appear and disappear, materials become occluded, and
+surfaces that were visible last week are inaccessible today. Robotic
+perception in such settings cannot always be treated as a static mapping
+problem in which observations are gathered first and interpreted afterward:
+large geometric and temporal change reduces correspondence between
+observations taken at different times, making registration and persistent
+scene understanding progressively harder. This motivates a more active
+formulation, in which a robot deliberately selects sensing configurations that
+supply the information needed to resolve the current state of the environment.
+
+We present DeltaSeek, an initial framework toward active perception in evolving
+built environments. The broader objective is a robot that reasons about
+\emph{where} to observe, \emph{how} to observe, and ultimately \emph{when}
+enough perceptual evidence has been gathered. As a first step we study a
+question that underlies all three: how does sensing embodiment constrain the
+observations available to a mobile robot? We build an IFC-derived simulation
+benchmark and evaluate a Clearpath Husky A300 with a UR5e manipulator under
+chassis-mounted and wrist-mounted RGB-D configurations. Candidate observations
+are scored by geometric visibility; inspection effort is measured as drivable
+distance on the platform's own navigation costmap.
+
+In a room-scale environment containing eight controlled scene changes spanning
+four observability conditions, an exhaustive evaluation over 240 admissible
+base poses shows that two changes cannot be observed by the chassis camera from
+\emph{any} tested viewpoint, while the wrist camera resolves both. Changes
+constructed around occlusion and viewing incidence remain observable from the
+chassis but demand less accessible viewpoints and more travel: median drivable
+distance to first observation rises from $6.0$~m with wrist-mounted sensing to
+$14.2$~m with chassis-mounted sensing. These results separate two effects that
+matter for active perception --- \emph{sensing capability}, where embodiment
+decides whether an informative observation exists at all, and \emph{acquisition
+cost}, where the same information is available but must be paid for in motion.
+We argue this distinction is a necessary foundation for robots that plan
+perception rather than passively accumulate data.
 \end{abstract}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{INTRODUCTION}
 
-Building Information Models (BIM) are increasingly used as a geometric prior
-for construction robots \cite{halder2023review}. A natural application is
-as-built verification: driving a sensor through a partially finished building
-and reporting where reality departs from the model. Established pipelines
-capture along a preset or coverage-driven route and register against the model
-afterwards \cite{bosche2010,turkan2012,golparvar2015}. The verification
-objective therefore never influences where the robot goes.
+A construction site is not a scene to be mapped once. Between two visits, walls
+are erected, services are hung, pallets are delivered and consumed, and
+formwork is struck. The same physical space presents a materially different
+surface geometry from week to week, and the parts that changed are precisely
+the parts a verification system cares about.
 
-Making that objective drive the plan is an appealing idea, and it is the one we
-set out to test. A robot that knows which elements it has already resolved
-should be able to spend a limited traversal budget where uncertainty is
-highest, rather than sweeping a floor uniformly. Including a manipulator adds a
-second lever: an arm reaches vantage points a fixed sensor cannot, looking
-beneath assemblies and into equipment enclosures without repositioning the
-base.
+Most robotic capture pipelines in construction are nevertheless organised
+around passive accumulation: drive a coverage route, collect point clouds or
+images, register them to the building model, and compute differences
+offline~\cite{bosche2010,turkan2012,golparvar2015}. This is a reasonable
+division of labour when the environment is nearly static. It degrades when it
+is not. Registration relies on correspondence between what was seen before and
+what is seen now, and large change is exactly the condition under which that
+correspondence thins out. The information the robot most needs is the
+information its pipeline is least equipped to acquire.
 
-Testing the idea required more infrastructure than the idea itself: no shared
-benchmark supplies exact deviation ground truth at a controllable density, an
-observation model fast enough for a planner loop, and a traversal metric that
-accounts for walls. This paper contributes that apparatus and reports what it
-says.
+Active perception offers the alternative
+framing~\cite{bajcsy1988,aloimonos1988}: treat sensor placement as a decision
+that resolves a specific uncertainty. Applied to an evolving building, this
+means asking where to look next to determine whether part of the model still
+describes reality --- which requires answering, in sequence, where to observe,
+how to observe, and when enough evidence has been gathered.
 
-\textbf{Contributions.}
-(i) An open, reproducible benchmark: element manifests keyed by IFC
-\texttt{GlobalId}, seeded deviation sampling at a chosen density, matched
-Gazebo worlds and exact labels, and a geometric observation model costing
-$\sim$12\,ms per candidate viewpoint.
-(ii) A viewpoint-planning formulation over base poses \emph{and} arm
-configurations, with camera pose derived from the generated robot description
-so the sensor mount cannot silently diverge from the robot.
-(iii) An evaluation showing that traversal accounting reverses planner
-ranking, that greedy information gain does not beat coverage under drivable
-distance, and that the manipulator helps every planner tested.
+This paper takes the first step, and deliberately a narrow one. Before a
+planner can choose among sensing configurations, we need to know what the
+robot's embodiment makes available at all. A mobile manipulator can place a
+camera almost anywhere within its reachable workspace; a fixed chassis sensor
+cannot. That extra freedom is usually assumed to be valuable. We measure it.
+
+Our contribution is threefold. First, a reproducible IFC-derived benchmark that
+clips a real Revit export into a room-scale scene and injects controlled
+changes with exact ground truth. Second, an observability taxonomy that
+classifies a change by \emph{why} it is hard to see rather than by what moved.
+Third, an exhaustive sensor-configuration study whose central finding is a
+distinction we believe generalises: embodiment separates changes into those a
+sensor configuration cannot observe at all, and those it can observe only at
+greater cost.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{RELATED WORK}
 
-\textbf{As-built verification.} Bosch\'e \cite{bosche2010} registers laser
-scans against CAD objects for dimensional compliance; Turkan et al.
-\cite{turkan2012} and Golparvar-Fard et al. \cite{golparvar2015} track progress
-by comparing captured data with 4D models. These are offline comparisons of
-data gathered along routes chosen for coverage, not for the questions the
-comparison will ask.
+\textbf{As-built verification} against a building model is well established,
+from dimensional compliance checking~\cite{bosche2010} to schedule-linked
+progress tracking~\cite{turkan2012,golparvar2015}. These systems consume data
+rather than plan it: the route is set by coverage or by an operator, and the
+verification objective never influences where the sensor goes.
 
-\textbf{Active perception.} Next-best-view planning dates to Connolly
-\cite{connolly1985} and remains active for volumetric reconstruction and
-exploration \cite{bircher2016,isler2016}. Frontier exploration
-\cite{yamauchi1997} maximises newly observed free space. These objectives
-reward seeing \emph{more}, whereas verification rewards resolving specific
-modelled elements. Recent construction work does close the perception--action
-loop, but treats model--reality divergence as a safety signal while reaching a
-navigation goal rather than as the objective itself \cite{TODOactive}.
-
-\textbf{Budgeted selection.} Choosing viewpoints under a travel budget is an
-orienteering problem \cite{golden1987}; greedy benefit-per-cost is the standard
-heuristic and carries guarantees when the objective is submodular
-\cite{nemhauser1978,krause2008}. Our results suggest the greedy \emph{routing},
-not the objective, is what limits performance here.
+\textbf{Active perception} treats sensing as an action to be
+planned~\cite{bajcsy1988,aloimonos1988}. Next-best-view methods select
+placements maximising expected information for
+reconstruction~\cite{connolly1985,isler2016} or
+exploration~\cite{bircher2016,yamauchi1997}, usually under an unknown-space
+objective. Our setting differs: a strong prior exists, and the question is not
+what is unknown but what has \emph{changed}. Mounting the sensor on an arm
+enlarges the achievable viewpoint set, but how much that is worth in a given
+environment is rarely quantified --- the gap this paper addresses.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{figure*}[t]
-  \centering
-  \includegraphics[width=\textwidth]{figures/fig_pipeline.pdf}
-  \caption{The benchmark pipeline. A building model becomes an element
-  manifest keyed by IFC \texttt{GlobalId}; a seeded sampler injects deviations
-  at a chosen density; the same generator emits the Gazebo world and the exact
-  labels, so scene and ground truth cannot drift apart. Planners see only the
-  nominal model.}
-  \label{fig:pipeline}
-\end{figure*}
-
 \section{BENCHMARK}
 
-\subsection{Scenes and deviations}
+\subsection{From IFC to a room-scale scene}
 
-An adapter converts IFC products into a manifest of elements, each retaining
-its \texttt{GlobalId}, IFC class, pose and geometry (Fig.~\ref{fig:pipeline}).
-Because that adapter currently approximates each product by its world-aligned
-bounding box, a wall with a door becomes a solid barrier, which inflates
-occlusion exactly where a viewpoint planner's reasoning lives. For the
-experiments here we therefore generate a synthetic storey from primitives: a
-central corridor with rooms down both sides, with walls emitted as jambs and a
-lintel so that a doorway is a real opening. The default layout has 110
-elements. Contents sit at heights that reward different arm postures: services
-near the ceiling, panels at chest height, and fittings tucked against the far
-side of equipment.
+The benchmark derives its geometry from a real Revit~2025 IFC2X3 export of a
+single-storey building, $44.5 \times 19.0 \times 4.5$~m, comprising 133
+products that convert without failure. Each product is approximated by a box
+oriented in its own placement frame. Orientation is not a refinement: the
+export sits on a site grid rotated $0.90^\circ$ off the world axes, and a
+world-aligned box turns a $0.203$~m wall into a $0.82$~m one, a fourfold error
+on the dimension that decides whether the robot fits between them.
 
-A seeded sampler injects five deviation types --- \texttt{displaced},
-\texttt{rotated}, \texttt{resized}, \texttt{missing} and \texttt{unexpected}
---- at a specified density, defined as the fraction of nominal elements
-carrying a deviation. Unexpected elements are counted separately, since they
-add to the scene rather than modifying an element. A scenario identifier and
-seed reproduce a benchmark exactly.
-
-\subsection{Observation model}
-
-Rendering every candidate viewpoint is infeasible when a planner scores
-thousands of them, so we answer the cheaper question a planner actually asks:
-what fraction of an element's surface would this camera see? Elements are
-treated as oriented boxes and their surfaces sampled; a sample counts when it
-lies inside the view frustum, faces the camera within an incidence limit, and
-is unoccluded by another element. Evaluating one viewpoint against 110 elements
-costs about 12\,ms.
-
-Each deviation type is revealed by a different observation. A
-\texttt{missing} element is found by seeing \emph{into} its modelled volume and
-finding it empty; \texttt{rotated}, \texttt{resized} and \texttt{unexpected}
-elements by observing the as-built element; a \texttt{displaced} element by
-either. A deviation counts as detected the first time its governing
-observation exceeds a visible-fraction threshold, which stands in for detector
-sensitivity.
-
-This model assumes perfect recognition and localisation, so it measures
-\emph{viewpoint quality} rather than perception robustness: the right
-separation for studying where to look, and a limitation for hardware
-transfer.
-
-\subsection{Traversal metric}
+A storey is the wrong unit for studying observation, and is also unusable
+directly --- one wall entity runs the full $39$~m of a facade. We clip a
+manifest to a rectangle, cutting in each element's own frame so the site
+rotation survives. The resulting scene, Hall~B, is $7.0 \times 12.5$~m with
+twelve modelled elements: four walls, two windows, a door, floor and ceiling.
+Two modelled fit-out units are added, since the export contains no furniture
+and both occlusion and height-limited observability require something to stand
+behind or on top of.
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=\columnwidth]{figures/fig_scene.pdf}
-  \caption{Plan view of the synthetic storey with one sampled scenario. Grey
-  rectangles are elements, light grey are overhead services, red markers are
-  injected deviations, and the blue path is the tour selected by the
-  deviation-seeking planner under a 60\,m drivable budget. The planner
-  concentrates on the corridor and enters comparatively few rooms.}
+  \includegraphics[width=0.86\columnwidth]{figures/fig_scene.pdf}
+  \caption{Hall~B, clipped from a real IFC export, with the eight injected
+  changes coloured by observability class. Grey is the modelled shell and
+  fit-out. The robot starts at the marked pose.}
   \label{fig:scene}
 \end{figure}
 
-Detections per unit distance is the quantity we want to improve, so the
-denominator must be a distance the robot could actually drive. We compute it on
-an inflated occupancy grid using the platform's own Nav2 settings
-\cite{macenski2020}: a 0.06\,m costmap resolution and the
-$0.495\times0.349$\,m footprint, inflated by its 0.606\,m circumscribed radius.
-The platform's global planner is NavFn, which is Dijkstra over a costmap, so we
-compute that quantity directly rather than through an action server; a round
-trip per query would make evaluation intractable. Treating inflated cells as
-lethal bounds the planner's answer from above.
+\subsection{Observation model}
 
-The choice is not cosmetic. On this storey, drivable distance averages $1.8\times$
-the straight-line distance and reaches $11\times$.
+Detection is geometric rather than image-based. An element's surface is
+sampled, and a sample counts when it falls inside the view frustum, faces the
+camera within a $75^\circ$ incidence limit, and is unoccluded by another
+element. A change is observed when the visible surface fraction supporting it
+exceeds $0.05$, which stands in for a detector's sensitivity. Each change type
+carries its own evidence: an unmodelled object is revealed by seeing it, a
+displaced element by seeing it in its new position or its modelled volume
+empty.
+
+This model assumes perfect recognition and perfect localisation. It therefore
+measures \emph{viewpoint quality}, not perception robustness, and it is fast
+enough to evaluate exhaustively --- which rendering is not, and which the study
+below requires.
+
+\subsection{Effort}
+
+Inspection effort is drivable distance: Dijkstra search over an occupancy grid
+inflated by the platform's own Nav2 footprint ($0.606$~m circumscribed radius,
+$0.06$~m resolution). This matters --- on a storey-scale scene drivable
+distance averages $1.8\times$ the straight line and reaches $11\times$, and
+straight-line distance would let a robot pass through walls to reach a
+viewpoint.
+
+\subsection{Observability classes}
+
+A change's type says what moved; it says nothing about whether a sensor can see
+it. We therefore label each change by \emph{why} it is hard to observe:
+
+\begin{itemize}
+  \item \textbf{trivial} --- a large unmodelled object in open floor space;
+  \item \textbf{height} --- above the chassis camera's sightline;
+  \item \textbf{incidence} --- resolvable only from an oblique angle;
+  \item \textbf{occluded} --- in another object's shadow from most base poses.
+\end{itemize}
+
+Eight changes were hand-placed in Hall~B, two per class, in a committed
+scenario rather than sampled, so that each is explainable from geometry and the
+study is exactly reproducible. The \emph{trivial} pair is included as a
+control: a configuration that misses it is visibly broken.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{PLANNING AND BASELINES}
+\section{SENSING CONFIGURATIONS}
 
-Candidate viewpoints pair a base pose, drawn from a grid of navigable free
-space, with one of five inspection arm postures. Camera pose comes from
-forward kinematics over the generated robot description, so the arm mount and
-camera transform cannot diverge from the robot; we verified the chain against
-the running simulator's TF tree to machine precision. The fixed-sensor
-configuration is the same generator with the arm frozen, so the ablation
-compares like with like.
+The platform is a Clearpath Husky A300 with an AMP enclosure and a UR5e,
+generated from a single \texttt{robot.yaml} so that simulation and hardware
+share one description. It carries two RGB-D cameras of the \emph{same} model,
+so the comparison isolates where a camera is mounted rather than how good it
+is:
 
-Every planner sees only the nominal model. Ground truth is used afterwards, by
-the scorer, which is what prevents a planner from quietly cheating.
+\begin{itemize}
+  \item \textbf{chassis} --- fixed on the enclosure deck at
+        $(0.460, 0.000, 0.418)$~m in the base frame, pitched $0.17$~rad down.
+        Its pose depends only on the base.
+  \item \textbf{wrist} --- eye-in-hand, its pose obtained by forward
+        kinematics over the generated description across five inspection
+        postures. The kinematic chain is verified against the running
+        simulation's transform tree to machine precision.
+\end{itemize}
 
-The \emph{deviation-seeking} planner maintains an independent Bernoulli belief
-over each element's deviation state. A viewpoint is worth the expected entropy
-it removes, where an observation's resolving power ramps from zero below the
-detection threshold to one when the element is properly seen. Viewpoints are
-chosen greedily by benefit per unit distance under a traversal budget.
+Candidate base poses are laid on a $1.0$~m grid of navigable free space inside
+the room, giving \textbf{240 admissible base poses}. Each combines with the
+five arm postures, so the wrist camera has $1200$ distinct poses while the
+chassis camera has $240$ --- it does not move with the arm. An element is
+observed if \emph{any} active sensor observes it.
 
-Baselines are \emph{coverage} (visit every base pose in a nearest-neighbour
-sweep), \emph{frontier} (greedily reveal unseen area \cite{yamauchi1997}), and
-\emph{goal-directed} (drive to a distant goal, observing only from poses along
-the way). All four share the same candidate set, budget and cost function.
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.86\columnwidth]{figures/fig_reach.pdf}
+  \caption{Why exactly two changes are unreachable. Sweeping all base yaws at
+  the $5$~m range limit, the highest point the chassis camera can place inside
+  its frustum is $2.23$~m; the wrist camera reaches $3.59$~m (swept at $5$~mm
+  resolution). The ceiling begins at $2.44$~m, leaving a wrist-only band
+  $0.21$~m tall. The two \emph{height} changes sit in it at $2.25$~m.}
+  \label{fig:reach}
+\end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{RESULTS}
+
 \begin{figure*}[t]
   \centering
-  \includegraphics[width=0.95\textwidth]{figures/fig_curves.pdf}
-  \caption{Detections against traversal budget, mean over five deviation seeds
-  with one standard deviation shaded. \textbf{Left:} drivable distance.
-  \textbf{Right:} straight-line distance. The ranking of the top two methods
-  reverses: measuring distance in straight lines credits the deviation-seeking
-  planner with a lead it does not have.}
-  \label{fig:curves}
+  \includegraphics[width=0.94\textwidth]{figures/fig_result.pdf}
+  \caption{(a)~Capability: the share of admissible sensor poses from which each
+  change is observable. Two changes are observable from no chassis pose at all.
+  (b)~Acquisition cost: drivable distance to first observation under a $25$~m
+  budget. Tick colours encode observability class.}
+  \label{fig:result}
 \end{figure*}
 
-\section{EXPERIMENTS}
-
-We evaluate in Gazebo on a Clearpath Husky A300 with a UR5e and a
-wrist-mounted RealSense D435, configured through the vendor's own
-\texttt{robot.yaml} generator so the same description serves simulation and
-hardware. Scenes use the 110-element storey with deviations sampled at density
-$0.2$ plus a $0.05$ unexpected rate, giving 28 deviations for the seed shown.
-Each planner receives a 60\,m budget and a 5\,m usable depth range, and we
-report the mean over five deviation seeds.
-
-\begin{table}[b]
-  \centering
-  \caption{Deviations detected within a 60\,m budget (\%, mean $\pm$ s.d.\ over
-  five seeds). Ranking of the top two methods depends on how distance is
-  measured.}
+\begin{table}[t]
+  \caption{Changes observed, by observability class}
   \label{tab:main}
-  \begin{tabular}{lcc}
+  \centering
+  \begin{tabular}{lccc}
     \toprule
-    Planner & Drivable & Straight-line \\
+    Class & chassis & wrist & both \\
     \midrule
-    Coverage                  & \textbf{70.0 $\pm$ 5.3} & 70.0 $\pm$ 5.3 \\
-    Deviation-seeking (ours)  & 63.6 $\pm$ 6.1 & \textbf{72.1 $\pm$ 5.7} \\
-    Frontier                  & 47.9 $\pm$ 4.3 & 47.1 $\pm$ 6.1 \\
-    Goal-directed             & 25.7 $\pm$ 4.2 & 42.9 $\pm$ 4.5 \\
+    trivial    & 2/2          & 2/2 & 2/2 \\
+    height     & \textbf{0/2} & 2/2 & 2/2 \\
+    incidence  & 1/2          & 2/2 & 2/2 \\
+    occluded   & 2/2          & 2/2 & 2/2 \\
+    \midrule
+    all        & 5/8          & 8/8 & 8/8 \\
     \bottomrule
   \end{tabular}
 \end{table}
 
-\subsection{Traversal accounting changes the answer}
+\subsection{Capability: what cannot be seen at all}
 
-Table~\ref{tab:main} and Fig.~\ref{fig:curves} report the same runs under both
-cost models. Under straight-line distance the deviation-seeking planner leads
-coverage by 2.1 points, which is inside one standard deviation. Under drivable
-distance it trails by 6.4 points. The goal-directed baseline loses 17 points
-when walls are charged for, because a straight run between distant poses is
-precisely what a building does not allow.
+Table~\ref{tab:main} reports what each configuration observed within a $25$~m
+budget, and Fig.~\ref{fig:result}(a) the underlying capability.
 
-We consider this the most transferable result in the paper: a
-detections-per-metre claim is only as good as the metre, and straight-line
-distance systematically flatters planners that wander.
+The headline is \emph{not} $5/8$. A single planned run conflates what a sensor
+can see with what one route happened to reach, so we separate them by
+evaluating every admissible pose exhaustively. Two changes --- both
+\emph{height} --- are observable from \textbf{none} of the 240 chassis poses,
+at zero visible fraction. This is a property of the embodiment. One further
+change that the chassis-only run missed is in fact observable from 14 of those
+240 poses; the planner simply did not visit one inside the budget. That is a
+routing outcome and not evidence for the manipulator.
 
-\subsection{Greedy information gain does not beat coverage}
+The distinction is not academic. Repositioning the arm on the deck during
+development moved the chassis result from $6/8$ to $5/8$, which reads as the
+manipulator becoming more necessary and was entirely routing noise. The
+capability figure did not move.
 
-Under honest accounting, coverage detects $70.0\pm5.3$\% against
-$63.6\pm6.1$\% for the deviation-seeking planner. The gap is stable across
-seeds.
+Fig.~\ref{fig:reach} explains why only \emph{height} produces a capability gap.
+Swept over all base yaws at the $5$~m range limit, the chassis camera reaches
+$2.23$~m and the wrist camera $3.59$~m, against a ceiling at $2.44$~m. The
+wrist-only band is therefore $0.21$~m tall, and the two \emph{height} changes
+were placed in it at $2.25$~m.
 
-Fig.~\ref{fig:scene} suggests why. The planner concentrates on the corridor,
-from which many elements are partially visible, and enters comparatively few
-rooms; coverage systematically enters every one. Two mechanisms plausibly
-contribute. First, with a uniform prior, maximising expected information about
-every element's deviation state is close to asking to see every element, which
-is what coverage does by construction --- the objective may simply not be
-selective. Second, greedy benefit-per-metre is myopic: it repeatedly takes the
-locally cheapest informative viewpoint and pays for detours it cannot amortise,
-whereas a nearest-neighbour sweep is a serviceable travelling-salesman
-heuristic. The second mechanism points at the routing rather than the
-objective, and is the first thing we intend to fix.
+\subsection{Acquisition cost: what is merely expensive}
 
-\subsection{The manipulator helps every planner}
+The \emph{occluded} and \emph{incidence} pairs were designed to require the
+manipulator and did not. The crate behind the pallet stack is observable from
+16 of 240 chassis poses --- hidden from $93\%$ of the room, as intended --- but
+a planner needs only one of the remaining sixteen. Where both configurations
+succeed, the difference appears as distance rather than as detections
+(Fig.~\ref{fig:result}(b)). Median drivable distance to first observation is
+$6.0$~m for the wrist configuration and $14.2$~m for the chassis, a factor of
+$2.4$.
 
-\begin{figure}[t]
-  \centering
-  \includegraphics[width=\columnwidth]{figures/fig_ablation.pdf}
-  \caption{Including the arm in viewpoint selection versus freezing it at one
-  posture, under drivable distance. Every planner loses ground with a fixed
-  sensor.}
-  \label{fig:ablation}
-\end{figure}
-
-Freezing the arm costs the deviation-seeking planner 5.7 points
-($63.6\rightarrow57.9$), coverage 6.4 ($70.0\rightarrow63.6$) and frontier 9.3
-($47.9\rightarrow38.6$); the goal-directed baseline is nearly unaffected
-because it barely stops (Fig.~\ref{fig:ablation}). In the selected plans the
-robot routinely parks once and adopts several postures, gathering additional
-observations for no traversal cost at all.
-
-The honest reading is that the manipulator is valuable for as-built
-verification in general, not for our objective in particular. That is a weaker
-claim than we set out to make and a more useful one for practitioners choosing
-a platform.
+Occlusion, the intuitive case for a manipulator, is in this environment a
+routing cost paid in metres, not a sensing limit.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{LIMITATIONS AND NEXT STEPS}
+\section{DISCUSSION}
 
-The observation model is geometric; a depth-based detector behind the same
-interface is required before any claim about perception robustness. Scenes are
-synthetic, because the bounding-box IFC adapter would turn every doorway into a
-wall; a tessellating importer is needed for real models. Traversal cost reasons
-about walls, but the controller that executes a plan does not yet follow paths
-around them. Results are five seeds on one layout at one density; the density
-sweep the sampler was built for is not yet reported.
+Two effects fall out of these measurements, and an active-perception system
+must treat them differently.
 
-The immediate work is to replace greedy selection with tour construction and
-local improvement, which tests the routing explanation directly. If the planner
-still does not beat coverage, the uniform prior is implicated, and
-deviation-seeking planning will need a defensible reason to prefer some
-elements over others --- from construction sequence, trade handover, or
-observed workmanship --- rather than treating all modelled elements as equally
-suspect.
+\textbf{Sensing capability} is binary and set by embodiment. No amount of
+planning recovers a change that lies outside every achievable frustum. A
+planner cannot trade distance for it; only the robot's configuration can
+supply it.
 
+\textbf{Acquisition cost} is continuous and set by the environment. The
+information exists, and the question is how much motion it takes. This is where
+viewpoint planning has leverage, and where the $6.0$~m against $14.2$~m gap
+lives.
+
+Conflating them is easy and consequential: a single run reports only
+``observed'' or ``not observed'', so a change that was expensive is
+indistinguishable from one that was impossible.
+
+The capability boundary is also a \emph{design} variable, not a fact of nature.
+The wrist-only band in Hall~B is $0.21$~m because the chassis camera sits at
+$0.418$~m pitched $0.17$~rad down; raising or levelling it would shrink the
+band toward zero, and a taller space would widen it considerably. The useful
+output is therefore not ``the arm is worth two changes'' but a method for
+locating that boundary for a given robot and space before committing to
+either.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{LIMITATIONS}
+
+The result is narrow and should not be read as more. It is one room, one
+ceiling height and eight changes; the $0.21$~m band is a property of this
+geometry, and establishing a trend needs rooms of differing height, which the
+clipping tool makes cheap. Detection is geometric --- no detector, no renderer,
+no noise --- so these numbers describe viewpoint quality, not whether a
+perception stack would recover the change. Elements are boxes, which discards
+the 48 opening entities in the source model, so a wall with doors becomes a
+solid barrier and Hall~B is a sealed room the robot must be spawned inside:
+tolerable for one room, not for many. Finally, the framework does not yet
+answer its own third question --- deciding \emph{when} enough evidence has been
+gathered needs graded belief and a stopping rule, not binary detection.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{CONCLUSION}
 
-We built the apparatus needed to ask whether deviation-seeking viewpoint
-planning pays, and used it to answer honestly: on this benchmark it does not
-yet beat systematic coverage once traversal distance is measured around walls,
-though including a manipulator in viewpoint selection helps every planner
-tested. We release the benchmark, the baselines and the evaluation so that the
-negative result can be attacked rather than repeated.
+DeltaSeek is a first step toward robots that plan perception in environments
+that will not hold still. Using an IFC-derived, exactly reproducible benchmark
+we asked what a mobile manipulator's embodiment actually buys. For a room-scale
+scene with eight controlled changes the answer is sharper and smaller than the
+usual assumption: two changes lie outside the chassis camera's reach entirely,
+and the rest cost roughly $2.4\times$ the travel to observe without the arm.
+Separating capability from cost is what makes that answer meaningful. A robot
+that will one day decide when it has seen enough must first distinguish a view
+it cannot obtain from one it has not yet paid for.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{thebibliography}{99}
-
-\bibitem{halder2023review}
-S.~Halder and K.~Afsari, ``Robots in inspection and monitoring of buildings and
-infrastructure: A systematic review,'' \emph{Applied Sciences}, vol.~13, no.~4,
-2023.
 
 \bibitem{bosche2010}
 F.~Bosch\'e, ``Automated recognition of 3D CAD model objects in laser scans and
@@ -371,6 +384,15 @@ M.~Golparvar-Fard, F.~Pe\~na-Mora, and S.~Savarese, ``Automated progress
 monitoring using unordered daily construction photographs and IFC-based
 building information models,'' \emph{Journal of Computing in Civil
 Engineering}, vol.~29, no.~1, 2015.
+
+\bibitem{bajcsy1988}
+R.~Bajcsy, ``Active perception,'' \emph{Proceedings of the IEEE}, vol.~76,
+no.~8, pp.~966--1005, 1988.
+
+\bibitem{aloimonos1988}
+J.~Aloimonos, I.~Weiss, and A.~Bandyopadhyay, ``Active vision,''
+\emph{International Journal of Computer Vision}, vol.~1, no.~4, pp.~333--356,
+1988.
 
 \bibitem{connolly1985}
 C.~Connolly, ``The determination of next best views,'' in \emph{Proc. IEEE Int.
@@ -390,20 +412,6 @@ Conf. Robotics and Automation (ICRA)}, 2016, pp.~3477--3484.
 B.~Yamauchi, ``A frontier-based approach for autonomous exploration,'' in
 \emph{Proc. IEEE Int. Symp. Computational Intelligence in Robotics and
 Automation (CIRA)}, 1997, pp.~146--151.
-
-\bibitem{golden1987}
-B.~L.~Golden, L.~Levy, and R.~Vohra, ``The orienteering problem,'' \emph{Naval
-Research Logistics}, vol.~34, no.~3, pp.~307--318, 1987.
-
-\bibitem{nemhauser1978}
-G.~L.~Nemhauser, L.~A.~Wolsey, and M.~L.~Fisher, ``An analysis of
-approximations for maximizing submodular set functions---I,''
-\emph{Mathematical Programming}, vol.~14, no.~1, pp.~265--294, 1978.
-
-\bibitem{krause2008}
-A.~Krause, A.~Singh, and C.~Guestrin, ``Near-optimal sensor placements in
-Gaussian processes: Theory, efficient algorithms and empirical studies,''
-\emph{Journal of Machine Learning Research}, vol.~9, pp.~235--284, 2008.
 
 \bibitem{macenski2020}
 S.~Macenski, F.~Mart\'in, R.~White, and J.~Gin\'es Clavero, ``The Marathon 2: A
@@ -428,11 +436,6 @@ Organization for Standardization, 2018.
 \bibitem{ifcopenshell}
 IfcOpenShell: an open source IFC toolkit and geometry engine.
 \url{https://ifcopenshell.org}
-
-\bibitem{TODOactive}
-TODO: cite the recent active-sensing construction work that treats
-model--reality divergence as a safety signal, referred to in the introduction
-and related work.
 
 \end{thebibliography}
 

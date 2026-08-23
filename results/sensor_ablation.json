@@ -1,0 +1,264 @@
+{
+  "configurations": {
+    "chassis": [
+      {
+        "deviation": "T1-pallet-stack",
+        "class": "trivial",
+        "type": "unexpected",
+        "detected": true,
+        "distance_m": 14.203,
+        "resolved_by": "chassis",
+        "best_visible_fraction": 0.111111
+      },
+      {
+        "deviation": "T2-site-cabin",
+        "class": "trivial",
+        "type": "unexpected",
+        "detected": true,
+        "distance_m": 14.203,
+        "resolved_by": "chassis",
+        "best_visible_fraction": 0.111111
+      },
+      {
+        "deviation": "H1-rack-tote",
+        "class": "height",
+        "type": "unexpected",
+        "detected": false,
+        "distance_m": Infinity,
+        "resolved_by": "",
+        "best_visible_fraction": 0.0
+      },
+      {
+        "deviation": "H2-cabinet-carton",
+        "class": "height",
+        "type": "unexpected",
+        "detected": false,
+        "distance_m": Infinity,
+        "resolved_by": "",
+        "best_visible_fraction": 0.0
+      },
+      {
+        "deviation": "I1-window-displaced",
+        "class": "incidence",
+        "type": "displaced",
+        "detected": true,
+        "distance_m": 14.203,
+        "resolved_by": "chassis",
+        "best_visible_fraction": 0.166667
+      },
+      {
+        "deviation": "I2-standing-panel",
+        "class": "incidence",
+        "type": "unexpected",
+        "detected": false,
+        "distance_m": Infinity,
+        "resolved_by": "",
+        "best_visible_fraction": 0.0
+      },
+      {
+        "deviation": "O1-crate-behind-stack",
+        "class": "occluded",
+        "type": "unexpected",
+        "detected": true,
+        "distance_m": 14.203,
+        "resolved_by": "chassis",
+        "best_visible_fraction": 0.166667
+      },
+      {
+        "deviation": "O2-drum-behind-rack",
+        "class": "occluded",
+        "type": "unexpected",
+        "detected": true,
+        "distance_m": 15.163,
+        "resolved_by": "chassis",
+        "best_visible_fraction": 0.166667
+      }
+    ],
+    "wrist": [
+      {
+        "deviation": "T1-pallet-stack",
+        "class": "trivial",
+        "type": "unexpected",
+        "detected": true,
+        "distance_m": 12.855,
+        "resolved_by": "wrist",
+        "best_visible_fraction": 0.333333
+      },
+      {
+        "deviation": "T2-site-cabin",
+        "class": "trivial",
+        "type": "unexpected",
+        "detected": true,
+        "distance_m": 6.0,
+        "resolved_by": "wrist",
+        "best_visible_fraction": 0.111111
+      },
+      {
+        "deviation": "H1-rack-tote",
+        "class": "height",
+        "type": "unexpected",
+        "detected": true,
+        "distance_m": 0.0,
+        "resolved_by": "wrist",
+        "best_visible_fraction": 0.185185
+      },
+      {
+        "deviation": "H2-cabinet-carton",
+        "class": "height",
+        "type": "unexpected",
+        "detected": true,
+        "distance_m": 9.06,
+        "resolved_by": "wrist",
+        "best_visible_fraction": 0.203704
+      },
+      {
+        "deviation": "I1-window-displaced",
+        "class": "incidence",
+        "type": "displaced",
+        "detected": true,
+        "distance_m": 6.0,
+        "resolved_by": "wrist",
+        "best_visible_fraction": 0.166667
+      },
+      {
+        "deviation": "I2-standing-panel",
+        "class": "incidence",
+        "type": "unexpected",
+        "detected": true,
+        "distance_m": 6.0,
+        "resolved_by": "wrist",
+        "best_visible_fraction": 0.111111
+      },
+      {
+        "deviation": "O1-crate-behind-stack",
+        "class": "occluded",
+        "type": "unexpected",
+        "detected": true,
+        "distance_m": 24.233,
+        "resolved_by": "wrist",
+        "best_visible_fraction": 0.111111
+      },
+      {
+        "deviation": "O2-drum-behind-rack",
+        "class": "occluded",
+        "type": "unexpected",
+        "detected": true,
+        "distance_m": 0.0,
+        "resolved_by": "wrist",
+        "best_visible_fraction": 0.333333
+      }
+    ],
+    "both": [
+      {
+        "deviation": "T1-pallet-stack",
+        "class": "trivial",
+        "type": "unexpected",
+        "detected": true,
+        "distance_m": 8.885,
+        "resolved_by": "wrist",
+        "best_visible_fraction": 0.333333
+      },
+      {
+        "deviation": "T2-site-cabin",
+        "class": "trivial",
+        "type": "unexpected",
+        "detected": true,
+        "distance_m": 6.422,
+        "resolved_by": "wrist",
+        "best_visible_fraction": 0.055556
+      },
+      {
+        "deviation": "H1-rack-tote",
+        "class": "height",
+        "type": "unexpected",
+        "detected": true,
+        "distance_m": 0.0,
+        "resolved_by": "wrist",
+        "best_visible_fraction": 0.185185
+      },
+      {
+        "deviation": "H2-cabinet-carton",
+        "class": "height",
+        "type": "unexpected",
+        "detected": true,
+        "distance_m": 8.885,
+        "resolved_by": "wrist",
+        "best_visible_fraction": 0.203704
+      },
+      {
+        "deviation": "I1-window-displaced",
+        "class": "incidence",
+        "type": "displaced",
+        "detected": true,
+        "distance_m": 17.203,
+        "resolved_by": "wrist",
+        "best_visible_fraction": 0.055556
+      },
+      {
+        "deviation": "I2-standing-panel",
+        "class": "incidence",
+        "type": "unexpected",
+        "detected": true,
+        "distance_m": 17.203,
+        "resolved_by": "wrist",
+        "best_visible_fraction": 0.166667
+      },
+      {
+        "deviation": "O1-crate-behind-stack",
+        "class": "occluded",
+        "type": "unexpected",
+        "detected": true,
+        "distance_m": 19.183,
+        "resolved_by": "wrist",
+        "best_visible_fraction": 0.333333
+      },
+      {
+        "deviation": "O2-drum-behind-rack",
+        "class": "occluded",
+        "type": "unexpected",
+        "detected": true,
+        "distance_m": 0.0,
+        "resolved_by": "wrist",
+        "best_visible_fraction": 0.333333
+      }
+    ]
+  },
+  "chassis_capability": [
+    "I1-window-displaced",
+    "I2-standing-panel",
+    "O1-crate-behind-stack",
+    "O2-drum-behind-rack",
+    "T1-pallet-stack",
+    "T2-site-cabin"
+  ],
+  "pose_counts": {
+    "chassis": {
+      "counts": {
+        "T1-pallet-stack": 30,
+        "T2-site-cabin": 23,
+        "H1-rack-tote": 0,
+        "H2-cabinet-carton": 0,
+        "I1-window-displaced": 10,
+        "I2-standing-panel": 14,
+        "O1-crate-behind-stack": 16,
+        "O2-drum-behind-rack": 29
+      },
+      "distinct_poses": 240
+    },
+    "wrist": {
+      "counts": {
+        "T1-pallet-stack": 163,
+        "T2-site-cabin": 107,
+        "H1-rack-tote": 68,
+        "H2-cabinet-carton": 35,
+        "I1-window-displaced": 66,
+        "I2-standing-panel": 76,
+        "O1-crate-behind-stack": 74,
+        "O2-drum-behind-rack": 98
+      },
+      "distinct_poses": 1200
+    }
+  },
+  "candidate_base_poses": 240,
+  "viewpoints": 1200
+}

@@ -16,6 +16,7 @@ here is tuned to prevent that.
 
 import argparse
 import csv
+import json
 import math
 from pathlib import Path
 import statistics
@@ -25,13 +26,15 @@ import yaml
 
 from deltaseek_gazebo.benchmark import apply_scenario, validate_manifest
 from deltaseek_gazebo.detection import (
-    CHASSIS, WRIST, ObservationParams, detect_along)
+    CHASSIS, WRIST, ObservationParams, Scene, detect_along, evidence_fractions,
+    sensor_params)
 from deltaseek_gazebo.evaluate import cumulative_distance
 from deltaseek_gazebo.kinematics import Chain
 from deltaseek_gazebo.navigation import path_cost_for
 from deltaseek_gazebo.planner import plan_deviation_seeking, visibility_matrix
 from deltaseek_gazebo.viewpoints import (
     build_viewpoints, chassis_chain, free_base_poses, scene_bounds)
+from deltaseek_gazebo.visibility import OrientedBox
 
 
 CONFIGURATIONS = {
@@ -115,6 +118,45 @@ def run_configuration(manifest, scenario, chain, chassis, sensors, args):
     return rows, {'viewpoints': len(viewpoints), 'selected': len(selected),
                   'planned_distance': info.get('distance'),
                   'spent': float(distances[-1]) if len(distances) else 0.0}
+
+
+def observation_counts(manifest, scenario, viewpoints, sensors, params):
+    """How many candidate viewpoints observe each deviation, per sensor set.
+
+    The count is the difference between "impossible" and "awkward". A deviation
+    seen from 0 poses is a capability limit; one seen from 70 of 600 is a
+    routing problem wearing the same clothes in a single planned run.
+    """
+    nominal = validate_manifest(manifest)
+    _, actual_elements, ground_truth = apply_scenario(manifest, scenario)
+    scene = Scene.from_elements(actual_elements)
+    nominal_boxes = {element['id']: OrientedBox.from_element(element)
+                     for element in nominal['elements']}
+    counts = {d['id']: 0 for d in ground_truth['discrepancies']}
+
+    # Count distinct sensor poses, not viewpoints. A chassis sensor does not
+    # move with the arm, so the same pose recurs once per posture; counting
+    # viewpoints would inflate its coverage fivefold and make it look far more
+    # capable than it is.
+    seen = set()
+    total = 0
+    for viewpoint in viewpoints:
+        for name, (xyz, rpy) in viewpoint.poses(sensors).items():
+            key = (name, tuple(round(v, 6) for v in xyz),
+                   tuple(round(v, 6) for v in rpy))
+            if key in seen:
+                continue
+            seen.add(key)
+            total += 1
+            active = sensor_params(params, name)
+            camera = active.camera(xyz, rpy)
+            for discrepancy in ground_truth['discrepancies']:
+                fractions = evidence_fractions(
+                    camera, discrepancy, nominal_boxes, scene, active)
+                if fractions and max(fractions.values()) >= \
+                        active.min_visible_fraction:
+                    counts[discrepancy['id']] += 1
+    return {'counts': counts, 'distinct_poses': total}
 
 
 def observable_anywhere(manifest, scenario, viewpoints, sensors, params):
@@ -234,9 +276,20 @@ def report(results, info, out_dir):
               '| --- | --- | --- | --- |']
     for name, cls, c_d, w_d in distance_penalty(results):
         lines.append(f'| {name} | {cls} | {_fmt(c_d)} | {_fmt(w_d)} |')
-    lines += ['', 'Per-deviation detail is in `sensor_ablation.csv`.', '']
+    lines += ['', 'Per-deviation detail is in `sensor_ablation.csv`; the '
+              'machine-readable form, including per-viewpoint observation '
+              'counts, is in `sensor_ablation.json`.', '']
     md_path = out_dir / 'sensor_ablation.md'
     md_path.write_text('\n'.join(lines), encoding='utf-8')
+
+    json_path = out_dir / 'sensor_ablation.json'
+    json_path.write_text(json.dumps({
+        'configurations': {name: rows for name, rows in results.items()},
+        'chassis_capability': sorted(reachable),
+        'pose_counts': info.get('pose_counts', {}),
+        'candidate_base_poses': info.get('candidate_base_poses'),
+        'viewpoints': info['both']['viewpoints'],
+    }, indent=2, default=str), encoding='utf-8')
 
     print(f'candidates: {info["both"]["viewpoints"]} viewpoints, '
           f'{len(next(iter(results.values())))} deviations\n')
@@ -297,7 +350,7 @@ def report(results, info, out_dir):
     if missed:
         print(f'\nNot resolved by any configuration within the budget: '
               f'{", ".join(missed)}')
-    print(f'\nWrote {csv_path}\nWrote {md_path}')
+    print(f'\nWrote {csv_path}\nWrote {md_path}\nWrote {json_path}')
     return only_arm
 
 
@@ -338,11 +391,17 @@ def main(argv=None):
     bases = room_base_poses(
         nominal['elements'], scene_bounds(nominal['elements']), args.spacing,
         (0.0, 1.5707963, 3.1415927, -1.5707963), args.room)
+    sweep = build_viewpoints(chain, bases, chassis=chassis)
+    params = ObservationParams(far=args.max_range,
+                               min_visible_fraction=args.min_visible_fraction)
     info['chassis_capability'] = observable_anywhere(
-        manifest, scenario, build_viewpoints(chain, bases, chassis=chassis),
-        CONFIGURATIONS['chassis'],
-        ObservationParams(far=args.max_range,
-                          min_visible_fraction=args.min_visible_fraction))
+        manifest, scenario, sweep, CONFIGURATIONS['chassis'], params)
+    info['pose_counts'] = {
+        name: observation_counts(manifest, scenario, sweep, sensors, params)
+        for name, sensors in (('chassis', CONFIGURATIONS['chassis']),
+                              ('wrist', CONFIGURATIONS['wrist']))
+    }
+    info['candidate_base_poses'] = len(bases)
     report(results, info, args.output_dir)
     return 0
 

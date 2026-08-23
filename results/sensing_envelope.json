@@ -1,0 +1,14 @@
+{
+  "chassis_reach": 2.2349999999999866,
+  "wrist_reach": 3.5949999999999576,
+  "ceiling": 2.44,
+  "chassis_height": [
+    0.418
+  ],
+  "wrist_heights": [
+    0.291,
+    0.612,
+    0.684,
+    1.019
+  ]
+}
