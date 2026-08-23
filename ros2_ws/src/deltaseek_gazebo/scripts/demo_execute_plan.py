@@ -8,6 +8,12 @@ scoring is geometric and needs no simulator at all.
 Base motion is a proportional controller on odometry, not Nav2. That is honest
 for short hops between viewpoints in open space and nothing more: a plan that
 has to cross a doorway needs the real navigation stack.
+
+The planner works in world coordinates and the platform's odometry starts at
+zero wherever the robot was spawned, so targets are converted into the odom
+frame before they are driven to. Skipping that conversion drives the robot to
+the right offsets from the wrong origin, which looks like plausible motion and
+is entirely wrong.
 """
 
 import argparse
@@ -160,6 +166,11 @@ def _parser():
     parser.add_argument('--angular-speed', type=float, default=0.7)
     parser.add_argument('--tolerance', type=float, default=0.25)
     parser.add_argument('--posture-seconds', type=float, default=3.0)
+    parser.add_argument(
+        '--spawn', nargs=3, type=float, default=[0.0, 0.0, 0.0],
+        metavar=('X', 'Y', 'YAW'),
+        help='World pose the robot was spawned at, which is where its odom '
+             'frame is anchored. Must match the launch arguments.')
     parser.add_argument('--loop', action='store_true',
                         help='Repeat the plan until interrupted.')
     return parser
@@ -189,6 +200,13 @@ def plan(args):
     return [viewpoints[index] for index in order[:args.max_viewpoints]], info
 
 
+def to_odom_frame(target, spawn):
+    """Express a world-frame xy target in the spawn-anchored odom frame."""
+    dx, dy = target[0] - spawn[0], target[1] - spawn[1]
+    cos, sin = math.cos(-spawn[2]), math.sin(-spawn[2])
+    return (cos * dx - sin * dy, sin * dx + cos * dy)
+
+
 def main():
     args = _parser().parse_args()
     selected, info = plan(args)
@@ -204,10 +222,12 @@ def main():
         node.wait_for_odom()
         while rclpy.ok():
             for step, viewpoint in enumerate(selected, start=1):
+                goal = to_odom_frame(viewpoint.base_xy, args.spawn)
                 node.get_logger().info(
-                    f'[{step}/{len(selected)}] drive to '
-                    f'({viewpoint.base_xy[0]:.1f}, {viewpoint.base_xy[1]:.1f})')
-                node.drive_to(viewpoint.base_xy)
+                    f'[{step}/{len(selected)}] drive to world '
+                    f'({viewpoint.base_xy[0]:.1f}, {viewpoint.base_xy[1]:.1f}) '
+                    f'= odom ({goal[0]:.1f}, {goal[1]:.1f})')
+                node.drive_to(goal)
                 node.get_logger().info(f'[{step}/{len(selected)}] posing arm')
                 node.strike(list(viewpoint.joint_values.values()),
                             args.posture_seconds)

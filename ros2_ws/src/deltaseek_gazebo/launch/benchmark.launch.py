@@ -64,6 +64,14 @@ def generate_launch_description():
         arguments=[
             '--frame-id', 'world',
             '--child-frame-id', 'odom',
+            # The platform's odometry starts at zero wherever the robot is
+            # spawned, so the odom frame is anchored at the spawn pose. Leaving
+            # this transform at identity was correct only while that pose was
+            # the origin; with a room-centred spawn it silently displaced the
+            # robot from the ground-truth markers by the whole spawn offset.
+            '--x', spawn_x,
+            '--y', spawn_y,
+            '--yaw', spawn_yaw,
         ],
         parameters=[{'use_sim_time': True}],
         remappings=[
