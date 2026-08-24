@@ -755,6 +755,40 @@ def render_figures() -> None:
                             str(source), str(out / name)], check=True)
 
 
+EXPECTED_PAGE = {'a4': (595, 842), 'letter': (612, 792)}
+
+
+def verify(output: Path) -> None:
+    """Render the package and check it opens at the intended page size.
+
+    Word is not available here, so the document was previously shipped
+    unrendered: well-formed XML referencing styles that exist proves neither
+    that it opens nor that it paginates. LibreOffice renders it, which is a
+    weaker check than Word but catches a package that is broken outright.
+    """
+    if not shutil.which('soffice'):
+        print('  (soffice not found: rendering not verified)')
+        return
+    with tempfile.TemporaryDirectory() as tmp:
+        subprocess.run(['soffice', '--headless', '--convert-to', 'pdf',
+                        '--outdir', tmp, str(output)],
+                       capture_output=True, timeout=300, check=True)
+        pdf = Path(tmp) / (output.stem + '.pdf')
+        if not pdf.exists():
+            raise SystemExit(f'  FAILED: {output.name} did not render')
+        info = subprocess.run(['pdfinfo', str(pdf)], capture_output=True,
+                              text=True, timeout=60).stdout
+        pages = int(re.search(r'Pages:\s+(\d+)', info).group(1))
+        size = re.search(r'Page size:\s+([\d.]+) x ([\d.]+)', info)
+        got = (round(float(size.group(1))), round(float(size.group(2))))
+        want = EXPECTED_PAGE[PAPER]
+        ok = all(abs(a - b) <= 1 for a, b in zip(got, want))
+        print(f'  rendered {pages} pages at {got[0]} x {got[1]} pt'
+              f'{"" if ok else f"  MISMATCH, expected {want}"}')
+        if not ok:
+            raise SystemExit('page size does not match --paper')
+
+
 def main() -> None:
     global PAPER
     argv = [a for a in sys.argv[1:] if not a.startswith('--')]
@@ -814,6 +848,7 @@ def main() -> None:
             zout.writestr(name, data)
 
     print(f'wrote {output} ({output.stat().st_size / 1024:.0f} KiB)')
+    verify(output)
 
 
 if __name__ == '__main__':
