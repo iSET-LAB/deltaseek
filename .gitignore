@@ -17,4 +17,8 @@ log/
 *.synctex.gz
 
 # regenerated from the figure PDFs by scripts/make_ieee_docx.py
-ieeeconf/figures/png/
+publication/ieeeconf/figures/png/
+
+# Manuscript, templates and rendered outputs. Kept out of the shared repo
+# while unpublished; the generators that produce them are tracked.
+publication/

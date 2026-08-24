@@ -20,6 +20,27 @@ UR5e mounting transform, sensor inventory, and end effector must be replaced
 from the physical robot's `/etc/clearpath/robot.yaml`; do not infer them from
 photographs.
 
+## Repository layout
+
+| path | contents |
+| --- | --- |
+| `ros2_ws/` | the ROS 2 workspace: pipeline, planners, evaluation, tests |
+| `clearpath/` | `robot.yaml` and the generated robot description |
+| `results/` | measured outputs, including the sensor ablation and the pose audit |
+| `generated/` | worlds and manifests built from the IFC model |
+| `scripts/` | installer and the Word renderer |
+| `publication/` | manuscript, templates and rendered outputs |
+
+`publication/` is deliberately untracked while the work is unpublished. The
+generators that produce its contents are tracked, so a clone can rebuild every
+figure and both document formats:
+
+```bash
+python3 ros2_ws/src/deltaseek_gazebo/scripts/make_abstract_figures.py
+python3 ros2_ws/src/deltaseek_gazebo/scripts/compose_platform_figure.py
+python3 scripts/make_ieee_docx.py --paper=letter
+```
+
 ## Build
 
 ROS 2 Jazzy and `ros-jazzy-clearpath-simulator` are installed system-wide. Do

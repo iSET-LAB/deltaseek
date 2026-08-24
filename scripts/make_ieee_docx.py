@@ -27,7 +27,7 @@ import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-FIGURES = ROOT / 'ieeeconf' / 'figures'
+FIGURES = ROOT / 'publication' / 'ieeeconf' / 'figures'
 
 EMU_PER_PT = 12700
 
@@ -798,9 +798,9 @@ def main() -> None:
             if PAPER not in PAPER_SIZES:
                 raise SystemExit(f'--paper must be one of {sorted(PAPER_SIZES)}')
             _sections()
-    template = Path(argv[0]) if argv else ROOT / 'conference-template-a4.docx'
+    template = Path(argv[0]) if argv else ROOT / 'publication' / 'conference-template-a4.docx'
     output = (Path(argv[1]) if len(argv) > 1
-              else ROOT / 'ieeeconf' / f'deltaseek_ieee_{PAPER}.docx')
+              else ROOT / 'publication' / 'ieeeconf' / f'deltaseek_ieee_{PAPER}.docx')
 
     render_figures()
 

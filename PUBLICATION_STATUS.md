@@ -13,7 +13,7 @@ working IFC pipeline on a real Revit export, and a simulated A300 + UR5e
 carrying the three sensors the physical robot will have.
 
 The science has moved twice since the paper was written, and the paper has not
-followed. `ieeeconf/deltaseek.pdf` argues a **negative** result at building
+followed. `publication/ieeeconf/deltaseek.pdf` argues a **negative** result at building
 scale. A single-room experiment then produced the **opposite** result. A sensor
 ablation has now qualified both by asking the question a reviewer asks first,
 and its answer is narrow: **exactly two of eight deviations require the wrist

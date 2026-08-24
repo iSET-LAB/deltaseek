@@ -10,8 +10,8 @@ import numpy as np
 import yaml
 from PIL import Image
 
-SHOTS = Path('/home/acharjee07/deltaseek/ieeeconf/figures/shots')
-OUT = Path('/home/acharjee07/deltaseek/ieeeconf/figures/fig_platform.pdf')
+SHOTS = Path('/home/acharjee07/deltaseek/publication/ieeeconf/figures/shots')
+OUT = Path('/home/acharjee07/deltaseek/publication/ieeeconf/figures/fig_platform.pdf')
 CAM_HFOV, CAM_W, CAM_H = 1.05, 1600, 1100
 BLUE, ORANGE = '#2f6fb5', '#d1660f'
 # Panel box aspects (width / height). Every panel is cropped to its own box so
@@ -67,7 +67,7 @@ def mark_target(ax, meta):
     ax.add_patch(Rectangle((lo[0]-pad, lo[1]-pad), hi[0]-lo[0]+2*pad,
                            hi[1]-lo[1]+2*pad, fill=False, ec='#111', lw=1.4,
                            zorder=7))
-    ax.annotate('target change', ((lo[0]+hi[0])/2, lo[1]-pad-8), ha='center',
+    ax.annotate('Target change', ((lo[0]+hi[0])/2, lo[1]-pad-8), ha='center',
                 va='bottom', fontsize=7.5, weight='bold', color='#111', zorder=7)
 
 
@@ -110,7 +110,7 @@ def main():
 
     ax = fig.add_subplot(gs[0, 0])
     panel(ax, SHOTS / 'raw_platform.png', aspect=A_ASPECT)
-    ax.set_xlabel('(a) platform', fontsize=8, labelpad=4)
+    ax.set_xlabel('(a) Platform', fontsize=8, labelpad=4)
 
     ax = fig.add_subplot(gs[0, 1])
     panel(ax, SHOTS / 'raw_environment.png', aspect=B_ASPECT)
@@ -118,11 +118,11 @@ def main():
 
     inner = gs[0, 2].subgridspec(1, 2, wspace=0.03)
     for column, (sensor, colour, name) in enumerate(
-            ((('chassis'), BLUE, 'chassis-mounted RGB-D'),
-             (('wrist'), ORANGE, 'wrist-mounted RGB-D'))):
+            ((('chassis'), BLUE, 'Chassis-mounted RGB-D'),
+             (('wrist'), ORANGE, 'Wrist-mounted RGB-D'))):
         sub = fig.add_subplot(inner[0, column])
         panel(sub, SHOTS / f'raw_frustum_{sensor}.png')
-        draw_frustum(sub, meta[sensor], colour, sensor)
+        draw_frustum(sub, meta[sensor], colour, sensor.capitalize())
         mark_target(sub, meta[sensor])
         # Keep the overlay in full-image coordinates and crop with the limits,
         # so the projected frusta stay registered to the render.
@@ -131,7 +131,7 @@ def main():
         sub.set_ylim(CAM_H, 0)
         sub.set_title(name, fontsize=7.5, color=colour, pad=3)
         if column == 0:
-            sub.set_xlabel('(c) perceptual action spaces', fontsize=8,
+            sub.set_xlabel('(c) Perceptual action spaces', fontsize=8,
                            labelpad=4)
             sub.xaxis.set_label_coords(1.03, -0.055)
 

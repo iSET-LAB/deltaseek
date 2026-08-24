@@ -32,7 +32,7 @@ from deltaseek_gazebo.viewpoints import ARM_POSTURES, build_viewpoints, chassis_
 from deltaseek_gazebo.visibility import OrientedBox, rotation_matrix
 
 WORLD = 'deltaseek_hall_b_ablation_hall_b_ablation'
-SHOTS = Path('/home/acharjee07/deltaseek/ieeeconf/figures/shots')
+SHOTS = Path('/home/acharjee07/deltaseek/publication/ieeeconf/figures/shots')
 BENCH = Path(__file__).resolve().parents[1] / 'config' / 'benchmarks'
 CAM_HFOV, CAM_W, CAM_H = 1.05, 1600, 1100
 TARGET = 'H2-cabinet-carton'
