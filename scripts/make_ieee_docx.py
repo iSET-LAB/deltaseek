@@ -1,4 +1,4 @@
-"""Render the extended abstract into the IEEE A4 conference Word template.
+"""Render the extended abstract into an IEEE conference Word template.
 
 The template (conference-template-a4.docx) is ISO/IEC 29500 *strict* OOXML, so
 python-docx cannot be used and the document part is written directly.  The
@@ -7,6 +7,12 @@ numbering of headings, figures, tables and references, so the content below
 supplies text only.
 
 Usage:  python3 scripts/make_ieee_docx.py [template.docx] [out.docx]
+                                         [--paper=a4|letter]
+
+The paper size is set here rather than taken from the template, because a
+US-letter template supplied as legacy binary .doc cannot be read at all.
+Letter and A4 differ only in the page box; the IEEE margins and column
+measures are identical.
 """
 
 from __future__ import annotations
@@ -229,22 +235,39 @@ def figure(media: Media, name: str, width_pt: float, caption: str, sect: str = '
 # section properties
 # --------------------------------------------------------------------------
 
-_PAGE = ('<w:pgSz w:w="595.30pt" w:h="841.90pt" w:code="9"/>'
+# A4 is the default because that is the template this was written against.
+# The US-letter geometry differs only in the page box: the IEEE conference
+# margins and column measures are the same on both.
+PAPER_SIZES = {
+    'a4': ('595.30pt', '841.90pt', '9'),
+    'letter': ('612pt', '792pt', '1'),
+}
+PAPER = 'a4'
+
+_PAGE = ('<w:pgSz w:w="{w}" w:h="{h}" w:code="{code}"/>'
          '<w:pgMar w:top="{top}" w:right="44.65pt" w:bottom="72pt" w:left="44.65pt"'
          ' w:header="36pt" w:footer="36pt" w:gutter="0pt"/>')
 
-SECT_TITLE = ('<w:sectPr><w:footerReference w:type="first" r:id="rId8"/>'
-              + _PAGE.format(top='27pt')
-              + '<w:cols w:space="36pt"/><w:titlePg/><w:docGrid w:linePitch="360"/></w:sectPr>')
 
-SECT_AUTHORS = ('<w:sectPr><w:type w:val="continuous"/>' + _PAGE.format(top='22.50pt')
-                + '<w:cols w:num="2" w:space="36pt"/><w:docGrid w:linePitch="360"/></w:sectPr>')
+def _page(top):
+    width, height, code = PAPER_SIZES[PAPER]
+    return _PAGE.format(w=width, h=height, code=code, top=top)
 
-SECT_2COL = ('<w:sectPr><w:type w:val="continuous"/>' + _PAGE.format(top='54pt')
-             + '<w:cols w:num="2" w:space="18pt"/><w:docGrid w:linePitch="360"/></w:sectPr>')
+def _sections():
+    """Rebuild the section properties for the current paper size."""
+    global SECT_TITLE, SECT_AUTHORS, SECT_2COL, SECT_1COL
+    SECT_TITLE = ('<w:sectPr><w:footerReference w:type="first" r:id="rId8"/>'
+              + _page('27pt')
+                  + '<w:cols w:space="36pt"/><w:titlePg/><w:docGrid w:linePitch="360"/></w:sectPr>')
+    SECT_AUTHORS = ('<w:sectPr><w:type w:val="continuous"/>' + _page('22.50pt')
+                    + '<w:cols w:num="2" w:space="36pt"/><w:docGrid w:linePitch="360"/></w:sectPr>')
+    SECT_2COL = ('<w:sectPr><w:type w:val="continuous"/>' + _page('54pt')
+                 + '<w:cols w:num="2" w:space="18pt"/><w:docGrid w:linePitch="360"/></w:sectPr>')
+    SECT_1COL = ('<w:sectPr><w:type w:val="continuous"/>' + _page('54pt')
+                 + '<w:cols w:space="36pt"/><w:docGrid w:linePitch="360"/></w:sectPr>')
 
-SECT_1COL = ('<w:sectPr><w:type w:val="continuous"/>' + _PAGE.format(top='54pt')
-             + '<w:cols w:space="36pt"/><w:docGrid w:linePitch="360"/></w:sectPr>')
+
+_sections()
 
 
 # --------------------------------------------------------------------------
@@ -733,8 +756,17 @@ def render_figures() -> None:
 
 
 def main() -> None:
-    template = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / 'conference-template-a4.docx'
-    output = Path(sys.argv[2]) if len(sys.argv) > 2 else ROOT / 'ieeeconf' / 'deltaseek_ieee.docx'
+    global PAPER
+    argv = [a for a in sys.argv[1:] if not a.startswith('--')]
+    for flag in sys.argv[1:]:
+        if flag.startswith('--paper='):
+            PAPER = flag.split('=', 1)[1]
+            if PAPER not in PAPER_SIZES:
+                raise SystemExit(f'--paper must be one of {sorted(PAPER_SIZES)}')
+            _sections()
+    template = Path(argv[0]) if argv else ROOT / 'conference-template-a4.docx'
+    output = (Path(argv[1]) if len(argv) > 1
+              else ROOT / 'ieeeconf' / f'deltaseek_ieee_{PAPER}.docx')
 
     render_figures()
 

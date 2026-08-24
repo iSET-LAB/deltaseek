@@ -225,11 +225,13 @@ def fig_result(truth, data):
     plt.close(fig)
 
 
-def export_png(dpi=200):
+def export_png(dpi=300):
     """Mirror each figure to PNG for viewing outside a LaTeX build.
 
-    The PNG copies are what get opened when checking a figure, so they are
-    regenerated here rather than by hand; a stale copy is worse than none.
+    The PNG copies are what get opened when checking a figure, and the Word
+    build inlines them, so they are
+    regenerated here rather than by hand at the 300 dpi that build expects; a
+    stale or low-resolution copy is worse than none.
     """
     out = FIGURES / 'png'
     out.mkdir(parents=True, exist_ok=True)
