@@ -22,7 +22,8 @@ from deltaseek_gazebo.kinematics import Chain
 from deltaseek_gazebo.viewpoints import build_viewpoints, chassis_chain
 from deltaseek_gazebo.visibility import rotation_matrix
 
-OUT = Path('/home/acharjee07/deltaseek/results/sensing_envelope.json')
+ROOT = Path(__file__).resolve().parents[2]
+OUT = ROOT / 'results' / 'sensing_envelope.json'
 CEILING = 2.44          # underside of the suspended ceiling in Hall B
 FAR = 5.0
 

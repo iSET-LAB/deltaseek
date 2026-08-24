@@ -1,6 +1,7 @@
 """Assemble the three-panel platform figure from the captured renders."""
 
 from pathlib import Path
+import subprocess
 
 import matplotlib
 matplotlib.use('Agg')
@@ -10,8 +11,9 @@ import numpy as np
 import yaml
 from PIL import Image
 
-SHOTS = Path('/home/acharjee07/deltaseek/publication/ieeeconf/figures/shots')
-OUT = Path('/home/acharjee07/deltaseek/publication/ieeeconf/figures/fig_platform.pdf')
+ROOT = Path(__file__).resolve().parents[2]
+SHOTS = ROOT / 'publication' / 'ieeeconf' / 'figures' / 'shots'
+OUT = ROOT / 'publication' / 'ieeeconf' / 'figures' / 'fig_platform.pdf'
 CAM_HFOV, CAM_W, CAM_H = 1.05, 1600, 1100
 BLUE, ORANGE = '#2f6fb5', '#d1660f'
 # Panel box aspects (width / height). Every panel is cropped to its own box so
@@ -136,7 +138,12 @@ def main():
             sub.xaxis.set_label_coords(1.03, -0.055)
 
     fig.savefig(OUT, dpi=300)
-    print('wrote', OUT)
+    # Mirror to the tracked PNG the README shows.
+    png = ROOT / 'docs' / 'figures'
+    png.mkdir(parents=True, exist_ok=True)
+    subprocess.run(['pdftoppm', '-r', '300', '-png', '-singlefile',
+                    str(OUT), str(png / 'fig_platform')], check=True)
+    print('wrote', OUT, 'and', png / 'fig_platform.png')
 
 
 if __name__ == '__main__':

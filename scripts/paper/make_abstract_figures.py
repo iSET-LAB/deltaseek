@@ -25,10 +25,11 @@ import yaml
 from deltaseek_gazebo.benchmark import apply_scenario
 from deltaseek_gazebo.visibility import OrientedBox
 
-ROOT = Path('/home/acharjee07/deltaseek')
+ROOT = Path(__file__).resolve().parents[2]
 RESULTS = ROOT / 'results'
 FIGURES = ROOT / 'publication' / 'ieeeconf' / 'figures'
-BENCH = Path(__file__).resolve().parents[1] / 'config' / 'benchmarks'
+PNG = ROOT / 'docs' / 'figures'
+BENCH = ROOT / 'ros2_ws' / 'src' / 'deltaseek_gazebo' / 'config' / 'benchmarks'
 
 CLASS_COLOUR = {'trivial': '#4c72b0', 'height': '#c44e52',
                 'incidence': '#dd8452', 'occluded': '#55a868'}
@@ -184,12 +185,12 @@ def fig_result(truth, data):
 def export_png(dpi=300):
     """Mirror each figure to PNG for viewing outside a LaTeX build.
 
-    The PNG copies are what get opened when checking a figure, and the Word
-    build inlines them, so they are
-    regenerated here rather than by hand at the 300 dpi that build expects; a
-    stale or low-resolution copy is worse than none.
+    docs/figures is tracked, so these are what the README displays and what
+    the Word build inlines. Regenerated here rather than by hand, at the
+    300 dpi that build expects: a stale or low-resolution copy is worse than
+    none.
     """
-    out = FIGURES / 'png'
+    out = PNG
     out.mkdir(parents=True, exist_ok=True)
     for name in ('fig_reach', 'fig_result', 'fig_platform'):
         source = FIGURES / f'{name}.pdf'

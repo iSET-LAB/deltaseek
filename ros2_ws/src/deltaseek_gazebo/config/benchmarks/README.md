@@ -27,7 +27,7 @@ in place would shadow the Conda environment's packages.
 cd ~/deltaseek
 PYTHONPATH=ros2_ws/src/deltaseek_gazebo \
 conda run -n deltaseek-ifc python -m deltaseek_gazebo.ifc_to_manifest \
-  --ifc /absolute/path/model.ifc \
+  --ifc data/ERS_B_STRUCT.ifc \
   --output /absolute/path/nominal.yaml \
   --origin 0 0 0 \
   --threads 4
@@ -40,7 +40,7 @@ Each supported IFC product is represented by a box oriented in its own
 placement frame. Orientation is not a refinement: building models are routinely
 exported on a site grid rotated a fraction of a degree off the world axes, and
 a world-aligned box inflates anything long and thin sitting on such a grid. On
-`ERS_B_STRUCT.ifc` (Revit 2025, IFC2X3, a 44 x 20 m storey rotated 0.90 deg)
+`data/ERS_B_STRUCT.ifc` (Revit 2025, IFC2X3, a 44 x 20 m storey rotated 0.90 deg)
 the world-aligned box turns 8-inch walls into 0.82 m ones -- a 4x error on the
 dimension that decides whether the robot fits -- and blocks 11% of the
 candidate base stations. `--geometry aabb` restores the old behaviour for

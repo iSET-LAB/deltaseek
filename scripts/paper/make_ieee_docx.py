@@ -6,8 +6,8 @@ template's own styles carry the IEEE formatting, including the automatic
 numbering of headings, figures, tables and references, so the content below
 supplies text only.
 
-Usage:  python3 scripts/make_ieee_docx.py [template.docx] [out.docx]
-                                         [--paper=a4|letter]
+Usage:  python3 scripts/paper/make_ieee_docx.py [template.docx] [out.docx]
+                                              [--paper=a4|letter]
 
 The paper size is set here rather than taken from the template, because a
 US-letter template supplied as legacy binary .doc cannot be read at all.
@@ -26,8 +26,9 @@ import tempfile
 import zipfile
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
+ROOT = Path(__file__).resolve().parents[2]
 FIGURES = ROOT / 'publication' / 'ieeeconf' / 'figures'
+PNG = ROOT / 'docs' / 'figures'
 
 EMU_PER_PT = 12700
 
@@ -226,7 +227,7 @@ def picture(media: Media, path: Path, width_pt: float) -> str:
 
 
 def figure(media: Media, name: str, width_pt: float, caption: str, sect: str = '') -> str:
-    img = para(None, picture(media, FIGURES / 'png' / f'{name}.png', width_pt),
+    img = para(None, picture(media, PNG / f'{name}.png', width_pt),
                '<w:jc w:val="center"/>')
     return img + text_para('figurecaption', caption, sect)
 
@@ -745,8 +746,8 @@ NAMESPACES = ' '.join([
 
 
 def render_figures() -> None:
-    out = FIGURES / 'png'
-    out.mkdir(exist_ok=True)
+    out = PNG
+    out.mkdir(parents=True, exist_ok=True)
     for name in ('fig_platform', 'fig_reach', 'fig_result'):
         target = out / f'{name}.png'
         source = FIGURES / f'{name}.pdf'
