@@ -200,16 +200,24 @@ distinct-pose basis they are 14 and 16 of 240.
 
 ---
 
-## 6. Follow-ups this audit did not action
+## 6. Follow-ups
 
-Reported, not changed, per the audit-first constraint:
+Actioned since the audit:
 
-1. **`deltaseek.tex` reach figures.** 2.23 -> 2.24, 3.59 -> 4.63, band 0.21 ->
-   0.20. `fig_reach.pdf` needs regenerating with them.
-2. **Stale "600"** in `README.md:306`, `PUBLICATION_STATUS.md:131,135`, and two
-   docstrings, `sensor_ablation.py:127,168`.
+1. **The reach figures were wrong and are corrected.** The wrist value of
+   3.59 m was the sweep's own z-range bound rather than a reach; it is 4.63 m.
+   The chassis 2.23 m rounds to 2.24 m from the closed form, and the
+   wrist-only band is 0.20 m. `measure_sensing_envelope.py` now derives both
+   analytically and cross-checks against a sweep bounded above the analytic
+   value, so it cannot saturate again.
+2. **Stale pose counts cleared** from the README and the docstrings: 600
+   becomes 240, 70 becomes 14, 105 becomes 16.
+
+Still open:
+
 3. **Yaw resolution.** 90 deg bins leave 20.4% of azimuth unframable. The
-   height claim is unaffected, but reporting the occlusion and incidence counts
-   at 22.5 deg spacing would be more defensible.
-4. **`min_camera_height` coupling** between the wrist and the chassis candidate
-   set (section 1). Dormant, worth decoupling.
+   height claim is unaffected, since the ceiling has no yaw term, but
+   reporting the occlusion and incidence counts at 22.5 deg spacing would be
+   more defensible. Section 5 shows the shares barely move.
+4. **`min_camera_height` coupling** between the wrist and the chassis
+   candidate set (section 1). Dormant today, worth decoupling.

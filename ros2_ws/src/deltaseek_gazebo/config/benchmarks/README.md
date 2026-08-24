@@ -236,32 +236,10 @@ straight line and reaches 11x, so the choice is not a refinement.
 
 `--path-cost euclidean` restores straight lines for comparison.
 
-### Result on this scene
+### Planner baselines
 
-Five seeds at density 0.2, 60 m budget, 5 m usable range, detection rate as
-mean +/- standard deviation:
-
-| planner | arm, drivable | arm, straight-line |
-| --- | --- | --- |
-| coverage | **70.0% +/- 5.3** | 70.0% +/- 5.3 |
-| deviation seeking | 63.6% +/- 6.1 | **72.1% +/- 5.7** |
-| frontier | 47.9% +/- 4.3 | 47.1% +/- 6.1 |
-| goal directed | 25.7% +/- 4.2 | 42.9% +/- 4.5 |
-
-Read the first column, because it is the honest one: **the deviation-seeking
-planner does not beat coverage once distance is measured around walls.** Under
-straight-line distance it appears to lead, which is what made the earlier
-single-seed run look favourable, but the margin is inside one standard
-deviation and it disappears entirely under a realistic cost.
-
-A plausible explanation is that the objective and the search disagree. With a
-uniform prior, maximizing expected information about every element's deviation
-state is close to asking to see every element, which is what coverage does --
-and coverage routes better, because a nearest-neighbour tour is a decent
-travelling-salesman heuristic while greedy benefit-per-metre is myopic and
-pays for detours it cannot amortize. That points at the routing rather than
-the objective: selecting a tour, or refining the greedy order, before changing
-what the planner values.
-
-The manipulator still earns its place: with the arm frozen the same planner
-drops from 63.6% to 57.9%, and every planner loses ground.
+`compare_planners` runs the deviation-seeking planner against coverage,
+frontier and goal-directed baselines on a shared candidate set and a shared
+budget. It is not part of the paper's experiment, which fixes the planner and
+varies the sensing configuration; it is retained because `sensor_ablation`
+uses the same selection code.
