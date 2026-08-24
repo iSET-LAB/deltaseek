@@ -13,6 +13,7 @@ figures cannot drift from the numbers in the text.
 from decimal import Decimal, ROUND_HALF_UP
 import json
 from pathlib import Path
+import subprocess
 
 import matplotlib
 matplotlib.use('Agg')
@@ -185,7 +186,11 @@ def fig_result(truth, data):
     ax.set_yticklabels(short, fontsize=7)
     ax.set_xlabel('admissible sensor poses that observe it [%]')
     ax.set_title('(a) Capability')
-    ax.legend(loc='lower right', framealpha=0.9)
+    # Headroom above the top bar, so the legend sits clear of the data rather
+    # than over it. The bars run to the right edge, so there is no free corner.
+    ax.set_ylim(-0.75, len(order) + 0.85)
+    ax.legend(loc='upper center', ncol=2, framealpha=0.95, fontsize=7,
+              handlelength=1.2, columnspacing=1.1, borderpad=0.35)
     ax.grid(axis='x', alpha=0.15, lw=0.4)
 
     ax = axes[1]
@@ -199,8 +204,8 @@ def fig_result(truth, data):
         ax.scatter(c, y[index], s=26, color='#c44e52', zorder=3,
                    marker='X' if not np.isfinite(float(rows[name]['distance_m'])) else 'o')
     ax.axvline(cap, color='#c44e52', lw=0.8, ls=':')
-    ax.annotate('never', (cap - 0.4, 6.72), fontsize=6.5, ha='right',
-                color='#8c2f33')
+    ax.annotate('never', (cap - 0.4, len(order) - 0.55), fontsize=6.5,
+                ha='right', color='#8c2f33')
     ax.set_yticks(y)
     ax.set_yticklabels(short, fontsize=7)
     for tick, name in zip(ax.get_yticklabels(), order):
@@ -208,7 +213,9 @@ def fig_result(truth, data):
     ax.scatter([], [], s=26, color='#4c72b0', label='wrist')
     ax.scatter([], [], s=26, color='#c44e52', label='chassis')
     ax.scatter([], [], s=30, color='#c44e52', marker='X', label='chassis, never')
-    ax.legend(loc='center left', framealpha=0.9, handletextpad=0.2)
+    ax.set_ylim(-0.75, len(order) + 0.85)
+    ax.legend(loc='upper center', ncol=3, framealpha=0.95, fontsize=7,
+              handletextpad=0.2, columnspacing=0.9, borderpad=0.35)
     ax.set_xlabel('drivable distance to first observation [m]')
     ax.set_title('(b) Acquisition cost')
     ax.set_xlim(-1, cap + 1)
@@ -218,13 +225,29 @@ def fig_result(truth, data):
     plt.close(fig)
 
 
+def export_png(dpi=200):
+    """Mirror each figure to PNG for viewing outside a LaTeX build.
+
+    The PNG copies are what get opened when checking a figure, so they are
+    regenerated here rather than by hand; a stale copy is worse than none.
+    """
+    out = FIGURES / 'png'
+    out.mkdir(parents=True, exist_ok=True)
+    for name in ('fig_scene', 'fig_reach', 'fig_result', 'fig_platform'):
+        source = FIGURES / f'{name}.pdf'
+        if source.exists():
+            subprocess.run(['pdftoppm', '-r', str(dpi), '-png', '-singlefile',
+                            str(source), str(out / name)], check=True)
+
+
 def main():
     FIGURES.mkdir(parents=True, exist_ok=True)
     nominal, actual, truth, data, envelope = load()
     fig_scene(nominal, actual, truth)
     fig_reach(truth, actual, envelope)
     fig_result(truth, data)
-    print('wrote fig_scene.pdf, fig_reach.pdf, fig_result.pdf')
+    export_png()
+    print('wrote fig_scene.pdf, fig_reach.pdf, fig_result.pdf and png/ copies')
 
 
 if __name__ == '__main__':
